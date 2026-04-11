@@ -39,7 +39,6 @@ export function JobIntakeCard({ onStart }: Props) {
       const result = await api.estimatePricing({ description, location, urgency });
       setEstimate(result as PricingEstimate);
       onStart?.();
-      setCustomerSession();
     } catch {
       setError("Could not get estimate. Is the backend running?");
     } finally {
