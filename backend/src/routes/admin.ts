@@ -85,3 +85,36 @@ adminRouter.get("/admin/pricing-events", async (_req, res) => {
   });
   res.json(events);
 });
+
+// GET /admin/contractors — full contractor list
+adminRouter.get("/admin/contractors", async (_req, res) => {
+  const contractors = await prisma.contractor.findMany({
+    orderBy: { createdAt: "desc" },
+    include: { jobs: { select: { id: true, status: true } } },
+  });
+  res.json(contractors);
+});
+
+// GET /admin/contractors/:id — full contractor detail
+adminRouter.get("/admin/contractors/:id", async (req, res) => {
+  const contractor = await prisma.contractor.findUnique({
+    where: { id: req.params.id },
+    include: { jobs: { orderBy: { createdAt: "desc" } } },
+  });
+  if (!contractor) { res.status(404).json({ error: "contractor not found" }); return; }
+  res.json(contractor);
+});
+
+// DELETE /admin/contractors/:id — remove contractor
+adminRouter.delete("/admin/contractors/:id", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    // Unlink jobs before deleting
+    await prisma.job.updateMany({
+      where: { contractorId: id },
+      data: { contractorId: null, status: "priced" },
+    });
+    await prisma.contractor.delete({ where: { id } });
+    res.json({ success: true });
+  } catch (error) { next(error); }
+});

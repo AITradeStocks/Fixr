@@ -1,260 +1,196 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { getSession, setCustomerSession } from "@/lib/auth";
-import { api } from "@/lib/api";
-import type { PricingEstimate, Job } from "@/lib/types";
+import { EnterpriseHero } from "@/components/EnterpriseHero";
+import { EnterpriseFeatures } from "@/components/EnterpriseFeatures";
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { 
+  Wrench, 
+  Bolt, 
+  Hammer, 
+  Snowflake, 
+  TreeDeciduous, 
+  Paintbrush, 
+  Home, 
+  Sparkles,
+  ChevronRight,
+  ArrowRight,
+  PhoneCall,
+  ArrowUpRight
+} from "lucide-react";
 
-const URGENCY_OPTIONS = [
-  { value: "urgent now", label: "Urgent — right now", sub: "Within 2 hours" },
-  { value: "today", label: "Today", sub: "Same day" },
-  { value: "flexible", label: "Flexible", sub: "Next few days" },
+const SERVICES = [
+  { icon: <Wrench size={20} />, label: "Plumbing", color: "text-blue-500", bg: "bg-blue-50" },
+  { icon: <Bolt size={20} />, label: "Electrical", color: "text-amber-500", bg: "bg-amber-50" },
+  { icon: <Hammer size={20} />, label: "Handyman", color: "text-orange-500", bg: "bg-orange-50" },
+  { icon: <Snowflake size={20} />, label: "HVAC", color: "text-sky-500", bg: "bg-sky-50" },
+  { icon: <Paintbrush size={20} />, label: "Painting", color: "text-rose-500", bg: "bg-rose-50" },
+  { icon: <Home size={20} />, label: "Roofing", color: "text-slate-500", bg: "bg-slate-50" },
+  { icon: <TreeDeciduous size={20} />, label: "Landscaping", color: "text-emerald-500", bg: "bg-emerald-50" },
+  { icon: <Sparkles size={20} />, label: "Cleaning", color: "text-violet-500", bg: "bg-violet-50" },
 ];
 
-const TRUST_ITEMS = [
-  { icon: "⚡", label: "Instant pricing", sub: "AI estimates in seconds" },
-  { icon: "✅", label: "Vetted contractors", sub: "Background checked" },
-  { icon: "🔒", label: "Fixed price", sub: "No hidden fees" },
+const HOW_IT_WORKS = [
+  {
+    step: "01",
+    title: "Intelligence First",
+    body: "Describe your maintenance issue in plain language. Our AI understands the technical scope and complexity instantly.",
+    color: "emerald"
+  },
+  {
+    step: "02",
+    title: "Transparent Rates",
+    body: "Receive a market-verified, fixed-price quote. No bidding, no negotiation, no hourly-rate variance.",
+    color: "blue"
+  },
+  {
+    step: "03",
+    title: "Rapid Dispatch",
+    body: "A vetted, licensed professional is routed to your location with all the context needed to solve the issue.",
+    color: "purple"
+  },
 ];
 
 export default function HomePage() {
-  const router = useRouter();
-  const [description, setDescription] = useState("");
-  const [location, setLocation] = useState("Austin, TX");
-  const [urgency, setUrgency] = useState("today");
-  const [estimate, setEstimate] = useState<PricingEstimate | null>(null);
-  const [loadingEstimate, setLoadingEstimate] = useState(false);
-  const [loadingBook, setLoadingBook] = useState(false);
-  const [booked, setBooked] = useState<Job | null>(null);
-  const [error, setError] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState("");
-
-  useEffect(() => {
-    const session = getSession();
-    if (session?.role === "contractor") router.push("/contractor/jobs");
-    if (session?.role === "admin") router.push("/admin/jobs");
-    if (session?.role === "customer" && session.user) {
-      setIsLoggedIn(true);
-      setUserName(session.user.name);
-    }
-  }, []);
-
-  async function handleEstimate() {
-    if (!description.trim()) { setError("Please describe your issue first"); return; }
-    setError("");
-    setLoadingEstimate(true);
-    setBooked(null);
-    try {
-      const result = await api.estimatePricing({ description, location, urgency });
-      setEstimate(result as PricingEstimate);
-    } catch {
-      setError("Could not get estimate — is the backend running?");
-    } finally { setLoadingEstimate(false); }
-  }
-
-  async function handleBook() {
-    // Must be logged in to book
-    const session = getSession();
-    if (!session || session.role !== "customer" || !session.token) {
-      router.push(`/login?redirect=/`);
-      return;
-    }
-    setLoadingBook(true);
-    setError("");
-    try {
-      const job = await api.createJob({ description, location, urgency });
-      setBooked(job as Job);
-    } catch (e: any) {
-      setError(e.message || "Could not book job");
-    } finally { setLoadingBook(false); }
-  }
-
-  if (booked) {
-    return (
-      <main className="min-h-screen bg-white">
-        <div className="mx-auto max-w-2xl px-4 py-16 text-center">
-          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100">
-            <svg className="h-10 w-10 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-            </svg>
-          </div>
-          <h1 className="text-3xl font-semibold tracking-tight text-slate-950">Job booked!</h1>
-          <p className="mt-3 text-slate-500">
-            {booked.contractor ? `${booked.contractor.name} has been assigned.` : "We're finding your contractor now."}
-          </p>
-          <div className="mt-8 rounded-2xl border border-slate-200 bg-slate-50 p-6 text-left">
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-4">Booking summary</p>
-            <div className="space-y-3 text-sm">
-              {[["Issue", booked.description], ["Location", booked.location], ["When", booked.urgency],
-                ["Category", booked.category], ["Quoted price", `$${booked.quotedPrice}`], ["Status", booked.status.replace(/_/g, " ")]
-              ].map(([k, v]) => (
-                <div key={k} className="flex justify-between gap-4">
-                  <span className="text-slate-500 shrink-0">{k}</span>
-                  <span className="font-medium text-slate-950 text-right capitalize">{v}</span>
-                </div>
-              ))}
-              {booked.contractor && (
-                <div className="border-t border-slate-200 pt-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-full bg-emerald-100 flex items-center justify-center text-sm font-bold text-emerald-700">
-                        {booked.contractor.name.charAt(0)}
-                      </div>
-                      <div>
-                        <p className="font-semibold text-slate-950">{booked.contractor.name}</p>
-                        <p className="text-xs text-slate-500">{booked.contractor.trade.split(",")[0]}{booked.contractor.rating ? ` · ⭐ ${booked.contractor.rating}` : ""}</p>
-                      </div>
-                    </div>
-                    <a href={`tel:${booked.contractor.phone}`} className="flex items-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors">
-                      Call
-                    </a>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-          <a href="/dashboard" className="mt-6 block w-full rounded-2xl bg-emerald-600 py-4 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors text-center">
-            Track my job in dashboard →
-          </a>
-          <button onClick={() => { setBooked(null); setEstimate(null); setDescription(""); }}
-            className="mt-3 w-full rounded-2xl border border-slate-200 py-3 text-sm text-slate-600 hover:bg-slate-50 transition-colors">
-            Book another job
-          </button>
-        </div>
-      </main>
-    );
-  }
-
   return (
-    <main className="min-h-screen bg-white">
-      <section className="mx-auto max-w-6xl px-4 pt-12 pb-8 md:px-6">
-        <div className="flex flex-col items-center text-center mb-10">
-          {isLoggedIn && (
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-emerald-50 border border-emerald-200 px-4 py-1.5 text-xs font-medium text-emerald-700">
-              Welcome back, {userName} — <a href="/dashboard" className="underline">view your jobs →</a>
-            </div>
-          )}
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1.5 text-xs font-medium text-emerald-700">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse inline-block" />
-            AI-powered pricing · Booked jobs · Verified contractors
-          </div>
-          <h1 className="text-4xl md:text-5xl font-semibold tracking-tight text-slate-950 leading-tight max-w-2xl">
-            Book trusted home services <span className="text-emerald-600">instantly.</span>
-          </h1>
-          <p className="mt-4 text-lg text-slate-500 max-w-xl">Describe the issue, get an instant price, and dispatch a verified contractor fast.</p>
-        </div>
+    <main className="min-h-screen bg-white overflow-hidden">
+      
+      {/* Hero */}
+      <EnterpriseHero />
 
-        <div className="flex flex-wrap justify-center gap-6 mb-10">
-          {TRUST_ITEMS.map(item => (
-            <div key={item.label} className="flex items-center gap-2.5">
-              <span className="text-xl">{item.icon}</span>
-              <div>
-                <p className="text-sm font-medium text-slate-950">{item.label}</p>
-                <p className="text-xs text-slate-400">{item.sub}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="mx-auto max-w-2xl">
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_18px_80px_rgba(15,23,42,0.08)]">
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm font-medium text-slate-700">What needs fixing?</label>
-                <textarea value={description} onChange={e => setDescription(e.target.value)}
-                  placeholder="e.g. My kitchen sink is leaking under the cabinet..." rows={3}
-                  className="mt-1.5 w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-950 outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-50 resize-none transition-colors placeholder:text-slate-400" />
-              </div>
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <div>
-                  <label className="text-sm font-medium text-slate-700">Location</label>
-                  <input value={location} onChange={e => setLocation(e.target.value)} placeholder="Austin, TX"
-                    className="mt-1.5 h-12 w-full rounded-2xl border border-slate-200 px-4 text-sm outline-none focus:border-emerald-400 transition-colors" />
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-slate-700">When do you need it?</label>
-                  <select value={urgency} onChange={e => setUrgency(e.target.value)}
-                    className="mt-1.5 h-12 w-full rounded-2xl border border-slate-200 px-4 text-sm outline-none focus:border-emerald-400 transition-colors bg-white">
-                    {URGENCY_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label} — {o.sub}</option>)}
-                  </select>
-                </div>
-              </div>
-              {error && <div className="rounded-xl bg-red-50 border border-red-100 px-4 py-3 text-sm text-red-700">{error}</div>}
-              <button onClick={handleEstimate} disabled={loadingEstimate}
-                className="w-full rounded-2xl bg-emerald-600 py-4 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-60 transition-colors shadow-sm">
-                {loadingEstimate ? "Getting your price..." : "Get instant price →"}
-              </button>
-
-              {estimate && (
-                <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
-                  <div className="flex items-start justify-between gap-4 mb-4">
-                    <div>
-                      <p className="text-xs font-semibold uppercase tracking-wide text-emerald-600 mb-1">AI estimate</p>
-                      <p className="text-4xl font-bold text-slate-950">${estimate.price}</p>
-                      <p className="text-sm text-slate-500 mt-1">Range: ${estimate.priceRange[0]} – ${estimate.priceRange[1]}</p>
-                    </div>
-                    <div className="text-right">
-                      <span className={`inline-block rounded-full border px-3 py-1 text-xs font-semibold ${estimate.confidence === "high" ? "bg-emerald-100 text-emerald-700 border-emerald-200" : "bg-yellow-100 text-yellow-700 border-yellow-200"}`}>
-                        {estimate.confidence} confidence
-                      </span>
-                      <p className="mt-2 text-xs text-slate-500 capitalize">{estimate.category} · ~{estimate.estimatedTimeMinutes} min</p>
-                    </div>
-                  </div>
-                  <div className="border-t border-emerald-200 pt-4">
-                    {!isLoggedIn && (
-                      <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 mb-3">
-                        You need an account to book.{" "}
-                        <a href="/register" className="font-semibold underline">Create one free</a> or{" "}
-                        <a href="/login" className="font-semibold underline">log in</a>
-                      </p>
-                    )}
-                    <p className="text-xs text-slate-500 mb-3">Price is fixed when you book. No surprises.</p>
-                    <button onClick={handleBook} disabled={loadingBook}
-                      className="w-full rounded-xl bg-slate-900 py-3.5 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-60 transition-colors">
-                      {loadingBook ? "Booking..." : isLoggedIn ? "Confirm & book job →" : "Log in to book →"}
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
+      {/* Trust Bar */}
+      <section className="py-12 border-y border-slate-100 bg-slate-50/50">
+        <div className="max-w-7xl mx-auto px-6">
+          <p className="text-center text-xs font-bold uppercase tracking-[0.2em] text-slate-400 mb-8">Trusted by property leaders</p>
+          <div className="flex flex-wrap justify-center items-center gap-12 md:gap-20 grayscale opacity-40">
+            {/* Logo Placeholders */}
+            <span className="text-2xl font-bold tracking-tighter">STRUCT</span>
+            <span className="text-2xl font-bold tracking-tighter">PRIMEVAL</span>
+            <span className="text-2xl font-bold tracking-tighter">NEXUS</span>
+            <span className="text-2xl font-bold tracking-tighter">ELEVATE</span>
+            <span className="text-2xl font-bold tracking-tighter">ORBIT</span>
           </div>
         </div>
       </section>
 
-      <section className="border-t border-slate-100 bg-slate-50 py-16 px-4">
-        <div className="mx-auto max-w-4xl">
-          <h2 className="text-center text-2xl font-semibold text-slate-950 mb-10">How it works</h2>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-            {[
-              { step: "1", title: "Describe your issue", body: "Tell us what's broken. AI understands the job and gives a fair price instantly." },
-              { step: "2", title: "Book in one tap", body: "Fixed price, no back-and-forth. Create a free account to book." },
-              { step: "3", title: "Contractor dispatched", body: "A vetted pro arrives. Confirm completion and leave a review from your dashboard." },
-            ].map(item => (
-              <div key={item.step} className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-600 text-sm font-bold text-white">{item.step}</div>
-                <h3 className="font-semibold text-slate-950 mb-2">{item.title}</h3>
-                <p className="text-sm text-slate-500 leading-relaxed">{item.body}</p>
+      {/* Features */}
+      <EnterpriseFeatures />
+
+      {/* Services Grid */}
+      <section className="py-24 bg-slate-50" id="services">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+            <div>
+              <p className="text-emerald-600 font-bold tracking-widest uppercase text-xs mb-3">Capabilities</p>
+              <h2 className="text-3xl md:text-5xl font-bold text-slate-950 tracking-tight">Expertise in every trade.</h2>
+            </div>
+            <Link href="/booking" className="inline-flex items-center gap-2 text-slate-600 font-bold hover:text-emerald-600 transition-colors">
+              Request custom service
+              <ArrowRight size={18} />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {SERVICES.map((s, i) => (
+              <Link 
+                key={i}
+                href={`/booking?description=${encodeURIComponent(s.label + " service needed")}`}
+                className="group p-6 rounded-3xl bg-white border border-slate-200 hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-900/5 transition-all"
+              >
+                <div className={`w-12 h-12 rounded-2xl ${s.bg} ${s.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                  {s.icon}
+                </div>
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-slate-900">{s.label}</h3>
+                  <ArrowUpRight size={16} className="text-slate-300 group-hover:text-emerald-500 transition-colors" />
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Process Section */}
+      <section className="py-24 bg-white" id="how-it-works">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-20">
+            <h2 className="text-3xl md:text-5xl font-bold text-slate-950 tracking-tight mb-4">A streamlined experience.</h2>
+            <p className="text-slate-500 max-w-2xl mx-auto italic">Industry-leading response times coupled with enterprise-grade accountability.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+            {/* Connecting Line (desktop only) */}
+            <div className="hidden md:block absolute top-[60px] left-[15%] right-[15%] h-[1px] bg-slate-100 -z-0" />
+            
+            {HOW_IT_WORKS.map((step, i) => (
+              <div key={i} className="relative z-10 text-center flex flex-col items-center">
+                <div className={`w-14 h-14 rounded-full bg-white border-4 border-slate-50 shadow-lg flex items-center justify-center text-slate-900 font-black text-xl mb-6 ring-8 ring-transparent hover:ring-emerald-50 transition-all`}>
+                  {step.step}
+                </div>
+                <h3 className="text-xl font-bold text-slate-950 mb-3">{step.title}</h3>
+                <p className="text-slate-500 text-sm leading-relaxed max-w-xs">{step.body}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="border-t border-slate-100 py-14 px-4">
-        <div className="mx-auto max-w-xl text-center">
-          <p className="text-sm font-medium text-slate-500 mb-4">Are you a trades professional?</p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="/contractor/login" className="flex-1 rounded-2xl border border-slate-200 py-3.5 text-center text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors">
-              Log in as contractor
-            </a>
-            <a href="/contractor/onboarding" className="flex-1 rounded-2xl bg-slate-900 py-3.5 text-center text-sm font-semibold text-white hover:bg-slate-800 transition-colors">
-              Join as contractor →
-            </a>
+      {/* CTA Section */}
+      <section className="py-24 bg-slate-950 relative overflow-hidden">
+        {/* Background Accents */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-900/20 rounded-full blur-[120px] -mr-[250px] -mt-[250px]" />
+        
+        <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
+          <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight mb-8">
+            Ready to experience <br />the <span className="text-emerald-400 font-medium">modern standard?</span>
+          </h2>
+          <p className="text-slate-400 text-lg mb-12 max-w-xl mx-auto">
+            Join the forward-thinking enterprises and homeowners who manage their property with Fixr.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link 
+              href="/register" 
+              className="w-full sm:w-auto px-10 py-4 rounded-2xl bg-emerald-600 text-white font-bold hover:bg-emerald-500 transition-all shadow-xl shadow-emerald-900/20 active:scale-95"
+            >
+              Start Free Today
+            </Link>
+            <Link 
+              href="/contractor/onboarding" 
+              className="w-full sm:w-auto px-10 py-4 rounded-2xl bg-white/10 text-white font-bold hover:bg-white/20 transition-all backdrop-blur-sm border border-white/10"
+            >
+              For Contractors
+            </Link>
           </div>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="py-12 bg-white border-t border-slate-100">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-8">
+            <div className="flex items-center gap-3 grayscale opacity-80">
+              <div className="h-8 w-8 bg-slate-900 rounded-lg flex items-center justify-center text-white font-bold text-sm">F</div>
+              <span className="text-lg font-bold tracking-tight text-slate-950">Fixr</span>
+            </div>
+            
+            <div className="flex flex-wrap justify-center gap-8 text-sm font-medium text-slate-500">
+              <Link href="/#services" className="hover:text-emerald-600 transition-colors">Services</Link>
+              <Link href="/#how-it-works" className="hover:text-emerald-600 transition-colors">How it Works</Link>
+              <Link href="/pricing" className="hover:text-emerald-600 transition-colors">Pricing</Link>
+              <Link href="/terms" className="hover:text-emerald-600 transition-colors">Terms</Link>
+              <Link href="/privacy" className="hover:text-emerald-600 transition-colors">Privacy</Link>
+              <Link href="/help" className="hover:text-emerald-600 transition-colors">Help Center</Link>
+            </div>
+
+            <div className="flex items-center gap-4 text-slate-400">
+              <a href="tel:+1800FIXR" className="p-2 rounded-lg hover:bg-slate-50 transition-colors text-slate-400 hover:text-emerald-600">
+                <PhoneCall size={18} />
+              </a>
+              <p className="text-xs font-bold uppercase tracking-widest">© 2026 Fixr Inc.</p>
+            </div>
+          </div>
+        </div>
+      </footer>
     </main>
   );
 }

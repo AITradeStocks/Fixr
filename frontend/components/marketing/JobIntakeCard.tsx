@@ -98,8 +98,8 @@ export function JobIntakeCard({ onStart }: Props) {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-500">Contact</span>
-                    <a href={`tel:${booked.contractor.phone}`} className="font-medium text-emerald-600 hover:underline">
-                      {booked.contractor.phone}
+                    <a href={`tel:${booked.contractor.telephone}`} className="font-medium text-emerald-600 hover:underline">
+                      {booked.contractor.telephone}
                     </a>
                   </div>
                   {booked.contractor.rating && (

@@ -19,7 +19,7 @@ export interface PricingEstimate {
 export interface Contractor {
   id: string;
   name: string;
-  phone: string;
+  telephone: string;
   email?: string;
   trade: string;
   trades?: string[];
@@ -28,8 +28,19 @@ export interface Contractor {
   rating?: number;
   zipCodes: string[];
   insuranceUploaded: boolean;
-  licenseUploaded: boolean;
-  identityUploaded: boolean;
+  isLicensed: boolean;
+  isVerified: boolean;
+  // Extended profile
+  headline?: string;
+  location?: string;
+  website?: string;
+  owner?: string;
+  abn?: string;
+  licenses: string[];
+  postcode?: string;
+  about?: string;
+  logo_url?: string;
+  address?: string;
   createdAt: string;
 }
 
@@ -37,6 +48,8 @@ export interface Job {
   id: string;
   description: string;
   location: string;
+  address?: string;
+  postcode?: string;
   urgency: string;
   category: string;
   problemType: string;
@@ -49,7 +62,7 @@ export interface Job {
   confidence: string;
   status: string;
   userId?: string;
-  user?: { id: string; name: string; email: string };
+  user?: { id: string; name: string; email: string; phone?: string };
   contractorId?: string;
   contractor?: Contractor;
   reviews?: Review[];

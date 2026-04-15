@@ -28,9 +28,17 @@ jobsRouter.get("/jobs/mine", requireAuth, async (req: AuthRequest, res, next) =>
   } catch (error) { next(error); }
 });
 
-// GET /jobs — all jobs (admin/contractor use; no auth required for contractor feed)
-jobsRouter.get("/jobs", async (_req, res) => {
+// GET /jobs — all jobs (admin/contractor use; supports postcode filtering)
+jobsRouter.get("/jobs", async (req, res) => {
+  const { postcode } = req.query;
+  const where: any = {};
+  
+  if (postcode) {
+    where.postcode = postcode;
+  }
+
   const jobs = await prisma.job.findMany({
+    where,
     orderBy: { createdAt: "desc" },
     include: { contractor: true, reviews: true },
   });
@@ -41,7 +49,7 @@ jobsRouter.get("/jobs", async (_req, res) => {
 jobsRouter.get("/jobs/:id", async (req, res) => {
   const job = await prisma.job.findUnique({
     where: { id: req.params.id },
-    include: { contractor: true, reviews: true, user: { select: { id: true, name: true, email: true } } },
+    include: { contractor: true, reviews: true, user: { select: { id: true, name: true, email: true, phone: true } } },
   });
   if (!job) { res.status(404).json({ error: "job not found" }); return; }
   res.json(job);
@@ -132,7 +140,7 @@ jobsRouter.post("/jobs/:id/review", async (req, res, next) => {
     const job = await prisma.job.findUnique({ where: { id: req.params.id } });
     if (job?.contractorId) {
       const reviews = await prisma.review.findMany({ where: { job: { contractorId: job.contractorId } } });
-      const avg = reviews.reduce((s, r) => s + r.rating, 0) / reviews.length;
+      const avg = reviews.reduce((s: number, r: any) => s + r.rating, 0) / reviews.length;
       await prisma.contractor.update({
         where: { id: job.contractorId },
         data: { rating: Math.round(avg * 10) / 10 },

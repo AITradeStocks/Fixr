@@ -2,10 +2,32 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { api } from "@/lib/api";
 import { getSession } from "@/lib/auth";
 import type { Job } from "@/lib/types";
 import { STATUS_COLORS, STATUS_LABELS } from "@/lib/types";
+import { motion, AnimatePresence } from "framer-motion";
+import { 
+  Plus, 
+  Activity, 
+  CheckCircle2, 
+  Clock, 
+  ChevronRight, 
+  Star, 
+  Phone, 
+  MapPin, 
+  ShieldCheck, 
+  Wrench,
+  AlertCircle,
+  TrendingUp,
+  LayoutDashboard,
+  Calendar,
+  Sparkles,
+  MessageCircle,
+  Mail
+} from "lucide-react";
+import { SupportOverlay } from "@/components/SupportOverlay";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -15,10 +37,10 @@ export default function DashboardPage() {
   const [reviewData, setReviewData] = useState<Record<string, { rating: number; comment: string }>>({});
   const [showReview, setShowReview] = useState<string | null>(null);
   const [userName, setUserName] = useState("");
+  const [isSupportOpen, setIsSupportOpen] = useState(false);
 
   const load = useCallback(async () => {
     try {
-      // Fetch ONLY this user's jobs via /jobs/mine (requires JWT)
       const data = (await api.getMyJobs()) as Job[];
       setJobs(data);
     } catch (e: any) {
@@ -26,7 +48,7 @@ export default function DashboardPage() {
         router.push("/login");
       }
     } finally { setLoading(false); }
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     const session = getSession();
@@ -34,11 +56,10 @@ export default function DashboardPage() {
       router.push("/login");
       return;
     }
-    setUserName(session.user?.name || "");
+    setUserName(session.user?.name || "Member");
     load();
-  }, []);
+  }, [router, load]);
 
-  // Auto-refresh every 5s while jobs are open
   useEffect(() => {
     const hasOpen = jobs.some(j => ["priced", "assigned", "manual_dispatch_required", "awaiting_customer_confirmation"].includes(j.status));
     if (!hasOpen) return;
@@ -61,73 +82,230 @@ export default function DashboardPage() {
   }
 
   if (loading) return (
-    <main className="min-h-screen bg-slate-50 flex items-center justify-center">
-      <div className="flex items-center gap-2 text-slate-400 text-sm">
-        <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
-          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
-        </svg>
-        Loading your jobs...
+    <main className="min-h-screen bg-mesh flex items-center justify-center">
+      <div className="flex flex-col items-center gap-4">
+        <div className="h-10 w-10 border-4 border-emerald-600/30 border-t-emerald-600 rounded-full animate-spin" />
+        <p className="text-sm font-bold text-slate-500 uppercase tracking-widest">Securing Connection...</p>
       </div>
     </main>
   );
 
   const activeJobs = jobs.filter(j => !["reviewed", "cancelled"].includes(j.status));
   const doneJobs = jobs.filter(j => j.status === "reviewed");
+  const stats = [
+    { label: "Active Requests", value: activeJobs.length, icon: <Activity size={18} />, color: "text-emerald-600", bg: "bg-emerald-50" },
+    { label: "Completed Jobs", value: doneJobs.length, icon: <CheckCircle2 size={18} />, color: "text-blue-600", bg: "bg-blue-50" },
+    { label: "Account Status", value: "Verified", icon: <ShieldCheck size={18} />, color: "text-amber-600", bg: "bg-amber-50" },
+  ];
 
   return (
-    <main className="min-h-screen bg-slate-50">
-      <div className="mx-auto max-w-3xl px-4 py-10">
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-semibold tracking-tight text-slate-950">
-              {userName ? `${userName}'s jobs` : "My Jobs"}
+    <main className="min-h-screen bg-mesh pb-24 pt-10">
+      <SupportOverlay isOpen={isSupportOpen} onClose={() => setIsSupportOpen(false)} />
+      <div className="mx-auto max-w-6xl px-6">
+        {/* Header */}
+        <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+          >
+           
+            <h1 className="text-4xl font-black tracking-tight text-slate-950">
+              Welcome, {userName.split(" ")[0]}
             </h1>
-            <p className="mt-1 text-sm text-slate-500">
-              {jobs.length === 0 ? "No jobs yet" : `${activeJobs.length} active · ${doneJobs.length} completed`}
+            <p className="mt-2 text-slate-500 font-medium max-w-md">
+              Oversee your property maintenance, track active contractors, and manage your service history in real-time.
             </p>
-          </div>
-          <a href="/" className="rounded-2xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors shadow-sm">
-            + New job
-          </a>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex items-center gap-3"
+          >
+            <Link 
+              href="/dashboard/analysis" 
+              className="p-3 rounded-2xl bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all shadow-sm active:scale-95"
+              title="View Insights"
+            >
+              <Activity size={20} />
+            </Link>
+            <Link 
+              href="/booking" 
+              className="flex items-center gap-2 rounded-2xl bg-slate-950 px-6 py-3.5 text-sm font-bold text-white hover:bg-slate-800 transition-all shadow-xl shadow-slate-200 active:scale-95"
+            >
+              <Plus size={18} />
+              Post New Request
+            </Link>
+          </motion.div>
         </div>
 
-        {jobs.length === 0 && (
-          <div className="rounded-3xl border border-dashed border-slate-200 bg-white p-16 text-center">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100 text-3xl">🔧</div>
-            <h3 className="font-semibold text-slate-950">No jobs yet</h3>
-            <p className="mt-2 text-sm text-slate-400">Book your first job and a contractor will be on the way.</p>
-            <a href="/" className="mt-5 inline-block rounded-2xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors">
-              Book a job →
-            </a>
-          </div>
-        )}
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          {stats.map((stat, i) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1 }}
+              className="glass p-6 rounded-[2rem] border border-white/50 shadow-sm flex items-center justify-between group hover:border-white transition-all"
+            >
+              <div>
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">{stat.label}</p>
+                <p className="text-2xl font-black text-slate-950">{stat.value}</p>
+              </div>
+              <div className={`h-12 w-12 rounded-2xl ${stat.bg} ${stat.color} flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform`}>
+                {stat.icon}
+              </div>
+            </motion.div>
+          ))}
+        </div>
 
-        {activeJobs.length > 0 && (
-          <div className="mb-8">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Active</p>
-            <div className="space-y-4">
-              {activeJobs.map(job => (
-                <JobCard key={job.id} job={job} actionLoading={actionLoading} showReview={showReview}
-                  reviewData={reviewData} onConfirm={handleConfirm} onReview={handleReview}
-                  onSetReview={(id, d) => setReviewData(r => ({ ...r, [id]: d }))} />
-              ))}
-            </div>
-          </div>
-        )}
+        {/* Jobs Sections */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+          {/* Main List */}
+          <div className="lg:col-span-2 space-y-12">
+            {/* Active Jobs */}
+            <div>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                  <Activity size={18} className="text-emerald-500" />
+                  Active Service Requests
+                </h2>
+                {activeJobs.length > 0 && <span className="h-2 w-2 rounded-full bg-emerald-500 animate-ping" />}
+              </div>
 
-        {doneJobs.length > 0 && (
-          <div>
-            <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Completed</p>
-            <div className="space-y-3">
-              {doneJobs.map(job => (
-                <JobCard key={job.id} job={job} actionLoading={actionLoading} showReview={showReview}
-                  reviewData={reviewData} onConfirm={handleConfirm} onReview={handleReview}
-                  onSetReview={(id, d) => setReviewData(r => ({ ...r, [id]: d }))} />
-              ))}
+              {activeJobs.length === 0 ? (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="rounded-[2.5rem] border border-dashed border-slate-300 bg-white/50 p-16 text-center"
+                >
+                  <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-slate-100 text-slate-400">
+                    <Wrench size={32} />
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-950">System Idle</h3>
+                  <p className="mt-2 text-sm text-slate-400 font-medium max-w-xs mx-auto">You don't have any active maintenance requests. Ready to fix something?</p>
+                  <Link href="/booking" className="mt-6 inline-flex items-center gap-2 rounded-2xl bg-emerald-600 px-8 py-3.5 text-sm font-bold text-white hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-100">
+                    Dispatch Pro
+                    <ChevronRight size={16} />
+                  </Link>
+                </motion.div>
+              ) : (
+                <div className="space-y-6">
+                  {activeJobs.map((job, i) => (
+                    <motion.div
+                      key={job.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.2 + (i * 0.1) }}
+                    >
+                      <JobCard 
+                        job={job} 
+                        actionLoading={actionLoading} 
+                        showReview={showReview}
+                        reviewData={reviewData} 
+                        onConfirm={handleConfirm} 
+                        onReview={handleReview}
+                        onSetReview={(id, d) => setReviewData(r => ({ ...r, [id]: d }))} 
+                      />
+                    </motion.div>
+                  ))}
+                </div>
+              )}
             </div>
+
+            {/* Completed History */}
+            {doneJobs.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
+                <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2 mb-6">
+                  <CheckCircle2 size={18} className="text-blue-500" />
+                  Service History
+                </h2>
+                <div className="space-y-4">
+                  {doneJobs.map(job => (
+                    <JobCard 
+                      key={job.id} 
+                      job={job} 
+                      actionLoading={actionLoading} 
+                      showReview={showReview}
+                      reviewData={reviewData} 
+                      onConfirm={handleConfirm} 
+                      onReview={handleReview}
+                      onSetReview={(id, d) => setReviewData(r => ({ ...r, [id]: d }))} 
+                    />
+                  ))}
+                </div>
+              </motion.div>
+            )}
           </div>
-        )}
+
+          {/* Sidebar / Activities */}
+          <div className="space-y-6">
+            <div className="glass p-8 rounded-[2.5rem] border border-white/50 shadow-sm">
+              <h3 className="text-sm font-bold text-slate-900 uppercase tracking-widest mb-6">Support Center</h3>
+              <div className="space-y-4">
+                <Link href="/help#safety" className="flex gap-4 p-4 rounded-2xl bg-white/40 hover:bg-white/60 transition-colors border border-transparent hover:border-emerald-100 cursor-pointer group">
+                  <div className="h-10 w-10 shrink-0 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                    <ShieldCheck size={20} />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">Safety Standard</h4>
+                    <p className="text-xs text-slate-500 font-medium mt-1">All pros are verified through 5-point check.</p>
+                  </div>
+                </Link>
+                <Link href="/help#scheduling" className="flex gap-4 p-4 rounded-2xl bg-white/40 hover:bg-white/60 transition-colors border border-transparent hover:border-blue-100 cursor-pointer group">
+                  <div className="h-10 w-10 shrink-0 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                    <Calendar size={20} />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-slate-900 group-hover:text-blue-700 transition-colors">Fast Scheduling</h4>
+                    <p className="text-xs text-slate-500 font-medium mt-1">Next-day availability on all major trades.</p>
+                  </div>
+                </Link>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 mt-6">
+                <button 
+                  onClick={() => setIsSupportOpen(true)}
+                  className="p-4 rounded-2xl bg-emerald-600 text-white flex flex-col gap-2 hover:bg-emerald-700 transition-all active:scale-[0.98]"
+                >
+                  <MessageCircle size={18} />
+                  <span className="text-[10px] font-black uppercase tracking-widest text-left">Live Chat</span>
+                </button>
+                <a 
+                  href="mailto:support@fixr.io"
+                  className="p-4 rounded-2xl bg-slate-900 text-white flex flex-col gap-2 hover:bg-slate-800 transition-all active:scale-[0.98]"
+                >
+                  <Mail size={18} />
+                  <span className="text-[10px] font-black uppercase tracking-widest text-left">Email Support</span>
+                </a>
+              </div>
+              
+              <div className="mt-8 pt-8 border-t border-slate-100">
+                <Link href="/help" className="w-full py-4 rounded-2xl border border-slate-200 text-sm font-bold text-slate-600 hover:bg-slate-50 transition-all flex items-center justify-center gap-2">
+                  Documentation & FAQs
+                  <ChevronRight size={14} />
+                </Link>
+              </div>
+            </div>
+
+            {activeJobs.length > 0 && (
+              <div className="p-6 rounded-[2rem] bg-slate-950 text-white shadow-xl shadow-slate-200">
+                <div className="flex items-center gap-2 mb-4">
+                  <TrendingUp size={16} className="text-emerald-400" />
+                  <span className="text-[10px] font-bold uppercase tracking-widest opacity-60">System Insights</span>
+                </div>
+                <p className="text-sm font-medium leading-relaxed">
+                  Your requests are being handled by our AI coordinator. Pros typically respond within <span className="text-emerald-400 font-bold underline">12 minutes</span>.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </main>
   );
@@ -139,125 +317,212 @@ function JobCard({ job, actionLoading, showReview, reviewData, onConfirm, onRevi
   onConfirm: (id: string) => void; onReview: (id: string) => void;
   onSetReview: (id: string, d: { rating: number; comment: string }) => void;
 }) {
-  const done = job.status === "reviewed";
+  const isDone = job.status === "reviewed" || job.status === "cancelled";
+  
   return (
-    <div className={`rounded-3xl border bg-white shadow-sm overflow-hidden ${done ? "border-slate-100 opacity-75" : "border-slate-200"}`}>
-      <div className="p-5">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex-1 min-w-0">
-            <p className="font-semibold text-slate-950 leading-snug">{job.description}</p>
-            <p className="mt-1 text-xs text-slate-400">{job.location} · {job.urgency} · <span className="capitalize">{job.category}</span></p>
+    <div className={`glass rounded-[2rem] border transition-all duration-300 overflow-hidden ${
+      isDone ? "border-slate-100 opacity-80" : "border-white/50 shadow-md shadow-slate-900/5"
+    }`}>
+      <div className="p-6 md:p-8">
+        <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
+          <div className="flex-1">
+            <div className="flex items-center gap-2 mb-3">
+              <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest border ${
+                STATUS_COLORS[job.status] || "bg-slate-50 text-slate-600 border-slate-200"
+              }`}>
+                {STATUS_LABELS[job.status] || job.status}
+              </span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">#{job.id.slice(-6)}</span>
+            </div>
+            <h3 className="text-xl font-bold text-slate-950 leading-tight mb-2">{job.description}</h3>
+            <div className="flex flex-wrap items-center gap-y-2 gap-x-4 text-sm text-slate-500 font-medium">
+              <div className="flex items-center gap-1.5"><MapPin size={14} className="text-slate-400" /> {job.location}</div>
+              <div className="flex items-center gap-1.5"><Clock size={14} className="text-slate-400" /> {job.urgency}</div>
+              <div className="flex items-center gap-1.5"><Wrench size={14} className="text-slate-400" /> <span className="capitalize">{job.category}</span></div>
+            </div>
           </div>
-          <div className="flex flex-col items-end gap-1.5 shrink-0">
-            <span className="text-xl font-bold text-slate-950">${job.quotedPrice}</span>
-            <span className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${STATUS_COLORS[job.status] || "bg-slate-50 text-slate-600 border-slate-200"}`}>
-              {STATUS_LABELS[job.status] || job.status}
-            </span>
+          
+          <div className="flex flex-col md:items-end gap-1">
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Total Investment</p>
+            <p className="text-3xl font-black text-slate-950">${job.quotedPrice}</p>
           </div>
         </div>
 
         {/* Timeline */}
-        <div className="mt-5"><StatusTimeline status={job.status} /></div>
+        <div className="mt-8 mb-6 bg-white/30 rounded-2xl p-6 border border-white/40 shadow-inner">
+          <StatusTimeline status={job.status} />
+        </div>
 
-        {/* Contractor card */}
+        {/* Contractor Section */}
         {job.contractor && (
-          <div className="mt-4 rounded-2xl border border-slate-100 bg-slate-50 p-4">
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-3">Your contractor</p>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-sm font-bold text-emerald-700">
-                  {job.contractor.name.charAt(0)}
+          <motion.div 
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            className="mt-6 pt-6 border-t border-slate-100"
+          >
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-slate-50/50 p-6 rounded-2xl border border-slate-100">
+              <div className="flex items-center gap-4">
+                <div className="relative h-14 w-14 shrink-0 rounded-2xl bg-white border border-slate-100 flex items-center justify-center text-emerald-600 shadow-sm">
+                  {job.contractor.logo_url ? (
+                    <img src={job.contractor.logo_url} alt={job.contractor.name} className="h-full w-full rounded-2xl object-cover" />
+                  ) : (
+                    <span className="text-xl font-black">{job.contractor.name.charAt(0)}</span>
+                  )}
+                  <div className="absolute -bottom-1 -right-1 h-5 w-5 bg-white rounded-full flex items-center justify-center text-blue-500 shadow-sm">
+                    <ShieldCheck size={12} fill="currentColor" className="text-white" />
+                  </div>
                 </div>
                 <div>
-                  <p className="font-semibold text-slate-950">{job.contractor.name}</p>
-                  <p className="text-xs text-slate-500 capitalize mt-0.5">
-                    {job.contractor.trade.split(",")[0]} · {job.contractor.businessType}
-                    {job.contractor.rating ? ` · ⭐ ${job.contractor.rating}` : ""}
+                  <div className="flex items-center gap-2">
+                    <p className="font-bold text-slate-950 leading-none">{job.contractor.name}</p>
+                    {job.contractor.isVerified && (
+                      <span className="text-[9px] font-black uppercase tracking-widest px-1.5 py-0.5 bg-blue-50 text-blue-600 rounded-md border border-blue-100">Verified Pro</span>
+                    )}
+                  </div>
+                  <p className="text-xs text-slate-500 font-bold uppercase tracking-tight mt-1.5">
+                    {job.contractor.trade} • {job.contractor.businessType}
+                    {job.contractor.rating ? ` • ⭐ ${job.contractor.rating}` : ""}
                   </p>
                 </div>
               </div>
-              <a href={`tel:${job.contractor.phone}`}
-                className="flex items-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors">
-                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-                Call
+              <a 
+                href={`tel:${job.contractor.telephone}`}
+                className="flex items-center justify-center gap-2 rounded-xl bg-white border border-slate-200 px-6 py-3 text-sm font-bold text-slate-900 hover:bg-slate-50 transition-all shadow-sm active:scale-95"
+              >
+                <Phone size={16} />
+                Contact Pro
               </a>
             </div>
+          </motion.div>
+        )}
+
+        {/* Action Footers */}
+        {["priced", "manual_dispatch_required"].includes(job.status) && (
+          <div className="mt-6 flex items-center gap-3 p-4 bg-blue-50 rounded-2xl border border-blue-100 animate-pulse">
+            <div className="h-2 w-2 rounded-full bg-blue-500" />
+            <p className="text-xs font-bold text-blue-700 uppercase tracking-widest">Contractor Match in Progress...</p>
+          </div>
+        )}
+
+        {job.status === "completed" && showReview !== job.id && (
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+            className="mt-6 p-6 rounded-2xl bg-emerald-50 border border-emerald-100"
+          >
+            <div className="flex items-start gap-3 mb-4">
+              <Sparkles size={18} className="text-emerald-600" />
+              <div>
+                <p className="text-sm font-bold text-emerald-950">Maintenance Completed Successfully</p>
+                <p className="text-xs text-emerald-700 font-medium mt-1">Review the work quality to release payment and finalize the record.</p>
+              </div>
+            </div>
+            <button 
+              onClick={() => onConfirm(job.id)} 
+              disabled={actionLoading === job.id + "_confirm"}
+              className="w-full py-4 rounded-xl bg-emerald-600 text-white font-bold hover:bg-emerald-700 disabled:opacity-50 transition-all shadow-lg shadow-emerald-200 flex items-center justify-center gap-2"
+            >
+              {actionLoading === job.id + "_confirm" ? "Confirming..." : "Finalize & Leave Review"}
+              <ChevronRight size={16} />
+            </button>
+          </motion.div>
+        )}
+
+        {showReview === job.id && (
+          <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="mt-6 p-8 rounded-3xl bg-slate-900 text-white">
+            <h4 className="text-lg font-bold mb-6 flex items-center gap-2">
+              <Star size={20} className="text-amber-400" strokeWidth={3} />
+              Quality Assessment
+            </h4>
+            <div className="flex gap-4 mb-8">
+              {[1, 2, 3, 4, 5].map(n => (
+                <button 
+                  key={n} 
+                  onClick={() => onSetReview(job.id, { ...reviewData[job.id], rating: n })}
+                  className={`h-14 flex-1 rounded-2xl flex items-center justify-center text-2xl transition-all border-2 ${
+                    reviewData[job.id]?.rating >= n ? "bg-amber-400 border-amber-300 scale-105" : "bg-white/5 border-white/10 hover:bg-white/10"
+                  }`}
+                >
+                  <Star fill={reviewData[job.id]?.rating >= n ? "white" : "none"} size={24} className={reviewData[job.id]?.rating >= n ? "text-white" : "text-white/20"} />
+                </button>
+              ))}
+            </div>
+            <textarea 
+              placeholder="Provide professional feedback (optional)..." 
+              rows={3}
+              className="w-full rounded-2xl bg-white/5 border border-white/10 px-4 py-4 text-sm outline-none focus:border-amber-400 focus:bg-white/10 transition-all resize-none mb-6 placeholder:text-white/20"
+              onChange={e => onSetReview(job.id, { ...reviewData[job.id], comment: e.target.value })} 
+            />
+            <button 
+              onClick={() => onReview(job.id)} 
+              disabled={!reviewData[job.id]?.rating || actionLoading === job.id + "_review"}
+              className="w-full py-4 rounded-xl bg-white text-slate-900 font-black hover:bg-slate-100 disabled:opacity-20 transition-all active:scale-[0.98]"
+            >
+              {actionLoading === job.id + "_review" ? "Submitting..." : "Submit Formal Review"}
+            </button>
+          </motion.div>
+        )}
+
+        {isDone && showReview !== job.id && (
+          <div className="mt-6 flex items-center gap-2 p-4 rounded-2xl bg-white/50 border border-slate-100">
+            <CheckCircle2 size={16} className="text-emerald-500" />
+            <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">
+              Service Archieved • {job.reviews?.[0] ? `Rated ${job.reviews[0].rating}/5` : "Payment Released"}
+            </p>
           </div>
         )}
       </div>
-
-      {["priced", "manual_dispatch_required"].includes(job.status) && (
-        <div className="border-t border-slate-100 bg-blue-50 px-5 py-3 flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-blue-500 animate-pulse shrink-0" />
-          <p className="text-xs text-blue-700">Finding a contractor — page refreshes every 5s</p>
-        </div>
-      )}
-
-      {job.status === "completed" && showReview !== job.id && (
-        <div className="border-t border-slate-100 bg-emerald-50 p-5">
-          <p className="text-sm font-semibold text-emerald-900 mb-1">Work completed!</p>
-          <p className="text-xs text-emerald-700 mb-4">Confirm to release payment to your contractor.</p>
-          <button onClick={() => onConfirm(job.id)} disabled={actionLoading === job.id + "_confirm"}
-            className="w-full rounded-xl bg-emerald-600 py-3 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50 transition-colors">
-            {actionLoading === job.id + "_confirm" ? "Confirming..." : "Confirm & leave a review →"}
-          </button>
-        </div>
-      )}
-
-      {showReview === job.id && (
-        <div className="border-t border-slate-100 p-5">
-          <p className="text-sm font-semibold text-slate-950 mb-4">How was the service?</p>
-          <div className="flex gap-2 mb-4">
-            {[1, 2, 3, 4, 5].map(n => (
-              <button key={n} onClick={() => onSetReview(job.id, { ...reviewData[job.id], rating: n })}
-                className={`h-12 w-12 rounded-xl border text-xl transition-all ${reviewData[job.id]?.rating >= n ? "border-yellow-300 bg-yellow-50 scale-105" : "border-slate-200 bg-white hover:bg-slate-50"}`}>
-                ⭐
-              </button>
-            ))}
-          </div>
-          <textarea placeholder="Any comments? (optional)" rows={2}
-            className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-emerald-400 resize-none transition-colors"
-            onChange={e => onSetReview(job.id, { ...reviewData[job.id], comment: e.target.value })} />
-          <button onClick={() => onReview(job.id)} disabled={!reviewData[job.id]?.rating || actionLoading === job.id + "_review"}
-            className="mt-3 w-full rounded-xl bg-slate-900 py-3 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-40 transition-colors">
-            {actionLoading === job.id + "_review" ? "Submitting..." : "Submit review"}
-          </button>
-        </div>
-      )}
-
-      {done && showReview !== job.id && (
-        <div className="border-t border-slate-100 px-5 py-3 flex items-center gap-2">
-          <svg className="h-4 w-4 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-          </svg>
-          <p className="text-sm text-slate-500">
-            Complete · {job.reviews?.[0] ? `Rated ${job.reviews[0].rating}/5` : "Thank you!"}
-          </p>
-        </div>
-      )}
     </div>
   );
 }
 
 function StatusTimeline({ status }: { status: string }) {
-  const steps = [{ key: "priced", label: "Booked" }, { key: "awaiting_customer_confirmation", label: "Accepted" }, { key: "completed", label: "Done" }, { key: "reviewed", label: "Confirmed" }];
+  const steps = [
+    { key: "priced", label: "Requested" }, 
+    { key: "awaiting_customer_confirmation", label: "Matching" }, 
+    { key: "completed", label: "In Progress" }, 
+    { key: "reviewed", label: "Finalized" }
+  ];
+  
   const idx = status === "manual_dispatch_required" ? 0 : Math.max(0, steps.findIndex(s => s.key === status));
+  
   return (
-    <div className="flex items-center">
+    <div className="flex items-center w-full px-2">
       {steps.map((s, i) => {
-        const done = i <= idx; const active = i === idx;
+        const isCompleted = i < idx;
+        const isActive = i === idx;
         return (
           <div key={s.key} className="flex items-center flex-1 last:flex-none">
-            <div className="flex flex-col items-center">
-              <div className={`h-2.5 w-2.5 rounded-full transition-all ${active ? "bg-emerald-500 ring-4 ring-emerald-100" : done ? "bg-emerald-400" : "bg-slate-200"}`} />
-              <span className={`mt-1.5 text-[10px] whitespace-nowrap ${active ? "text-emerald-600 font-semibold" : done ? "text-slate-500" : "text-slate-300"}`}>{s.label}</span>
+            <div className="flex flex-col items-center relative z-10">
+              <motion.div 
+                initial={false}
+                animate={isActive ? { scale: 1.2 } : { scale: 1 }}
+                className={`h-5 w-5 rounded-full flex items-center justify-center border-2 transition-colors duration-500 ${
+                  isActive ? "bg-emerald-600 border-emerald-400 shadow-lg shadow-emerald-200" : 
+                  isCompleted ? "bg-emerald-500 border-emerald-500" : 
+                  "bg-white border-slate-200"
+                }`}
+              >
+                {isCompleted && <CheckCircle2 size={12} className="text-white" />}
+                {isActive && <div className="h-1.5 w-1.5 bg-white rounded-full animate-ping" />}
+              </motion.div>
+              <span className={`absolute -bottom-8 text-[10px] font-bold uppercase tracking-tight whitespace-nowrap transition-colors duration-500 ${
+                isActive ? "text-emerald-600" : isCompleted ? "text-slate-500" : "text-slate-300"
+              }`}>{s.label}</span>
             </div>
-            {i < steps.length - 1 && <div className={`flex-1 h-px mx-1.5 mb-4 ${i < idx ? "bg-emerald-300" : "bg-slate-100"}`} />}
+            {i < steps.length - 1 && (
+              <div className="flex-1 h-1.5 mx-0 bg-slate-100 rounded-full overflow-hidden">
+                <motion.div 
+                  initial={{ width: "0%" }}
+                  animate={{ width: i < idx ? "100%" : i === idx ? "50%" : "0%" }}
+                  transition={{ duration: 1, ease: "easeInOut" }}
+                  className="h-full bg-emerald-500"
+                />
+              </div>
+            )}
           </div>
         );
       })}
+      <div className="mb-4" /> {/* Spacer for labels */}
     </div>
   );
 }

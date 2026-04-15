@@ -4,6 +4,7 @@ import { parseJob } from "./parser.service.js";
 export interface PricingRequest {
   description: string;
   location: string;
+  postcode?: string;
   urgency: "urgent now" | "today" | "flexible";
 }
 

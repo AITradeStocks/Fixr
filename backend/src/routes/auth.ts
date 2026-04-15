@@ -7,7 +7,7 @@ import type { AuthRequest } from "../middleware/auth.middleware.js";
 export const authRouter = Router();
 
 // POST /auth/register — create customer account
-authRouter.post("/auth/register", async (req, res, next) => {
+authRouter.post("/register", async (req, res, next) => {
   try {
     const { email, password, name, phone } = req.body;
 
@@ -45,7 +45,7 @@ authRouter.post("/auth/register", async (req, res, next) => {
 });
 
 // POST /auth/login — email + password login
-authRouter.post("/auth/login", async (req, res, next) => {
+authRouter.post("/login", async (req, res, next) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -74,7 +74,7 @@ authRouter.post("/auth/login", async (req, res, next) => {
 });
 
 // GET /auth/me — verify token + return user profile
-authRouter.get("/auth/me", requireAuth, async (req: AuthRequest, res, next) => {
+authRouter.get("/me", requireAuth, async (req: AuthRequest, res, next) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: req.userId },

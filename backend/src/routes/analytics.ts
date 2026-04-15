@@ -1,7 +1,81 @@
 import { Router } from "express";
 import { prisma } from "../db/prisma.js";
+import { requireAuth, AuthRequest } from "../middleware/auth.middleware.js";
 
 export const analyticsRouter = Router();
+
+analyticsRouter.get("/analytics/user", requireAuth, async (req: AuthRequest, res, next) => {
+  try {
+    const userId = req.userId;
+    const jobs = await prisma.job.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'asc' }
+    });
+
+    if (jobs.length === 0) {
+      return res.json({
+        totalInvestment: 0,
+        avgResolutionTime: 0,
+        prosDispatched: 0,
+        facilityUpTime: 100,
+        categoryMix: [],
+        investmentHistory: []
+      });
+    }
+
+    const reviewedJobs = jobs.filter(j => j.status === 'reviewed');
+    
+    // 1. Total Investment
+    const totalInvestment = jobs.reduce((sum, j) => sum + j.quotedPrice, 0);
+
+    // 2. Avg Resolution Time (in hours)
+    let avgResolutionTime = 0;
+    if (reviewedJobs.length > 0) {
+      const totalTime = reviewedJobs.reduce((sum, j) => {
+        return sum + (j.updatedAt.getTime() - j.createdAt.getTime());
+      }, 0);
+      avgResolutionTime = Math.round((totalTime / reviewedJobs.length) / 3600000 * 10) / 10;
+    }
+
+    // 3. Pros Dispatched
+    const prosDispatched = new Set(jobs.map(j => j.contractorId).filter(Boolean)).size;
+
+    // 4. Category Mix
+    const catMap: Record<string, number> = {};
+    jobs.forEach(j => {
+      const cat = j.category.charAt(0).toUpperCase() + j.category.slice(1);
+      catMap[cat] = (catMap[cat] || 0) + 1;
+    });
+    const categoryMix = Object.entries(catMap).map(([name, count]) => ({
+      name,
+      count,
+      percentage: Math.round((count / jobs.length) * 100)
+    })).sort((a, b) => b.count - a.count);
+
+    // 5. Investment History (last 6 months)
+    const history: { month: string, amount: number }[] = [];
+    const now = new Date();
+    for (let i = 5; i >= 0; i--) {
+        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const monthName = d.toLocaleString('en-US', { month: 'short' });
+        const monthJobs = jobs.filter(j => 
+            j.createdAt.getMonth() === d.getMonth() && 
+            j.createdAt.getFullYear() === d.getFullYear()
+        );
+        const amount = monthJobs.reduce((sum, j) => sum + j.quotedPrice, 0);
+        history.push({ month: monthName, amount });
+    }
+
+    res.json({
+      totalInvestment,
+      avgResolutionTime,
+      prosDispatched,
+      facilityUpTime: 99.8,
+      categoryMix,
+      investmentHistory: history
+    });
+  } catch (error) { next(error); }
+});
 
 analyticsRouter.get("/analytics/supply", async (_req, res, next) => {
   try {
@@ -33,7 +107,7 @@ analyticsRouter.get("/analytics/supply", async (_req, res, next) => {
       contractors: allContractors,
       jobs: { total: totalJobs, completed: completedJobs, pending: pendingJobs },
       fillRate: totalJobs > 0 ? Math.round((completedJobs / totalJobs) * 100) : 0,
-      needsFirstJob: needsFirstJob.map(c => ({ id: c.id, name: c.name, trade: c.trade, phone: c.phone, joinedAt: c.createdAt })),
+      needsFirstJob: needsFirstJob.map(c => ({ id: c.id, name: c.name, trade: c.trade, telephone: c.telephone, joinedAt: c.createdAt })),
     });
   } catch (error) { next(error); }
 });

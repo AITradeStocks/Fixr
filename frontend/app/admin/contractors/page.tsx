@@ -5,27 +5,61 @@ import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import { getSession } from "@/lib/auth";
 import type { Contractor } from "@/lib/types";
+import { 
+  Users, 
+  Search, 
+  Filter, 
+  Trash2, 
+  CheckCircle, 
+  Award, 
+  Clock, 
+  ShieldAlert,
+  Globe,
+  Phone,
+  Mail,
+  Zap,
+  MoreVertical,
+  X,
+  Star,
+  ShieldCheck,
+  ExternalLink,
+  MapPin
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const STATUS_OPTIONS = ["onboarded", "activated", "retained", "inactive"];
 
+interface ContractorWithJobs extends Contractor {
+  jobs?: { id: string; status: string }[];
+}
+
 export default function AdminContractorsPage() {
   const router = useRouter();
-  const [contractors, setContractors] = useState<Contractor[]>([]);
+  const [contractors, setContractors] = useState<ContractorWithJobs[]>([]);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [toast, setToast] = useState("");
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
 
   useEffect(() => {
     const session = getSession();
     if (!session || session.role !== "admin") router.push("/admin");
-  }, []);
+  }, [router]);
 
   const load = useCallback(async () => {
-    const data = await api.getContractors();
-    setContractors(data as Contractor[]);
-    setLoading(false);
+    try {
+      const data = await api.getAdminContractors();
+      setContractors(data as ContractorWithJobs[]);
+    } catch {
+      const data = await api.getContractors();
+      setContractors(data as ContractorWithJobs[]);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => { load(); }, [load]);
@@ -39,14 +73,33 @@ export default function AdminContractorsPage() {
     setUpdating(id);
     try {
       await api.updateContractor(id, { status });
-      showToast(`Contractor status updated to "${status}"`);
+      showToast(`Unit designation updated to "${status}"`);
       await load();
     } finally { setUpdating(null); }
   }
 
+  async function handleDelete(id: string) {
+    setDeleting(id);
+    try {
+      await api.deleteContractor(id);
+      showToast("Unit decommissioned");
+      setSelectedId(null);
+      setConfirmDelete(null);
+      await load();
+    } catch (e: any) {
+      showToast(e.message || "Decommissioning failed");
+    } finally { setDeleting(null); }
+  }
+
   const filtered = contractors
     .filter(c => filterStatus === "all" || c.status === filterStatus)
-    .filter(c => !search || c.name.toLowerCase().includes(search.toLowerCase()) || c.trade.toLowerCase().includes(search.toLowerCase()));
+    .filter(c => !search ||
+      c.name.toLowerCase().includes(search.toLowerCase()) ||
+      c.trade.toLowerCase().includes(search.toLowerCase()) ||
+      (c.email || "").toLowerCase().includes(search.toLowerCase()) ||
+      (c.postcode || "").includes(search) ||
+      (c.location || "").toLowerCase().includes(search.toLowerCase())
+    );
 
   const counts = {
     all: contractors.length,
@@ -56,111 +109,304 @@ export default function AdminContractorsPage() {
     inactive: contractors.filter(c => c.status === "inactive").length,
   };
 
+  const selected = contractors.find(c => c.id === selectedId) || null;
+
   if (loading) return (
-    <main className="min-h-screen bg-slate-950 flex items-center justify-center">
-      <p className="text-slate-400 text-sm">Loading...</p>
-    </main>
+    <div className="flex h-[60vh] items-center justify-center">
+      <div className="flex flex-col items-center gap-4">
+        <div className="h-10 w-10 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin" />
+        <p className="text-slate-500 text-xs font-bold uppercase tracking-widest">Scanning Registry...</p>
+      </div>
+    </div>
   );
 
   return (
-    <main className="min-h-screen bg-slate-950">
-      {toast && (
-        <div className="fixed top-4 right-4 z-50 rounded-xl bg-emerald-600 px-4 py-3 text-sm font-medium text-white shadow-lg">
-          {toast}
-        </div>
-      )}
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
+      {/* Toast */}
+      <AnimatePresence>
+        {toast && (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="fixed bottom-8 right-8 z-[100] rounded-2xl bg-emerald-600 px-6 py-4 text-sm font-bold text-white shadow-2xl flex items-center gap-3 border border-white/20"
+          >
+            <ShieldCheck size={18} />
+            {toast}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      <div className="mx-auto max-w-7xl px-4 py-8">
-        <div className="mb-6">
-          <h1 className="text-xl font-semibold text-white">Contractor Management</h1>
-          <p className="text-xs text-slate-500 mt-0.5">Activate, retain, or deactivate contractors</p>
-        </div>
-
-        {/* KPIs */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-          {[
-            { label: "Onboarded", value: counts.onboarded, color: "text-blue-400" },
-            { label: "Activated", value: counts.activated, color: "text-emerald-400" },
-            { label: "Retained", value: counts.retained, color: "text-purple-400" },
-            { label: "Inactive", value: counts.inactive, color: "text-slate-500" },
-          ].map(k => (
-            <div key={k.label} className="rounded-xl border border-slate-800 bg-slate-900 p-4">
-              <p className={`text-2xl font-bold ${k.color}`}>{k.value}</p>
-              <p className="text-xs text-slate-500 mt-0.5">{k.label}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Filters */}
-        <div className="flex flex-col sm:flex-row gap-2 mb-5">
-          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search by name or trade..."
-            className="flex-1 h-9 rounded-lg border border-slate-700 bg-slate-800 px-3 text-sm text-white outline-none focus:border-emerald-500 placeholder:text-slate-500" />
-          <div className="flex gap-1">
-            {["all", ...STATUS_OPTIONS].map(s => (
-              <button key={s} onClick={() => setFilterStatus(s)}
-                className={`rounded-lg px-3 py-1.5 text-xs font-medium capitalize transition-colors ${filterStatus === s ? "bg-emerald-600 text-white" : "border border-slate-700 text-slate-400 hover:bg-slate-800"}`}>
-                {s} {s !== "all" && counts[s as keyof typeof counts] > 0 && `(${counts[s as keyof typeof counts]})`}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Contractors */}
-        <div className="space-y-3">
-          {filtered.length === 0 && (
-            <div className="rounded-xl border border-dashed border-slate-800 p-8 text-center text-sm text-slate-500">
-              No contractors match this filter
-            </div>
-          )}
-          {filtered.map(c => (
-            <div key={c.id} className="rounded-xl border border-slate-800 bg-slate-900 p-4">
-              <div className="flex items-start justify-between gap-4 flex-wrap">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-900 text-sm font-bold text-emerald-400">
-                    {c.name.charAt(0)}
-                  </div>
-                  <div>
-                    <p className="font-semibold text-white">{c.name}</p>
-                    <p className="text-xs text-slate-400 capitalize mt-0.5">{c.trade.split(",").join(", ")}</p>
-                    <p className="text-xs text-slate-600 mt-0.5">{c.phone}{c.email ? ` · ${c.email}` : ""}</p>
-                    <p className="text-xs text-slate-600 mt-0.5">Zips: {c.zipCodes.join(", ")}</p>
-                  </div>
-                </div>
-                <div className="flex flex-col items-end gap-2">
-                  {c.rating && <p className="text-sm text-amber-400 font-medium">⭐ {c.rating}</p>}
-                  <div className="flex items-center gap-2">
-                    <div className="flex gap-1">
-                      {[
-                        { s: "onboarded", color: "bg-blue-600" },
-                        { s: "activated", color: "bg-emerald-600" },
-                        { s: "retained", color: "bg-purple-600" },
-                        { s: "inactive", color: "bg-slate-600" },
-                      ].map(({ s, color }) => (
-                        <button key={s} onClick={() => handleStatusChange(c.id, s)}
-                          disabled={c.status === s || updating === c.id}
-                          className={`rounded-lg px-2.5 py-1 text-xs font-medium capitalize transition-colors disabled:opacity-50 ${c.status === s ? `${color} text-white` : "border border-slate-700 text-slate-400 hover:bg-slate-800"}`}>
-                          {s}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="flex gap-1">
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${c.insuranceUploaded ? "bg-emerald-900/50 text-emerald-400" : "bg-slate-800 text-slate-500"}`}>
-                      {c.insuranceUploaded ? "✓" : "✗"} Insurance
-                    </span>
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${c.licenseUploaded ? "bg-emerald-900/50 text-emerald-400" : "bg-slate-800 text-slate-500"}`}>
-                      {c.licenseUploaded ? "✓" : "✗"} License
-                    </span>
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${c.identityUploaded ? "bg-emerald-900/50 text-emerald-400" : "bg-slate-800 text-slate-500"}`}>
-                      {c.identityUploaded ? "✓" : "✗"} ID
-                    </span>
-                  </div>
-                </div>
+      {/* Confirm delete modal */}
+      <AnimatePresence>
+        {confirmDelete && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#020617]/90 backdrop-blur-sm p-4">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="w-full max-w-sm rounded-[2.5rem] bg-slate-900 border border-white/10 p-10 shadow-3xl text-center"
+            >
+              <div className="h-16 w-16 rounded-3xl bg-red-500/10 text-red-500 flex items-center justify-center mx-auto mb-6">
+                <ShieldAlert size={32} />
               </div>
+              <h3 className="text-xl font-black text-white mb-3">Decommission Unit?</h3>
+              <p className="text-sm text-slate-400 mb-8 leading-relaxed font-medium">
+                This will permanently remove the contractor from the registry and abort all active assignments. 
+                This action is irreversible.
+              </p>
+              <div className="flex flex-col gap-3">
+                <button 
+                  onClick={() => handleDelete(confirmDelete)} 
+                  disabled={!!deleting}
+                  className="w-full h-12 rounded-2xl bg-red-600 py-2.5 text-sm font-black text-white hover:bg-red-500 disabled:opacity-50 transition-all uppercase tracking-widest shadow-lg shadow-red-950/20"
+                >
+                  {deleting ? "Decommissioning..." : "Terminate Identity"}
+                </button>
+                <button 
+                  onClick={() => setConfirmDelete(null)}
+                  className="w-full h-12 rounded-2xl border border-white/5 py-2.5 text-sm font-bold text-slate-500 hover:text-white hover:bg-white/5 transition-all"
+                >
+                  Abort Deletion
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <h1 className="text-3xl font-black text-white tracking-tight">Contractor Registry</h1>
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-2">{contractors.length} Verified identities on file</p>
+        </div>
+      </div>
+
+      {/* KPI Funnel */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+        {[
+          { label: "Onboarded", value: counts.onboarded, icon: Clock, color: "text-blue-400" },
+          { label: "Activated", value: counts.activated, icon: Zap, color: "text-emerald-400" },
+          { label: "Elite/Retained", value: counts.retained, icon: Award, color: "text-purple-400" },
+          { label: "Inactive", value: counts.inactive, icon: ShieldAlert, color: "text-slate-600" },
+        ].map((k, i) => (
+          <motion.div 
+            key={k.label} 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.05 }}
+            className="rounded-2xl border border-white/5 bg-slate-900/50 p-5 shadow-xl"
+          >
+            <div className="flex justify-between items-start mb-3">
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">{k.label}</p>
+              <k.icon size={14} className={k.color} />
             </div>
+            <p className={`text-2xl font-black ${k.color}`}>{k.value}</p>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Database Filters */}
+      <div className="flex flex-col sm:flex-row gap-4 mb-8">
+        <div className="relative flex-1 group">
+           <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-emerald-500 transition-colors">
+             <Search size={16} />
+           </div>
+           <input 
+             value={search} 
+             onChange={e => setSearch(e.target.value)} 
+             placeholder="Search registry by name, specialty, location..."
+             className="w-full h-12 rounded-xl border border-white/5 bg-slate-900/50 pl-12 pr-4 text-sm text-white outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 placeholder:text-slate-700 transition-all font-medium" 
+           />
+        </div>
+        <div className="flex bg-slate-900/50 border border-white/5 rounded-xl p-1 shrink-0 overflow-x-auto no-scrollbar">
+          {["all", ...STATUS_OPTIONS].map(s => (
+            <button key={s} onClick={() => setFilterStatus(s)}
+              className={`px-4 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${
+                filterStatus === s 
+                  ? "bg-white text-slate-950 shadow-lg" 
+                  : "text-slate-500 hover:text-slate-300 hover:bg-white/5"
+              }`}>
+              {s}
+            </button>
           ))}
         </div>
       </div>
-    </main>
+
+      <div className={`grid gap-8 ${selectedId ? "lg:grid-cols-2" : "grid-cols-1"}`}>
+        {/* Unit List */}
+        <div className="space-y-4">
+          <AnimatePresence mode="popLayout">
+            {filtered.length === 0 ? (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="rounded-2xl border border-dashed border-white/5 py-20 text-center"
+              >
+                <Users size={32} className="mx-auto text-slate-800 mb-4" />
+                <p className="text-[10px] font-black text-slate-700 uppercase tracking-widest">No matching units found in registry</p>
+              </motion.div>
+            ) : (
+              filtered.map((c, idx) => {
+                const jobCount = c.jobs?.length || 0;
+                const activeJobs = c.jobs?.filter(j => !["reviewed","cancelled"].includes(j.status)).length || 0;
+                const isActive = selectedId === c.id;
+
+                return (
+                  <motion.div
+                    key={c.id}
+                    layout
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: idx * 0.01 }}
+                    onClick={() => setSelectedId(isActive ? null : c.id)}
+                    className={`group relative rounded-2xl border bg-slate-900/40 p-6 cursor-pointer transition-all hover:bg-slate-900 ${
+                      isActive ? "border-emerald-500/50 ring-4 ring-emerald-500/5 bg-slate-900" : "border-white/5 hover:border-white/10"
+                    }`}
+                  >
+                    <div className="flex items-start justify-between gap-6 flex-wrap lg:flex-nowrap">
+                      <div className="flex items-center gap-4 min-w-0">
+                        <div className="relative shrink-0">
+                           <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-800 text-lg font-black text-emerald-500 overflow-hidden shadow-2xl">
+                             {c.logo_url ? <img src={c.logo_url} alt={c.name} className="h-full w-full object-cover" /> : c.name.charAt(0)}
+                           </div>
+                           <div className={`absolute -bottom-1 -right-1 h-4 w-4 rounded-full border-2 border-slate-900 ${
+                             c.status === "activated" ? "bg-emerald-500" : c.status === "onboarded" ? "bg-blue-500" : "bg-slate-600"
+                           }`} />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <p className="font-black text-white tracking-tight truncate">{c.name}</p>
+                            {c.isVerified && <ShieldCheck size={14} className="text-blue-500 shrink-0" />}
+                          </div>
+                          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest truncate">{c.trade.split(",").join(" • ")}</p>
+                          <div className="flex gap-3 text-[10px] text-slate-600 mt-2 font-mono">
+                            <span className="flex items-center gap-1"><Phone size={10} /> {c.telephone}</span>
+                            <span className="flex items-center gap-1"><MapPin size={10} /> {c.postcode}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col items-end gap-3 shrink-0 ml-auto">
+                        <div className="flex items-center gap-1.5">
+                           <Star size={12} className="text-amber-400 fill-amber-400" />
+                           <span className="text-sm font-black text-white">{c.rating != null ? c.rating.toFixed(1) : "—"}</span>
+                        </div>
+                        <div className="flex gap-1">
+                           <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-white/5 text-slate-400 tracking-wider">
+                             {activeJobs} Active Tasks
+                           </span>
+                        </div>
+                        <div className="flex gap-1 flex-wrap justify-end">
+                          {STATUS_OPTIONS.map(s => (
+                            <button key={s} onClick={e => { e.stopPropagation(); handleStatusChange(c.id, s); }}
+                              disabled={c.status === s || updating === c.id}
+                              className={`rounded-lg px-2.5 py-1 text-[9px] font-black uppercase tracking-wider transition-all disabled:opacity-20 ${c.status === s
+                                ? "bg-emerald-600 text-white shadow-lg shadow-emerald-500/20"
+                                : "text-slate-600 hover:text-slate-400 hover:bg-white/5"}`}>
+                              {s}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Intelligence Detail Panel */}
+        <AnimatePresence>
+          {selected && (
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              className="rounded-3xl border border-white/10 bg-slate-900 p-8 h-fit lg:sticky lg:top-24 shadow-3xl"
+            >
+              <div className="flex items-start justify-between mb-8">
+                <div className="flex items-center gap-5">
+                  <div className="h-16 w-16 rounded-[2rem] bg-slate-800 flex items-center justify-center text-xl font-black text-emerald-500 shrink-0 shadow-2xl overflow-hidden border border-white/5">
+                    {selected.logo_url ? <img src={selected.logo_url} alt={selected.name} className="h-full w-full object-cover" /> : selected.name.charAt(0)}
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-black text-white tracking-tight">{selected.name}</h2>
+                    {selected.headline && <p className="text-sm font-bold text-slate-500 mt-1 uppercase tracking-widest">{selected.headline}</p>}
+                    <div className="flex items-center gap-3 mt-3">
+                       <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                         selected.status === "activated" ? "bg-emerald-500/10 text-emerald-500 border border-emerald-500/20" : "bg-slate-800 text-slate-500"
+                       }`}>
+                         Unit Status: {selected.status}
+                       </span>
+                    </div>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setSelectedId(null)} 
+                  className="h-10 w-10 flex items-center justify-center rounded-xl bg-white/5 text-slate-400 hover:text-white transition-all outline-none"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {selected.about && (
+                <div className="mb-8">
+                   <p className="text-xs font-black text-slate-600 uppercase tracking-widest mb-3">Transmission Message / Bio</p>
+                   <p className="text-sm text-slate-400 leading-relaxed font-medium bg-white/5 p-4 rounded-2xl italic">“{selected.about}”</p>
+                </div>
+              )}
+
+              <div className="grid grid-cols-2 gap-x-8 gap-y-1 mb-8">
+                {[
+                  { label: "Designation", value: selected.trade.split(",").join(" • "), icon: Globe },
+                  { label: "Operation Hub", value: selected.location || "N/A", icon: MapPin },
+                  { label: "Registry Code", value: selected.id.toUpperCase().slice(0, 12), icon: Zap },
+                  { label: "Phone Sync", value: selected.telephone, icon: Phone },
+                  { label: "Email Node", value: selected.email || "Offline", icon: Mail },
+                  { label: "Structure", value: selected.businessType, icon: Users },
+                  { label: "Rating Index", value: selected.rating != null ? `${selected.rating.toFixed(2)}/5.00` : "No Data", icon: Star },
+                  { label: "Identity Check", value: selected.isVerified ? "POSITIVE" : "PENDING", icon: ShieldCheck },
+                ].map((item) => (
+                  <div key={item.label} className="py-3 border-b border-white/5 flex flex-col gap-1">
+                    <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest flex items-center gap-1.5">
+                       <item.icon size={10} />
+                       {item.label}
+                    </span>
+                    <span className="text-xs font-bold text-slate-300 truncate">{item.value}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="space-y-3 pt-6">
+                {selected.website && (
+                  <a 
+                    href={selected.website} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="w-full h-12 rounded-2xl bg-white/5 border border-white/5 text-xs font-black text-white hover:bg-white/10 transition-all flex items-center justify-center gap-2 uppercase tracking-[0.2em]"
+                  >
+                    Outer Link Node
+                    <ExternalLink size={14} />
+                  </a>
+                )}
+                <button
+                  onClick={() => setConfirmDelete(selected.id)}
+                  className="w-full h-12 rounded-2xl border border-red-500/20 text-[10px] font-black text-red-500/70 hover:text-red-500 hover:bg-red-500/5 transition-all uppercase tracking-[0.2em]"
+                >
+                  Decommission Unit
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      <style jsx global>{`
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
+    </div>
   );
 }

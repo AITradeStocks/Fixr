@@ -4,7 +4,7 @@ import { assertValidTransition } from "../lib/state-machine.js";
 import { estimatePricing, logPricingEvent } from "./pricing.service.js";
 
 export async function createJob(
-  input: { description: string; location: string; urgency: "urgent now" | "today" | "flexible" },
+  input: { description: string; location: string; address?: string; postcode?: string; urgency: "urgent now" | "today" | "flexible" },
   userId?: string
 ) {
   const estimate = await estimatePricing(input);
@@ -13,6 +13,8 @@ export async function createJob(
     data: {
       description: input.description,
       location: input.location,
+      address: input.address,
+      postcode: input.postcode,
       urgency: input.urgency,
       category: estimate.category,
       problemType: estimate.problemType,

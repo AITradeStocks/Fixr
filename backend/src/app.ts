@@ -4,6 +4,7 @@ import express from "express";
 import { adminRouter } from "./routes/admin.js";
 import { analyticsRouter } from "./routes/analytics.js";
 import { authRouter } from "./routes/auth.js";
+import { contractorAuthRouter } from "./routes/contractorAuth.js";
 import { contractorsRouter } from "./routes/contractors.js";
 import { healthRouter } from "./routes/health.js";
 import { jobsRouter } from "./routes/jobs.js";
@@ -18,8 +19,10 @@ export function createApp() {
   app.use(cors({ origin: process.env.FRONTEND_URL || true }));
   app.use(express.json());
 
+
   app.use("/api", healthRouter);
-  app.use("/api", authRouter);       // NEW: customer auth
+  app.use("/api/auth", authRouter);       // NEW: customer auth
+  app.use("/api/contractor", contractorAuthRouter); // NEW: contractor auth
   app.use("/api", pricingRouter);
   app.use("/api", jobsRouter);
   app.use("/api", contractorsRouter);

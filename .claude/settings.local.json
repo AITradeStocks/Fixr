@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cp -f c:/Users/hp/Desktop/Fixr/node_modules/.prisma/client/runtime/library.js c:/Users/hp/Desktop/Fixr/node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/.prisma/client/runtime/)",
+      "Bash(cp -f c:/Users/hp/Desktop/Fixr/node_modules/.prisma/client/runtime/library.d.ts c:/Users/hp/Desktop/Fixr/node_modules/.pnpm/@prisma+client@5.22.0_prisma@5.22.0/node_modules/.prisma/client/runtime/)",
+      "Bash(python -m json.tool)",
+      "Bash(curl -s http://localhost:4000/api/contractors)",
+      "Read(//c/Users/hp/Desktop/Fixr/db/**)"
+    ]
+  }
+}

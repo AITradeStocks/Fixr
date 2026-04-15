@@ -9,8 +9,8 @@ export interface CustomerUser {
 
 export interface Session {
   role: UserRole;
+  token?: string; // Unified token
   // Customer
-  token?: string;
   user?: CustomerUser;
   // Contractor
   contractorId?: string;
@@ -40,8 +40,8 @@ export function setCustomerSession(token: string, user: CustomerUser) {
   setSession({ role: "customer", token, user });
 }
 
-export function setContractorSession(id: string, name: string, trades: string[]) {
-  setSession({ role: "contractor", contractorId: id, contractorName: name, trades });
+export function setContractorSession(token: string, id: string, name: string, trades: string[]) {
+  setSession({ role: "contractor", token, contractorId: id, contractorName: name, trades });
 }
 
 export function setAdminSession() {

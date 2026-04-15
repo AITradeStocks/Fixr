@@ -33,15 +33,27 @@ export const api = {
     request("/auth/login", { method: "POST", body: JSON.stringify(body) }),
   me: () => authReq("/auth/me"),
 
+  // ── Contractor Auth ──
+  registerContractor: (body: any) =>
+    request("/contractor/register", { method: "POST", body: JSON.stringify(body) }),
+  loginContractor: (body: { email: string; password: string }) =>
+    request("/contractor/login", { method: "POST", body: JSON.stringify(body) }),
+  getContractorMe: () => authReq("/contractor/me"),
+  updateContractorMe: (body: any) =>
+    authReq("/contractor/me", { method: "PATCH", body: JSON.stringify(body) }),
+
   // ── Pricing ──
-  estimatePricing: (body: { description: string; location: string; urgency: string }) =>
+  estimatePricing: (body: { description: string; location: string; postcode?: string; urgency: string }) =>
     request("/pricing/estimate", { method: "POST", body: JSON.stringify(body) }),
 
   // ── Jobs ──
-  createJob: (body: { description: string; location: string; urgency: string }) =>
+  createJob: (body: { description: string; location: string; address?: string; postcode?: string; urgency: string }) =>
     authReq("/jobs", { method: "POST", body: JSON.stringify(body) }),
   getMyJobs: () => authReq("/jobs/mine"),           // authenticated — own jobs only
-  getJobs: () => request("/jobs"),                   // unauthenticated — all jobs (contractor feed)
+  getJobs: (params?: { postcode?: string }) => {
+    const query = params?.postcode ? `?postcode=${encodeURIComponent(params.postcode)}` : "";
+    return request(`/jobs${query}`);                 // unauthenticated — all jobs (contractor feed)
+  },
   getJob: (id: string) => request(`/jobs/${id}`),
   acceptJob: (id: string, contractorId: string) =>
     request(`/jobs/${id}/accept`, { method: "POST", body: JSON.stringify({ contractorId }) }),
@@ -70,11 +82,16 @@ export const api = {
     request("/admin/unstick", { method: "POST", body: JSON.stringify({}) }),
   getAdminActions: () => request("/admin/actions"),
   getPricingEvents: () => request("/admin/pricing-events"),
+  getAdminContractors: () => request("/admin/contractors"),
+  getAdminContractor: (id: string) => request(`/admin/contractors/${id}`),
+  deleteContractor: (id: string) =>
+    request(`/admin/contractors/${id}`, { method: "DELETE" }),
 
   // ── Analytics ──
   getSupplyAnalytics: () => request("/analytics/supply"),
   getFunnelAnalytics: () => request("/analytics/funnel"),
   getRetentionAnalytics: () => request("/analytics/retention"),
+  getUserAnalytics: () => authReq("/analytics/user"),
 
   // ── CRM / Leads ──
   createLead: (body: unknown) =>

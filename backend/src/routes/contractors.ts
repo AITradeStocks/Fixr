@@ -24,12 +24,22 @@ contractorsRouter.get("/contractors/:id", async (req, res) => {
   res.json(contractor);
 });
 
-// PATCH /contractors/:id — update status (activate, retain, etc.)
+// PATCH /contractors/:id — update profile fields, status, etc.
 contractorsRouter.patch("/contractors/:id", async (req, res, next) => {
   try {
+    const allowedFields = [
+      "name", "telephone", "email", "trade", "businessType", "zipCodes",
+      "status", "rating", "insuranceUploaded", "isLicensed", "isVerified",
+      "headline", "location", "website", "owner", "abn", "licenses",
+      "postcode", "about", "logo_url", "address"
+    ];
+    const data: Record<string, unknown> = {};
+    for (const key of allowedFields) {
+      if (key in req.body) data[key] = req.body[key];
+    }
     const contractor = await prisma.contractor.update({
       where: { id: req.params.id },
-      data: req.body,
+      data,
     });
     res.json(contractor);
   } catch (error) { next(error); }

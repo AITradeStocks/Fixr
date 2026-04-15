@@ -23,16 +23,28 @@ model User {
 model Contractor {
   id                 String   @id @default(uuid())
   name               String
-  phone              String
-  email              String?
+  telephone          String
+  email              String   @unique
+  passwordHash       String
   trade              String
   businessType       String
   zipCodes           String[]
   status             String
   rating             Float?
   insuranceUploaded  Boolean  @default(false)
-  licenseUploaded    Boolean  @default(false)
-  identityUploaded   Boolean  @default(false)
+  isLicensed         Boolean  @default(false)
+  isVerified         Boolean  @default(false)
+  // Extended profile fields
+  headline           String?
+  location           String?
+  website            String?
+  owner              String?
+  abn                String?
+  licenses           String[]
+  postcode           String?
+  about              String?
+  logo_url           String?
+  address            String?
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
   jobs               Job[]
@@ -43,6 +55,8 @@ model Job {
   id                   String      @id @default(uuid())
   description          String
   location             String
+  address              String?
+  postcode             String?
   urgency              String
   category             String
   problemType          String
