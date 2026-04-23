@@ -28,13 +28,13 @@ import {
   Mail
 } from "lucide-react";
 import { SupportOverlay } from "@/components/SupportOverlay";
+import { ReviewModal } from "@/components/ReviewModal";
 
 export default function DashboardPage() {
   const router = useRouter();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
-  const [reviewData, setReviewData] = useState<Record<string, { rating: number; comment: string }>>({});
   const [showReview, setShowReview] = useState<string | null>(null);
   const [userName, setUserName] = useState("");
   const [isSupportOpen, setIsSupportOpen] = useState(false);
@@ -69,23 +69,35 @@ export default function DashboardPage() {
 
   async function handleConfirm(id: string) {
     setActionLoading(id + "_confirm");
-    try { await api.confirmCompletion(id); setShowReview(id); await load(); }
-    finally { setActionLoading(null); }
+    try { 
+      await api.confirmCompletion(id); 
+      setShowReview(id); 
+      await load(); 
+    } finally { setActionLoading(null); }
   }
 
-  async function handleReview(id: string) {
-    const r = reviewData[id];
-    if (!r?.rating) return;
+  async function handleReview(id: string, rating: number, comment: string) {
     setActionLoading(id + "_review");
-    try { await api.reviewJob(id, r.rating, r.comment || ""); setShowReview(null); await load(); }
-    finally { setActionLoading(null); }
+    try { 
+      await api.reviewJob(id, rating, comment); 
+      setShowReview(null); 
+      await load(); 
+    } finally { setActionLoading(null); }
   }
 
   if (loading) return (
     <main className="min-h-screen bg-mesh flex items-center justify-center">
-      <div className="flex flex-col items-center gap-4">
-        <div className="h-10 w-10 border-4 border-emerald-600/30 border-t-emerald-600 rounded-full animate-spin" />
-        <p className="text-sm font-bold text-slate-500 uppercase tracking-widest">Securing Connection...</p>
+      <div className="flex flex-col items-center gap-6">
+        <div className="relative">
+          <div className="h-16 w-16 border-4 border-emerald-600/10 border-t-emerald-600 rounded-full animate-spin" />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <ShieldCheck size={24} className="text-emerald-600 animate-pulse" />
+          </div>
+        </div>
+        <div className="text-center">
+          <p className="text-sm font-black text-slate-900 uppercase tracking-[0.2em]">Synchronizing Portfolio</p>
+          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-2 px-6 py-1 bg-white border border-slate-100 rounded-full">Fixr Verified Registry v3.1</p>
+        </div>
       </div>
     </main>
   );
@@ -99,42 +111,57 @@ export default function DashboardPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-mesh pb-24 pt-10">
+    <main className="min-h-screen bg-mesh pb-24 pt-10 font-sans antialiased">
       <SupportOverlay isOpen={isSupportOpen} onClose={() => setIsSupportOpen(false)} />
+      
+      {/* Dynamic Review Modal */}
+      {showReview && (
+        <ReviewModal 
+          isOpen={!!showReview}
+          onClose={() => setShowReview(null)}
+          onSubmit={(r, c) => handleReview(showReview, r, c)}
+          jobTitle={jobs.find(j => j.id === showReview)?.description || "Service Job"}
+          contractorName={jobs.find(j => j.id === showReview)?.contractor?.name || "Professional"}
+        />
+      )}
+
       <div className="mx-auto max-w-6xl px-6">
         {/* Header */}
-        <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-8">
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
           >
-           
-            <h1 className="text-4xl font-black tracking-tight text-slate-950">
-              Welcome, {userName.split(" ")[0]}
+            <div className="flex items-center gap-2 mb-4">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Property Command</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-black tracking-tight text-slate-950 leading-[0.9]">
+              Greetings, {userName.split(" ")[0]}
             </h1>
-            <p className="mt-2 text-slate-500 font-medium max-w-md">
-              Oversee your property maintenance, track active contractors, and manage your service history in real-time.
+            <p className="mt-4 text-slate-500 font-medium max-w-sm leading-relaxed">
+              Your real-time nexus for property integrity, maintenance intelligence, and service optimization.
             </p>
           </motion.div>
           
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-3"
+            className="flex items-center gap-4"
           >
             <Link 
               href="/dashboard/analysis" 
-              className="p-3 rounded-2xl bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all shadow-sm active:scale-95"
-              title="View Insights"
+              className="h-14 w-14 rounded-2xl bg-white border border-slate-200 text-slate-600 hover:text-emerald-600 hover:border-emerald-100 transition-all shadow-sm flex items-center justify-center active:scale-95 group"
+              title="System Analytics"
             >
-              <Activity size={20} />
+              <Activity size={20} className="group-hover:scale-110 transition-transform" />
             </Link>
             <Link 
               href="/booking" 
-              className="flex items-center gap-2 rounded-2xl bg-slate-950 px-6 py-3.5 text-sm font-bold text-white hover:bg-slate-800 transition-all shadow-xl shadow-slate-200 active:scale-95"
+              className="flex items-center justify-center gap-3 rounded-2xl bg-white border border-slate-200 px-8 h-14 text-sm font-black text-slate-900 hover:bg-emerald-600 hover:text-white hover:border-emerald-600 transition-all shadow-sm active:scale-95 uppercase tracking-widest"
             >
-              <Plus size={18} />
-              Post New Request
+              <Plus size={20} />
+              New Objective
             </Link>
           </motion.div>
         </div>
@@ -147,7 +174,7 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className="glass p-6 rounded-[2rem] border border-white/50 shadow-sm flex items-center justify-between group hover:border-white transition-all"
+              className="glass p-6 rounded-[2rem] border border-white/50 shadow-sm flex items-center justify-between group hover:border-white transition-all bg-white/40"
             >
               <div>
                 <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">{stat.label}</p>
@@ -162,9 +189,7 @@ export default function DashboardPage() {
 
         {/* Jobs Sections */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-          {/* Main List */}
           <div className="lg:col-span-2 space-y-12">
-            {/* Active Jobs */}
             <div>
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
@@ -185,7 +210,7 @@ export default function DashboardPage() {
                   </div>
                   <h3 className="text-xl font-bold text-slate-950">System Idle</h3>
                   <p className="mt-2 text-sm text-slate-400 font-medium max-w-xs mx-auto">You don't have any active maintenance requests. Ready to fix something?</p>
-                  <Link href="/booking" className="mt-6 inline-flex items-center gap-2 rounded-2xl bg-emerald-600 px-8 py-3.5 text-sm font-bold text-white hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-100">
+                  <Link href="/booking" className="mt-6 inline-flex items-center gap-3 rounded-2xl bg-slate-950 px-8 py-4 text-sm font-black text-white hover:bg-emerald-600 transition-all shadow-xl shadow-slate-200">
                     Dispatch Pro
                     <ChevronRight size={16} />
                   </Link>
@@ -203,10 +228,7 @@ export default function DashboardPage() {
                         job={job} 
                         actionLoading={actionLoading} 
                         showReview={showReview}
-                        reviewData={reviewData} 
                         onConfirm={handleConfirm} 
-                        onReview={handleReview}
-                        onSetReview={(id, d) => setReviewData(r => ({ ...r, [id]: d }))} 
                       />
                     </motion.div>
                   ))}
@@ -214,38 +236,23 @@ export default function DashboardPage() {
               )}
             </div>
 
-            {/* Completed History */}
             {doneJobs.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-              >
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
                 <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2 mb-6">
                   <CheckCircle2 size={18} className="text-blue-500" />
                   Service History
                 </h2>
                 <div className="space-y-4">
                   {doneJobs.map(job => (
-                    <JobCard 
-                      key={job.id} 
-                      job={job} 
-                      actionLoading={actionLoading} 
-                      showReview={showReview}
-                      reviewData={reviewData} 
-                      onConfirm={handleConfirm} 
-                      onReview={handleReview}
-                      onSetReview={(id, d) => setReviewData(r => ({ ...r, [id]: d }))} 
-                    />
+                    <JobCard key={job.id} job={job} actionLoading={actionLoading} showReview={showReview} onConfirm={handleConfirm} />
                   ))}
                 </div>
               </motion.div>
             )}
           </div>
 
-          {/* Sidebar / Activities */}
           <div className="space-y-6">
-            <div className="glass p-8 rounded-[2.5rem] border border-white/50 shadow-sm">
+            <div className="glass p-8 rounded-[2.5rem] border border-white/50 shadow-sm bg-white/40">
               <h3 className="text-sm font-bold text-slate-900 uppercase tracking-widest mb-6">Support Center</h3>
               <div className="space-y-4">
                 <Link href="/help#safety" className="flex gap-4 p-4 rounded-2xl bg-white/40 hover:bg-white/60 transition-colors border border-transparent hover:border-emerald-100 cursor-pointer group">
@@ -269,41 +276,16 @@ export default function DashboardPage() {
               </div>
 
               <div className="grid grid-cols-2 gap-3 mt-6">
-                <button 
-                  onClick={() => setIsSupportOpen(true)}
-                  className="p-4 rounded-2xl bg-emerald-600 text-white flex flex-col gap-2 hover:bg-emerald-700 transition-all active:scale-[0.98]"
-                >
+                <button onClick={() => setIsSupportOpen(true)} className="p-4 rounded-2xl bg-emerald-600 text-white flex flex-col gap-2 hover:bg-emerald-700 transition-all active:scale-[0.98]">
                   <MessageCircle size={18} />
                   <span className="text-[10px] font-black uppercase tracking-widest text-left">Live Chat</span>
                 </button>
-                <a 
-                  href="mailto:support@fixr.io"
-                  className="p-4 rounded-2xl bg-slate-900 text-white flex flex-col gap-2 hover:bg-slate-800 transition-all active:scale-[0.98]"
-                >
+                <a href="mailto:support@fixr.io" className="p-4 rounded-2xl bg-slate-900 text-white flex flex-col gap-2 hover:bg-slate-800 transition-all active:scale-[0.98]">
                   <Mail size={18} />
                   <span className="text-[10px] font-black uppercase tracking-widest text-left">Email Support</span>
                 </a>
               </div>
-              
-              <div className="mt-8 pt-8 border-t border-slate-100">
-                <Link href="/help" className="w-full py-4 rounded-2xl border border-slate-200 text-sm font-bold text-slate-600 hover:bg-slate-50 transition-all flex items-center justify-center gap-2">
-                  Documentation & FAQs
-                  <ChevronRight size={14} />
-                </Link>
-              </div>
             </div>
-
-            {activeJobs.length > 0 && (
-              <div className="p-6 rounded-[2rem] bg-slate-950 text-white shadow-xl shadow-slate-200">
-                <div className="flex items-center gap-2 mb-4">
-                  <TrendingUp size={16} className="text-emerald-400" />
-                  <span className="text-[10px] font-bold uppercase tracking-widest opacity-60">System Insights</span>
-                </div>
-                <p className="text-sm font-medium leading-relaxed">
-                  Your requests are being handled by our AI coordinator. Pros typically respond within <span className="text-emerald-400 font-bold underline">12 minutes</span>.
-                </p>
-              </div>
-            )}
           </div>
         </div>
       </div>
@@ -311,17 +293,15 @@ export default function DashboardPage() {
   );
 }
 
-function JobCard({ job, actionLoading, showReview, reviewData, onConfirm, onReview, onSetReview }: {
+function JobCard({ job, actionLoading, showReview, onConfirm }: {
   job: Job; actionLoading: string | null; showReview: string | null;
-  reviewData: Record<string, { rating: number; comment: string }>;
-  onConfirm: (id: string) => void; onReview: (id: string) => void;
-  onSetReview: (id: string, d: { rating: number; comment: string }) => void;
+  onConfirm: (id: string) => void;
 }) {
   const isDone = job.status === "reviewed" || job.status === "cancelled";
   
   return (
     <div className={`glass rounded-[2rem] border transition-all duration-300 overflow-hidden ${
-      isDone ? "border-slate-100 opacity-80" : "border-white/50 shadow-md shadow-slate-900/5"
+      isDone ? "border-slate-100 opacity-80" : "border-white/50 shadow-md shadow-slate-900/5 bg-white/80"
     }`}>
       <div className="p-6 md:p-8">
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
@@ -341,33 +321,22 @@ function JobCard({ job, actionLoading, showReview, reviewData, onConfirm, onRevi
               <div className="flex items-center gap-1.5"><Wrench size={14} className="text-slate-400" /> <span className="capitalize">{job.category}</span></div>
             </div>
           </div>
-          
           <div className="flex flex-col md:items-end gap-1">
             <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Total Investment</p>
             <p className="text-3xl font-black text-slate-950">${job.quotedPrice}</p>
           </div>
         </div>
 
-        {/* Timeline */}
         <div className="mt-8 mb-6 bg-white/30 rounded-2xl p-6 border border-white/40 shadow-inner">
           <StatusTimeline status={job.status} />
         </div>
 
-        {/* Contractor Section */}
         {job.contractor && (
-          <motion.div 
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            className="mt-6 pt-6 border-t border-slate-100"
-          >
+          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="mt-6 pt-6 border-t border-slate-100">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-slate-50/50 p-6 rounded-2xl border border-slate-100">
               <div className="flex items-center gap-4">
                 <div className="relative h-14 w-14 shrink-0 rounded-2xl bg-white border border-slate-100 flex items-center justify-center text-emerald-600 shadow-sm">
-                  {job.contractor.logo_url ? (
-                    <img src={job.contractor.logo_url} alt={job.contractor.name} className="h-full w-full rounded-2xl object-cover" />
-                  ) : (
-                    <span className="text-xl font-black">{job.contractor.name.charAt(0)}</span>
-                  )}
+                  <span className="text-xl font-black">{job.contractor.name.charAt(0)}</span>
                   <div className="absolute -bottom-1 -right-1 h-5 w-5 bg-white rounded-full flex items-center justify-center text-blue-500 shadow-sm">
                     <ShieldCheck size={12} fill="currentColor" className="text-white" />
                   </div>
@@ -385,30 +354,12 @@ function JobCard({ job, actionLoading, showReview, reviewData, onConfirm, onRevi
                   </p>
                 </div>
               </div>
-              <a 
-                href={`tel:${job.contractor.telephone}`}
-                className="flex items-center justify-center gap-2 rounded-xl bg-white border border-slate-200 px-6 py-3 text-sm font-bold text-slate-900 hover:bg-slate-50 transition-all shadow-sm active:scale-95"
-              >
-                <Phone size={16} />
-                Contact Pro
-              </a>
             </div>
           </motion.div>
         )}
 
-        {/* Action Footers */}
-        {["priced", "manual_dispatch_required"].includes(job.status) && (
-          <div className="mt-6 flex items-center gap-3 p-4 bg-blue-50 rounded-2xl border border-blue-100 animate-pulse">
-            <div className="h-2 w-2 rounded-full bg-blue-500" />
-            <p className="text-xs font-bold text-blue-700 uppercase tracking-widest">Contractor Match in Progress...</p>
-          </div>
-        )}
-
-        {job.status === "completed" && showReview !== job.id && (
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-            className="mt-6 p-6 rounded-2xl bg-emerald-50 border border-emerald-100"
-          >
+        {job.status === "completed" && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-6 p-6 rounded-2xl bg-emerald-50 border border-emerald-100">
             <div className="flex items-start gap-3 mb-4">
               <Sparkles size={18} className="text-emerald-600" />
               <div>
@@ -427,46 +378,11 @@ function JobCard({ job, actionLoading, showReview, reviewData, onConfirm, onRevi
           </motion.div>
         )}
 
-        {showReview === job.id && (
-          <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="mt-6 p-8 rounded-3xl bg-slate-900 text-white">
-            <h4 className="text-lg font-bold mb-6 flex items-center gap-2">
-              <Star size={20} className="text-amber-400" strokeWidth={3} />
-              Quality Assessment
-            </h4>
-            <div className="flex gap-4 mb-8">
-              {[1, 2, 3, 4, 5].map(n => (
-                <button 
-                  key={n} 
-                  onClick={() => onSetReview(job.id, { ...reviewData[job.id], rating: n })}
-                  className={`h-14 flex-1 rounded-2xl flex items-center justify-center text-2xl transition-all border-2 ${
-                    reviewData[job.id]?.rating >= n ? "bg-amber-400 border-amber-300 scale-105" : "bg-white/5 border-white/10 hover:bg-white/10"
-                  }`}
-                >
-                  <Star fill={reviewData[job.id]?.rating >= n ? "white" : "none"} size={24} className={reviewData[job.id]?.rating >= n ? "text-white" : "text-white/20"} />
-                </button>
-              ))}
-            </div>
-            <textarea 
-              placeholder="Provide professional feedback (optional)..." 
-              rows={3}
-              className="w-full rounded-2xl bg-white/5 border border-white/10 px-4 py-4 text-sm outline-none focus:border-amber-400 focus:bg-white/10 transition-all resize-none mb-6 placeholder:text-white/20"
-              onChange={e => onSetReview(job.id, { ...reviewData[job.id], comment: e.target.value })} 
-            />
-            <button 
-              onClick={() => onReview(job.id)} 
-              disabled={!reviewData[job.id]?.rating || actionLoading === job.id + "_review"}
-              className="w-full py-4 rounded-xl bg-white text-slate-900 font-black hover:bg-slate-100 disabled:opacity-20 transition-all active:scale-[0.98]"
-            >
-              {actionLoading === job.id + "_review" ? "Submitting..." : "Submit Formal Review"}
-            </button>
-          </motion.div>
-        )}
-
-        {isDone && showReview !== job.id && (
+        {isDone && (
           <div className="mt-6 flex items-center gap-2 p-4 rounded-2xl bg-white/50 border border-slate-100">
             <CheckCircle2 size={16} className="text-emerald-500" />
             <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">
-              Service Archieved • {job.reviews?.[0] ? `Rated ${job.reviews[0].rating}/5` : "Payment Released"}
+              Service Archived • {job.reviews?.[0] ? `Rated ${job.reviews[0].rating}/5` : "Payment Released"}
             </p>
           </div>
         )}
@@ -522,7 +438,6 @@ function StatusTimeline({ status }: { status: string }) {
           </div>
         );
       })}
-      <div className="mb-4" /> {/* Spacer for labels */}
     </div>
   );
 }

@@ -132,7 +132,7 @@ function BookingContent() {
                     <p className="text-xs text-slate-500">{booked.contractor.trade.split(",")[0]} · ⭐ {booked.contractor.rating || "New"}</p>
                   </div>
                 </div>
-                <a href={`tel:${booked.contractor.telephone}`} className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 text-white font-bold text-sm shadow-lg shadow-emerald-200 hover:bg-emerald-700 transition-all">
+                <a href={`tel:${booked.contractor.phones?.[0]?.number || ""}`} className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 text-white font-bold text-sm shadow-lg shadow-emerald-200 hover:bg-emerald-700 transition-all">
                   <Phone size={16} />
                   Call
                 </a>

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { prisma } from "../db/prisma.js";
 import { createContractor, listContractors } from "../services/contractors.service.js";
+import { requireAuth } from "../middleware/auth.middleware.js";
 
 export const contractorsRouter = Router();
 
@@ -28,7 +29,7 @@ contractorsRouter.get("/contractors/:id", async (req, res) => {
 contractorsRouter.patch("/contractors/:id", async (req, res, next) => {
   try {
     const allowedFields = [
-      "name", "telephone", "email", "trade", "businessType", "zipCodes",
+      "name", "trade", "businessType", "zipCodes",
       "status", "rating", "insuranceUploaded", "isLicensed", "isVerified",
       "headline", "location", "website", "owner", "abn", "licenses",
       "postcode", "about", "logo_url", "address"
@@ -42,5 +43,43 @@ contractorsRouter.patch("/contractors/:id", async (req, res, next) => {
       data,
     });
     res.json(contractor);
+  } catch (error) { next(error); }
+});
+
+// POST /contractors/:id/verify-email/:emailId — admin force verify email
+contractorsRouter.post("/contractors/:id/verify-email/:emailId", requireAuth, async (req, res, next) => {
+  try {
+    // Only admins should do this
+    if ((req as any).role !== "admin") return res.status(403).json({ error: "Admin access required" });
+
+    await prisma.contractorEmail.update({
+      where: { id: req.params.emailId },
+      data: { isVerified: true }
+    });
+    // Check if total contact should be marked verified
+    await prisma.contractor.update({
+      where: { id: req.params.id },
+      data: { isContactVerified: true }
+    });
+    res.json({ success: true });
+  } catch (error) { next(error); }
+});
+
+// POST /contractors/:id/verify-phone/:phoneId — admin force verify phone
+contractorsRouter.post("/contractors/:id/verify-phone/:phoneId", requireAuth, async (req, res, next) => {
+  try {
+    // Only admins should do this
+    if ((req as any).role !== "admin") return res.status(403).json({ error: "Admin access required" });
+
+    await prisma.contractorPhone.update({
+      where: { id: req.params.phoneId },
+      data: { isVerified: true }
+    });
+    // Check if total contact should be marked verified
+    await prisma.contractor.update({
+      where: { id: req.params.id },
+      data: { isContactVerified: true }
+    });
+    res.json({ success: true });
   } catch (error) { next(error); }
 });

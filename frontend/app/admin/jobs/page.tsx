@@ -314,106 +314,119 @@ export default function AdminJobsPage() {
                       </div>
                     </div>
 
-                    {/* Action Overlay */}
-                    {["priced", "manual_dispatch_required", "assigned"].includes(job.status) && (
-                      <div className="mt-6 pt-5 border-t border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <div className="flex-1 max-w-sm">
-                          <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest mb-2 block">Tactical Unit Assignment</label>
-                          <div className="flex gap-2">
-                            <select 
-                              value={selectedContractor[job.id] || ""} 
-                              onChange={e => setSelectedContractor(s => ({ ...s, [job.id]: e.target.value }))}
-                              className="flex-1 h-10 rounded-xl bg-slate-950 border border-white/5 px-4 text-xs font-bold text-slate-300 outline-none focus:border-emerald-500"
-                            >
-                              <option value="">Awaiting selection...</option>
-                              {contractors.filter(c => c.status === "activated").map(c => (
-                                <option key={c.id} value={c.id}>{c.name} ({c.trade.split(",")[0]}) ⭐{c.rating || "—"}</option>
-                              ))}
-                            </select>
-                            <button 
-                              onClick={() => handleAssign(job.id)} 
-                              disabled={!selectedContractor[job.id] || assigning === job.id}
-                              className="h-10 px-5 rounded-xl bg-emerald-600 text-white text-xs font-black shadow-lg shadow-emerald-500/20 hover:bg-emerald-500 disabled:opacity-20 transition-all flex items-center gap-2"
-                            >
-                              <UserPlus2 size={14} />
-                              Deploy
-                            </button>
-                          </div>
-                        </div>
-
-                        <div className="flex gap-2 relative">
-                           <button 
-                             onClick={() => handleForceStatus(job.id, "cancelled")}
-                             className="h-10 px-4 rounded-xl border border-white/5 text-[10px] font-bold text-slate-500 hover:text-red-400 hover:bg-red-400/5 transition-all uppercase tracking-widest"
-                           >
-                             Abort Task
-                           </button>
-                           
-                           <div className="relative">
-                              <button 
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setActiveMenuId(activeMenuId === job.id ? null : job.id);
-                                }}
-                                className={`h-10 w-10 flex items-center justify-center rounded-xl border transition-all ${
-                                  activeMenuId === job.id ? "bg-white border-white text-slate-950" : "border-white/5 text-slate-500 hover:text-white hover:bg-white/5"
-                                }`}
+                    {/* Universal Action Overlay */}
+                    <div className="mt-8 pt-6 border-t border-white/5 grid grid-cols-1 lg:grid-cols-[minmax(0,1.5fr)_auto] items-end gap-x-16 gap-y-6">
+                      <div className="min-w-0 max-w-2xl">
+                        {["priced", "manual_dispatch_required", "assigned", "awaiting_customer_confirmation"].includes(job.status) ? (
+                          <div className="min-w-0">
+                            <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest mb-2 block">Tactical Unit Assignment</label>
+                            <div className="flex gap-3 min-w-0">
+                              <select 
+                                value={selectedContractor[job.id] || ""} 
+                                onChange={e => setSelectedContractor(s => ({ ...s, [job.id]: e.target.value }))}
+                                className="flex-1 h-12 min-w-0 rounded-xl bg-slate-950 border border-white/5 px-4 text-xs font-bold text-slate-300 outline-none focus:border-emerald-500 transition-all"
                               >
-                                <MoreVertical size={16} />
+                                <option value="">Awaiting selection...</option>
+                                {contractors.filter(c => c.status === "activated").map(c => (
+                                  <option key={c.id} value={c.id}>{c.name} ({c.trade?.split(",")[0] || "General"}) ⭐{c.rating || "—"}</option>
+                                ))}
+                              </select>
+                              <button 
+                                onClick={() => handleAssign(job.id)} 
+                                disabled={!selectedContractor[job.id] || assigning === job.id}
+                                className="h-12 px-6 shrink-0 rounded-xl bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest shadow-xl shadow-emerald-500/20 hover:bg-emerald-500 disabled:opacity-20 transition-all flex items-center gap-2"
+                              >
+                                <UserPlus2 size={16} />
+                                Deploy
                               </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="h-20 flex flex-col justify-center min-w-0">
+                            <span className="text-[10px] font-black text-slate-700 uppercase tracking-widest mb-2">Phase Intelligence</span>
+                            <div className="flex items-center gap-3">
+                              <div className="h-2 w-2 rounded-full bg-emerald-500/20 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.3)]" />
+                              <p className="text-xs font-bold text-slate-500 italic truncate">
+                                Unit locked. Mission currently in <span className="text-emerald-500/80">{job.status.replace(/_/g, " ")}</span> phase log.
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
 
-                              <AnimatePresence>
-                                {activeMenuId === job.id && (
-                                  <>
-                                    <div 
-                                      className="fixed inset-0 z-10" 
-                                      onClick={() => setActiveMenuId(null)} 
-                                    />
-                                    <motion.div
-                                      initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                                      animate={{ opacity: 1, scale: 1, y: 0 }}
-                                      exit={{ opacity: 0, scale: 0.9, y: 10 }}
-                                      className="absolute right-0 bottom-full mb-3 w-56 z-20 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/90 backdrop-blur-xl shadow-2xl"
-                                    >
-                                      <div className="p-1.5 space-y-1">
-                                        {[
-                                          { label: "Force: Completed", icon: CheckCircle, color: "text-emerald-400", status: "completed" },
-                                          { label: "Force: Reset (Priced)", icon: RefreshCcw, color: "text-blue-400", status: "priced" },
-                                          { label: "Force: Reviewed", icon: Globe, color: "text-purple-400", status: "reviewed" },
-                                          { label: "System Intelligence", icon: FileText, color: "text-slate-400", status: null },
-                                        ].map((act) => (
-                                          <button
-                                            key={act.label}
-                                            onClick={() => {
-                                              if (act.status) handleForceStatus(job.id, act.status);
-                                              setActiveMenuId(null);
-                                            }}
-                                            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 transition-all group"
-                                          >
-                                            <act.icon size={14} className={`${act.color} opacity-70 group-hover:opacity-100 transition-opacity`} />
-                                            {act.label}
-                                          </button>
-                                        ))}
-                                        <div className="h-px bg-white/5 my-1" />
+                      <div className="flex items-center gap-3 relative">
+                         <button 
+                           onClick={() => handleForceStatus(job.id, "cancelled")}
+                           className="h-12 px-6 rounded-xl border border-white/5 bg-white/5 text-[10px] font-black text-slate-400 hover:text-red-400 hover:bg-red-400/5 transition-all uppercase tracking-widest"
+                         >
+                           Abort Task
+                         </button>
+                         
+                          <div className="relative">
+                             <button 
+                               onClick={(e) => {
+                                 e.preventDefault();
+                                 e.stopPropagation();
+                                 setActiveMenuId(activeMenuId === job.id ? null : job.id);
+                               }}
+                               className={`h-12 w-12 flex items-center justify-center rounded-xl border transition-all ${
+                                 activeMenuId === job.id ? "bg-white border-white text-slate-950 shadow-[0_0_30px_rgba(255,255,255,0.3)]" : "border-white/5 text-slate-500 hover:text-white hover:bg-white/5"
+                               }`}
+                             >
+                               <MoreVertical size={18} />
+                             </button>
+
+                            <AnimatePresence>
+                              {activeMenuId === job.id && (
+                                <>
+                                  <div 
+                                    className="fixed inset-0 z-10" 
+                                    onClick={() => setActiveMenuId(null)} 
+                                  />
+                                  <motion.div
+                                    initial={{ opacity: 0, scale: 0.9, y: 10 }}
+                                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                                    exit={{ opacity: 0, scale: 0.9, y: 10 }}
+                                    className="absolute right-0 bottom-full mb-3 w-56 z-20 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/90 backdrop-blur-xl shadow-2xl"
+                                  >
+                                    <div className="p-1.5 space-y-1">
+                                      {[
+                                        { label: "Force: Completed", icon: CheckCircle, color: "text-emerald-400", status: "completed" },
+                                        { label: "Force: Reset (Priced)", icon: RefreshCcw, color: "text-blue-400", status: "priced" },
+                                        { label: "Force: Reviewed", icon: Globe, color: "text-purple-400", status: "reviewed" },
+                                        { label: "System Intelligence", icon: FileText, color: "text-slate-400", status: null },
+                                      ].map((act) => (
                                         <button
+                                          key={act.label}
                                           onClick={() => {
-                                            handleForceStatus(job.id, "cancelled");
+                                            if (act.status) handleForceStatus(job.id, act.status);
                                             setActiveMenuId(null);
                                           }}
-                                          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest text-red-500/60 hover:text-red-500 hover:bg-red-500/5 transition-all"
+                                          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-white/5 transition-all group"
                                         >
-                                          <Trash2 size={14} />
-                                          Purge Record
+                                          <act.icon size={14} className={`${act.color} opacity-70 group-hover:opacity-100 transition-opacity`} />
+                                          {act.label}
                                         </button>
-                                      </div>
-                                    </motion.div>
-                                  </>
-                                )}
-                              </AnimatePresence>
-                           </div>
-                        </div>
+                                      ))}
+                                      <div className="h-px bg-white/5 my-1" />
+                                      <button
+                                        onClick={() => {
+                                          handleForceStatus(job.id, "cancelled");
+                                          setActiveMenuId(null);
+                                        }}
+                                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest text-red-500/60 hover:text-red-500 hover:bg-red-500/5 transition-all"
+                                      >
+                                        <Trash2 size={14} />
+                                        Purge Record
+                                      </button>
+                                    </div>
+                                  </motion.div>
+                                </>
+                              )}
+                            </AnimatePresence>
+                          </div>
                       </div>
-                    )}
+                    </div>
                   </motion.div>
                 ))
               )}

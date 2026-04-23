@@ -1,5 +1,4 @@
 import cors from "cors";
-import dotenv from "dotenv";
 import express from "express";
 import { adminRouter } from "./routes/admin.js";
 import { analyticsRouter } from "./routes/analytics.js";
@@ -11,8 +10,6 @@ import { jobsRouter } from "./routes/jobs.js";
 import { leadsRouter } from "./routes/leads.js";
 import { pricingRouter } from "./routes/pricing.js";
 import { HttpError } from "./lib/errors.js";
-
-dotenv.config();
 
 export function createApp() {
   const app = express();

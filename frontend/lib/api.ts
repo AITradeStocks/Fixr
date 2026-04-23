@@ -41,6 +41,11 @@ export const api = {
   getContractorMe: () => authReq("/contractor/me"),
   updateContractorMe: (body: any) =>
     authReq("/contractor/me", { method: "PATCH", body: JSON.stringify(body) }),
+  requestVerification: (body: { type: "email" | "phone"; target: string }) =>
+    request("/contractor/verify/request", { method: "POST", body: JSON.stringify(body) }),
+  submitVerification: (body: { type: "email" | "phone"; target: string; code: string; id?: string }) =>
+    request("/contractor/verify/submit", { method: "POST", body: JSON.stringify(body) }),
+
 
   // ── Pricing ──
   estimatePricing: (body: { description: string; location: string; postcode?: string; urgency: string }) =>
@@ -101,4 +106,10 @@ export const api = {
     request(`/tradie-leads/${id}`, { method: "PATCH", body: JSON.stringify(body) }),
   moveLead: (id: string, status: string, notes?: string) =>
     request(`/tradie-leads/${id}/move`, { method: "POST", body: JSON.stringify({ status, notes }) }),
+
+  // ── Admin Contractor Force Verify ──
+  adminVerifyEmail: (contractorId: string, emailId: string) =>
+    authReq(`/contractors/${contractorId}/verify-email/${emailId}`, { method: "POST" }),
+  adminVerifyPhone: (contractorId: string, phoneId: string) =>
+    authReq(`/contractors/${contractorId}/verify-phone/${phoneId}`, { method: "POST" }),
 };

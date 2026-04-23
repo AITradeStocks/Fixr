@@ -19,8 +19,6 @@ export interface PricingEstimate {
 export interface Contractor {
   id: string;
   name: string;
-  telephone: string;
-  email?: string;
   trade: string;
   trades?: string[];
   businessType: string;
@@ -29,7 +27,22 @@ export interface Contractor {
   zipCodes: string[];
   insuranceUploaded: boolean;
   isLicensed: boolean;
-  isVerified: boolean;
+  isVerified: boolean; // General check
+  isContactVerified: boolean; // Specific contact verification
+
+  emails: {
+    id: string;
+    email: string;
+    type: string;
+    isVerified: boolean;
+  }[];
+  phones: {
+    id: string;
+    number: string;
+    type: string;
+    isVerified: boolean;
+  }[];
+
   // Extended profile
   headline?: string;
   location?: string;
@@ -43,6 +56,7 @@ export interface Contractor {
   address?: string;
   createdAt: string;
 }
+
 
 export interface Job {
   id: string;

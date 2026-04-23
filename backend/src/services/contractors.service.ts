@@ -2,8 +2,7 @@ import { prisma } from "../db/prisma.js";
 
 export async function createContractor(input: {
   name: string;
-  telephone: string;
-  email?: string;
+  passwordHash: string; // Required now
   trade: string;
   businessType: string;
   zipCodes: string[];
@@ -27,6 +26,7 @@ export async function createContractor(input: {
     }
   });
 }
+
 
 export async function listContractors() {
   return prisma.contractor.findMany({ orderBy: { createdAt: "desc" } });

@@ -7,6 +7,20 @@ import type { AuthRequest } from "../middleware/auth.middleware.js";
 
 export const jobsRouter = Router();
 
+// Helper to mask contractor details for customer view
+function maskContractor(contractor: any) {
+  if (!contractor) return null;
+  const allowedFields = [
+    "id", "name", "trade", "businessType", "zipCodes",
+    "status", "rating", "insuranceUploaded", "isLicensed", "isVerified",
+    "headline", "location", "website", "owner", "abn", "licenses",
+    "postcode", "about", "logo_url", "address"
+  ];
+  return Object.fromEntries(
+    Object.entries(contractor).filter(([key]) => allowedFields.includes(key))
+  );
+}
+
 // POST /jobs — create job (authenticated customer, links userId)
 jobsRouter.post("/jobs", optionalAuth, async (req: AuthRequest, res, next) => {
   try {
@@ -24,7 +38,14 @@ jobsRouter.get("/jobs/mine", requireAuth, async (req: AuthRequest, res, next) =>
       orderBy: { createdAt: "desc" },
       include: { contractor: true, reviews: true },
     });
-    res.json(jobs);
+    
+    // Mask contractor details for customer
+    const maskedJobs = jobs.map(job => ({
+      ...job,
+      contractor: maskContractor(job.contractor)
+    }));
+
+    res.json(maskedJobs);
   } catch (error) { next(error); }
 });
 
@@ -52,7 +73,14 @@ jobsRouter.get("/jobs/:id", async (req, res) => {
     include: { contractor: true, reviews: true, user: { select: { id: true, name: true, email: true, phone: true } } },
   });
   if (!job) { res.status(404).json({ error: "job not found" }); return; }
-  res.json(job);
+  
+  // Mask if it's the customer's own job or a public view
+  const maskedJob = {
+    ...job,
+    contractor: maskContractor(job.contractor)
+  };
+
+  res.json(maskedJob);
 });
 
 // PATCH /jobs/:id/status
@@ -95,6 +123,11 @@ jobsRouter.post("/jobs/:id/accept", async (req, res, next) => {
       where: { id: req.params.id },
       include: { contractor: true },
     });
+
+    if (result) {
+      result.contractor = maskContractor(result.contractor) as any;
+    }
+
     res.json(result);
   } catch (error) { next(error); }
 });
@@ -131,21 +164,68 @@ jobsRouter.post("/jobs/:id/confirm-completion", requireAuth, async (req: AuthReq
 });
 
 // POST /jobs/:id/review — submit rating + update contractor avg
-jobsRouter.post("/jobs/:id/review", async (req, res, next) => {
+jobsRouter.post("/jobs/:id/review", optionalAuth, async (req: AuthRequest, res, next) => {
   try {
-    const review = await prisma.review.create({
-      data: { jobId: req.params.id, rating: req.body.rating, comment: req.body.comment },
+    const jobId = req.params.id;
+    const { rating, comment } = req.body;
+
+    if (!rating) {
+      res.status(400).json({ error: "Rating is required" });
+      return;
+    }
+
+    const job = await prisma.job.findUnique({
+      where: { id: jobId },
+      include: { contractor: true }
     });
-    await prisma.job.update({ where: { id: req.params.id }, data: { status: "reviewed" } });
-    const job = await prisma.job.findUnique({ where: { id: req.params.id } });
-    if (job?.contractorId) {
-      const reviews = await prisma.review.findMany({ where: { job: { contractorId: job.contractorId } } });
-      const avg = reviews.reduce((s: number, r: any) => s + r.rating, 0) / reviews.length;
+
+    if (!job) {
+      res.status(404).json({ error: "Job not found" });
+      return;
+    }
+
+    if (!job.contractorId) {
+      res.status(400).json({ error: "Cannot review a job without an assigned contractor" });
+      return;
+    }
+
+    // Use job owner (User) as customerId. Falls back to authenticated requester if available.
+    const customerId = job.userId || req.userId;
+    if (!customerId) {
+      res.status(403).json({ error: "Customer association required for review" });
+      return;
+    }
+
+    // Upsert review to prevent duplicates (since jobId is now unique)
+    const review = await prisma.review.upsert({
+      where: { jobId },
+      update: { rating, comment, customerId, contractorId: job.contractorId },
+      create: { 
+        jobId, 
+        rating, 
+        comment, 
+        customerId, 
+        contractorId: job.contractorId 
+      },
+    });
+
+    // Mark job as reviewed
+    await prisma.job.update({ where: { id: jobId }, data: { status: "reviewed" } });
+
+    // Recalculate contractor average rating
+    const reviews = await prisma.review.findMany({ 
+      where: { contractorId: job.contractorId } 
+    });
+
+    if (reviews.length > 0) {
+      const avg = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
       await prisma.contractor.update({
         where: { id: job.contractorId },
         data: { rating: Math.round(avg * 10) / 10 },
       });
     }
+
     res.status(201).json(review);
   } catch (error) { next(error); }
 });
+

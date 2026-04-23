@@ -90,7 +90,11 @@ adminRouter.get("/admin/pricing-events", async (_req, res) => {
 adminRouter.get("/admin/contractors", async (_req, res) => {
   const contractors = await prisma.contractor.findMany({
     orderBy: { createdAt: "desc" },
-    include: { jobs: { select: { id: true, status: true } } },
+    include: { 
+      jobs: { select: { id: true, status: true } },
+      emails: true,
+      phones: true
+    },
   });
   res.json(contractors);
 });
@@ -99,7 +103,11 @@ adminRouter.get("/admin/contractors", async (_req, res) => {
 adminRouter.get("/admin/contractors/:id", async (req, res) => {
   const contractor = await prisma.contractor.findUnique({
     where: { id: req.params.id },
-    include: { jobs: { orderBy: { createdAt: "desc" } } },
+    include: { 
+      jobs: { orderBy: { createdAt: "desc" } },
+      emails: true,
+      phones: true
+    },
   });
   if (!contractor) { res.status(404).json({ error: "contractor not found" }); return; }
   res.json(contractor);

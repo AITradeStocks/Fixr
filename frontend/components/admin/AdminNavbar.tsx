@@ -60,20 +60,46 @@ export function AdminNavbar() {
     const session = getSession();
     setIsAdmin(session?.role === "admin");
     
-    // Initial notifications (Mock for now, but wired to api)
-    setNotifications(MOCK_NOTIFICATIONS);
-    
     const fetch = async () => {
       try {
         const actions = await api.getAdminActions() as any[];
         if (actions && actions.length > 0) {
-          // Merge or update notifications if needed
+          const mapped: Notification[] = actions.map((a: any) => {
+            let type: Notification["type"] = "info";
+            let title = "System Event";
+            
+            if (a.actionType === "force-status") {
+              type = "warning";
+              title = "Manual Override";
+            } else if (a.actionType === "manual-assign") {
+              type = "success";
+              title = "Job Dispatch";
+            }
+
+            return {
+              id: a.id,
+              type,
+              title,
+              message: a.note || `Action: ${a.actionType}`,
+              timestamp: a.createdAt,
+              read: false
+            };
+          });
+          
+          setNotifications(prev => {
+            const existingIds = new Set(prev.map(p => p.id));
+            const newEntries = mapped.filter(m => !existingIds.has(m.id));
+            if (newEntries.length === 0) return prev;
+            return [...newEntries, ...prev].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).slice(0, 20);
+          });
         }
-      } catch (e) { console.error("Notification sync failed", e); }
+      } catch (e) {
+        console.error("Notification sync failed", e);
+      }
     };
     
     fetch();
-    const interval = setInterval(fetch, 60000); // Poll every minute
+    const interval = setInterval(fetch, 15000);
     return () => clearInterval(interval);
   }, [pathname]);
 
@@ -81,6 +107,11 @@ export function AdminNavbar() {
 
   function markAllRead() {
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+  }
+
+  function flushNotifications() {
+    setNotifications([]);
+    setShowNotifications(false);
   }
 
   async function handleLogout() {
@@ -194,14 +225,12 @@ export function AdminNavbar() {
                       >
                         <div className="px-6 py-5 border-b border-white/5 flex items-center justify-between bg-slate-900/50">
                           <h3 className="text-xs font-black text-white uppercase tracking-widest">Active Intelligence</h3>
-                          {unreadCount > 0 && (
                             <button 
-                              onClick={markAllRead}
-                              className="text-[9px] font-black text-emerald-500 uppercase tracking-widest hover:text-emerald-400 transition-colors"
+                              onClick={flushNotifications}
+                              className="text-[9px] font-black text-rose-500 uppercase tracking-widest hover:text-rose-400 transition-colors"
                             >
-                              Flush Reads
+                              Flush Registry
                             </button>
-                          )}
                         </div>
                         <div className="max-h-[350px] overflow-y-auto no-scrollbar divide-y divide-white/5">
                           {notifications.length === 0 ? (

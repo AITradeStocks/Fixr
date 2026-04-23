@@ -9,7 +9,8 @@
   "dependencies": {
     "@prisma/client": "^5.22.0",
     "bcrypt": "^6.0.0",
-    "bcryptjs": "^2.4.3"
+    "bcryptjs": "^2.4.3",
+    "csv-parser": "^3.2.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

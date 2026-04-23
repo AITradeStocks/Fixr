@@ -96,7 +96,7 @@ export default function AdminContractorsPage() {
     .filter(c => !search ||
       c.name.toLowerCase().includes(search.toLowerCase()) ||
       c.trade.toLowerCase().includes(search.toLowerCase()) ||
-      (c.email || "").toLowerCase().includes(search.toLowerCase()) ||
+      c.emails.some(e => e.email.toLowerCase().includes(search.toLowerCase())) ||
       (c.postcode || "").includes(search) ||
       (c.location || "").toLowerCase().includes(search.toLowerCase())
     );
@@ -278,14 +278,16 @@ export default function AdminContractorsPage() {
                           <div className="flex items-center gap-2 mb-1">
                             <p className="font-black text-white tracking-tight truncate">{c.name}</p>
                             {c.isVerified && <ShieldCheck size={14} className="text-blue-500 shrink-0" />}
+                            {c.isContactVerified && <CheckCircle size={14} className="text-emerald-500 shrink-0" />}
                           </div>
-                          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest truncate">{c.trade.split(",").join(" • ")}</p>
+                          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest truncate">{c.trade?.split(",").join(" • ") || "General"}</p>
                           <div className="flex gap-3 text-[10px] text-slate-600 mt-2 font-mono">
-                            <span className="flex items-center gap-1"><Phone size={10} /> {c.telephone}</span>
-                            <span className="flex items-center gap-1"><MapPin size={10} /> {c.postcode}</span>
+                            <span className="flex items-center gap-1"><Phone size={10} /> {c.phones?.[0]?.number || "N/A"}</span>
+                            <span className="flex items-center gap-1"><MapPin size={10} /> {c.postcode || "N/A"}</span>
                           </div>
                         </div>
                       </div>
+
 
                       <div className="flex flex-col items-end gap-3 shrink-0 ml-auto">
                         <div className="flex items-center gap-1.5">
@@ -324,7 +326,7 @@ export default function AdminContractorsPage() {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 20 }}
-              className="rounded-3xl border border-white/10 bg-slate-900 p-8 h-fit lg:sticky lg:top-24 shadow-3xl"
+              className="rounded-3xl border border-white/10 bg-slate-900 p-8 lg:sticky lg:top-24 shadow-3xl max-h-[calc(100vh-140px)] overflow-y-auto custom-scrollbar"
             >
               <div className="flex items-start justify-between mb-8">
                 <div className="flex items-center gap-5">
@@ -358,15 +360,13 @@ export default function AdminContractorsPage() {
                 </div>
               )}
 
-              <div className="grid grid-cols-2 gap-x-8 gap-y-1 mb-8">
+              <div className="grid grid-cols-2 gap-x-8 gap-y-1 mb-10">
                 {[
-                  { label: "Designation", value: selected.trade.split(",").join(" • "), icon: Globe },
+                  { label: "Designation", value: selected.trade?.split(",").join(" • ") || "General", icon: Globe },
                   { label: "Operation Hub", value: selected.location || "N/A", icon: MapPin },
-                  { label: "Registry Code", value: selected.id.toUpperCase().slice(0, 12), icon: Zap },
-                  { label: "Phone Sync", value: selected.telephone, icon: Phone },
-                  { label: "Email Node", value: selected.email || "Offline", icon: Mail },
-                  { label: "Structure", value: selected.businessType, icon: Users },
-                  { label: "Rating Index", value: selected.rating != null ? `${selected.rating.toFixed(2)}/5.00` : "No Data", icon: Star },
+                  { label: "ABN Sync", value: selected.abn || "Not Provided", icon: ShieldAlert },
+                  { label: "Legal Licenses", value: selected.licenses?.length > 0 ? selected.licenses.join(", ") : "None Verified", icon: Award },
+                  { label: "Registry Code", value: selected.id.toUpperCase().slice(0, 8), icon: Zap },
                   { label: "Identity Check", value: selected.isVerified ? "POSITIVE" : "PENDING", icon: ShieldCheck },
                 ].map((item) => (
                   <div key={item.label} className="py-3 border-b border-white/5 flex flex-col gap-1">
@@ -378,6 +378,104 @@ export default function AdminContractorsPage() {
                   </div>
                 ))}
               </div>
+
+              <div className="space-y-6 mb-10">
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Contact Verification Registry</p>
+                
+                <div className="space-y-4">
+                  {/* Emails */}
+                  {selected.emails?.map((e: any) => (
+                    <div key={e.id || e.email} className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5 group/contact">
+                      <div className="flex items-center gap-3">
+                        <div className={`h-8 w-8 rounded-xl flex items-center justify-center ${e.isVerified ? "bg-emerald-500/10 text-emerald-500" : "bg-slate-800 text-slate-500"}`}>
+                          <Mail size={14} />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-white">{e.email}</p>
+                          <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest mt-0.5">{e.type}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        {e.isVerified ? (
+                          <div className="flex items-center gap-1.5 text-emerald-500">
+                            <CheckCircle size={14} />
+                            <span className="text-[9px] font-black uppercase tracking-widest">Verified</span>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="flex items-center gap-1.5 text-slate-600 font-mono italic group-hover/contact:hidden">
+                              <Clock size={12} />
+                              <span className="text-[9px] font-black uppercase tracking-widest">Pending</span>
+                            </div>
+                            <button 
+                              onClick={async () => {
+                                try {
+                                  await api.adminVerifyEmail(selected.id, e.id);
+                                  showToast(`${e.email} forced verified`);
+                                  await load();
+                                } catch (err: any) {
+                                  showToast(err.message || "Verification failed");
+                                }
+                              }}
+                              className="hidden group-hover/contact:flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-600 text-white text-[9px] font-black uppercase tracking-widest transition-all hover:bg-emerald-500 shadow-lg shadow-emerald-950/20"
+                            >
+                              <ShieldCheck size={10} />
+                              Force Verify
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+
+                  {/* Phones */}
+                  {selected.phones?.map((p: any) => (
+                    <div key={p.id || p.number} className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5 group/contact">
+                      <div className="flex items-center gap-3">
+                        <div className={`h-8 w-8 rounded-xl flex items-center justify-center ${p.isVerified ? "bg-emerald-500/10 text-emerald-500" : "bg-slate-800 text-slate-500"}`}>
+                          <Phone size={14} />
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold text-white">{p.number}</p>
+                          <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest mt-0.5">{p.type}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        {p.isVerified ? (
+                          <div className="flex items-center gap-1.5 text-emerald-500">
+                            <CheckCircle size={14} />
+                            <span className="text-[9px] font-black uppercase tracking-widest">Verified</span>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="flex items-center gap-1.5 text-amber-500/50 group-hover/contact:hidden">
+                              <ShieldAlert size={12} />
+                              <span className="text-[9px] font-black uppercase tracking-widest">Unverified</span>
+                            </div>
+                            <button 
+                              onClick={async () => {
+                                try {
+                                  await api.adminVerifyPhone(selected.id, p.id);
+                                  showToast(`${p.number} forced verified`);
+                                  await load();
+                                } catch (err: any) {
+                                  showToast(err.message || "Verification failed");
+                                }
+                              }}
+                              className="hidden group-hover/contact:flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-600 text-white text-[9px] font-black uppercase tracking-widest transition-all hover:bg-emerald-500 shadow-lg shadow-emerald-950/20"
+                            >
+                              <ShieldCheck size={10} />
+                              Force Verify
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+
 
               <div className="space-y-3 pt-6">
                 {selected.website && (
@@ -406,6 +504,10 @@ export default function AdminContractorsPage() {
       <style jsx global>{`
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.05); border-radius: 20px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.1); }
       `}</style>
     </div>
   );

@@ -92,7 +92,10 @@ analyticsRouter.get("/analytics/supply", async (_req, res, next) => {
 
     // 48h ops alert: activated contractors with zero jobs in last 48h
     const cutoff = new Date(Date.now() - 48 * 60 * 60 * 1000);
-    const activatedContractors = await prisma.contractor.findMany({ where: { status: "activated" } });
+    const activatedContractors = await prisma.contractor.findMany({ 
+      where: { status: "activated" },
+      include: { phones: true }
+    });
     const needsFirstJob: typeof activatedContractors = [];
     for (const c of activatedContractors) {
       const jobCount = await prisma.job.count({ where: { contractorId: c.id } });
@@ -107,7 +110,13 @@ analyticsRouter.get("/analytics/supply", async (_req, res, next) => {
       contractors: allContractors,
       jobs: { total: totalJobs, completed: completedJobs, pending: pendingJobs },
       fillRate: totalJobs > 0 ? Math.round((completedJobs / totalJobs) * 100) : 0,
-      needsFirstJob: needsFirstJob.map(c => ({ id: c.id, name: c.name, trade: c.trade, telephone: c.telephone, joinedAt: c.createdAt })),
+      needsFirstJob: needsFirstJob.map(c => ({ 
+        id: c.id, 
+        name: c.name, 
+        trade: c.trade, 
+        phones: (c as any).phones || [], 
+        joinedAt: c.createdAt 
+      })),
     });
   } catch (error) { next(error); }
 });
@@ -138,6 +147,15 @@ analyticsRouter.get("/analytics/funnel", async (_req, res, next) => {
     });
   } catch (error) { next(error); }
 });
+
+function maskContractor(contractor: any) {
+  if (!contractor) return null;
+  const { 
+    id, name, trade, rating, logo_url, phones, businessType, isVerified, 
+    headline, location, website, about 
+  } = contractor;
+  return { id, name, trade, rating, logo_url, phones, businessType, isVerified, headline, location, website, about };
+}
 
 analyticsRouter.get("/analytics/retention", async (_req, res, next) => {
   try {

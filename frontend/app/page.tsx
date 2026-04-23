@@ -2,7 +2,7 @@
 
 import { EnterpriseHero } from "@/components/EnterpriseHero";
 import { EnterpriseFeatures } from "@/components/EnterpriseFeatures";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { 
   Wrench, 
@@ -164,29 +164,89 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-12 bg-white border-t border-slate-100">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-            <div className="flex items-center gap-3 grayscale opacity-80">
-              <div className="h-8 w-8 bg-slate-900 rounded-lg flex items-center justify-center text-white font-bold text-sm">F</div>
-              <span className="text-lg font-bold tracking-tight text-slate-950">Fixr</span>
-            </div>
-            
-            <div className="flex flex-wrap justify-center gap-8 text-sm font-medium text-slate-500">
-              <Link href="/#services" className="hover:text-emerald-600 transition-colors">Services</Link>
-              <Link href="/#how-it-works" className="hover:text-emerald-600 transition-colors">How it Works</Link>
-              <Link href="/pricing" className="hover:text-emerald-600 transition-colors">Pricing</Link>
-              <Link href="/terms" className="hover:text-emerald-600 transition-colors">Terms</Link>
-              <Link href="/privacy" className="hover:text-emerald-600 transition-colors">Privacy</Link>
-              <Link href="/help" className="hover:text-emerald-600 transition-colors">Help Center</Link>
+      {/* Enterprise Footer */}
+      <footer className="bg-slate-950 pt-24 pb-12 border-t border-white/5 relative overflow-hidden">
+        {/* Decorative accent */}
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent" />
+        
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12 mb-20">
+            {/* Brand Column */}
+            <div className="col-span-2 lg:col-span-2">
+              <div className="flex items-center gap-3 mb-6 group cursor-pointer">
+                <div className="h-10 w-10 bg-emerald-600 rounded-xl flex items-center justify-center text-white font-black text-lg group-hover:rotate-6 transition-transform shadow-lg shadow-emerald-900/40">F</div>
+                <span className="text-2xl font-black tracking-tight text-white uppercase">Fixr</span>
+              </div>
+              <p className="text-slate-400 text-sm leading-relaxed max-w-sm mb-8">
+                The modern standard for property intelligence and rapid maintenance. Vetted professionals, transparent pricing, and enterprise-grade accountability.
+              </p>
+              <div className="flex items-center gap-4">
+                {['𝕏', 'In', 'Gh'].map((social) => (
+                  <button key={social} className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-slate-500 hover:text-emerald-400 hover:bg-white/10 transition-all border border-white/5 hover:border-emerald-500/30">
+                    <span className="font-bold text-xs">{social}</span>
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <div className="flex items-center gap-4 text-slate-400">
-              <a href="tel:+1800FIXR" className="p-2 rounded-lg hover:bg-slate-50 transition-colors text-slate-400 hover:text-emerald-600">
-                <PhoneCall size={18} />
-              </a>
-              <p className="text-xs font-bold uppercase tracking-widest">© 2026 Fixr Inc.</p>
+            {/* Link Columns */}
+            <div>
+              <h4 className="text-xs font-black text-white uppercase tracking-[0.2em] mb-6">Solutions</h4>
+              <ul className="space-y-4">
+                {['Residential', 'Commercial', 'Prop Managers', 'Developers'].map(item => (
+                  <li key={item}>
+                    <Link href="#" className="text-slate-500 text-sm font-medium hover:text-emerald-400 transition-colors flex items-center gap-2 group">
+                      <ChevronRight size={12} className="opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" />
+                      {item}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="text-xs font-black text-white uppercase tracking-[0.2em] mb-6">Company</h4>
+              <ul className="space-y-4">
+                {['About Us', 'Careers', 'Partner Program', 'Newsroom'].map(item => (
+                  <li key={item}>
+                    <Link href="#" className="text-slate-500 text-sm font-medium hover:text-emerald-400 transition-colors flex items-center gap-2 group">
+                      <ChevronRight size={12} className="opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" />
+                      {item}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="text-xs font-black text-white uppercase tracking-[0.2em] mb-6">Resources</h4>
+              <ul className="space-y-4">
+                {['Help Center', 'API Docs', 'Safety protocols', 'Community'].map(item => (
+                  <li key={item}>
+                    <Link href={item === 'Help Center' ? '/help' : '#'} className="text-slate-500 text-sm font-medium hover:text-emerald-400 transition-colors flex items-center gap-2 group">
+                      <ChevronRight size={12} className="opacity-0 -ml-4 group-hover:opacity-100 group-hover:ml-0 transition-all" />
+                      {item}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Bottom Bar */}
+          <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
+            <div className="flex flex-wrap justify-center gap-x-8 gap-y-2 text-[10px] font-black uppercase tracking-widest text-slate-600">
+              <Link href="/privacy" className="hover:text-slate-300 transition-colors">Privacy Policy</Link>
+              <Link href="/terms" className="hover:text-slate-300 transition-colors">Terms of Service</Link>
+              <Link href="/cookies" className="hover:text-slate-300 transition-colors">Cookies</Link>
+            </div>
+            
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/5 border border-emerald-500/10">
+                <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">System Operational</span>
+              </div>
+              <p className="text-[10px] font-black text-slate-700 uppercase tracking-widest">© 2026 Fixr Inc.</p>
             </div>
           </div>
         </div>

@@ -1,0 +1,166 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated-client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  phone        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  jobs         Job[]
+  reviews      Review[]
+}
+
+model Contractor {
+  id                String            @id @default(uuid())
+  name              String
+  passwordHash      String
+  trade             String
+  businessType      String
+  zipCodes          String[]
+  status            String
+  rating            Float?
+  insuranceUploaded Boolean           @default(false)
+  isLicensed        Boolean           @default(false)
+  isVerified        Boolean           @default(false)
+  headline          String?
+  location          String?
+  website           String?
+  owner             String?
+  abn               String?
+  licenses          String[]
+  postcode          String?
+  about             String?
+  logo_url          String?
+  address           String?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  isContactVerified Boolean           @default(false)
+  emails            ContractorEmail[]
+  phones            ContractorPhone[]
+  jobs              Job[]
+  reviews           Review[]
+}
+
+model ContractorEmail {
+  id           String     @id @default(uuid())
+  email        String     @unique
+  type         String     @default("Personal")
+  isVerified   Boolean    @default(false)
+  contractorId String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  contractor   Contractor @relation(fields: [contractorId], references: [id], onDelete: Cascade)
+}
+
+model ContractorPhone {
+  id           String     @id @default(uuid())
+  number       String
+  type         String     @default("Personal")
+  isVerified   Boolean    @default(false)
+  contractorId String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  contractor   Contractor @relation(fields: [contractorId], references: [id], onDelete: Cascade)
+}
+
+model Job {
+  id                   String      @id @default(uuid())
+  description          String
+  location             String
+  urgency              String
+  category             String
+  problemType          String
+  severity             String
+  estimatedTimeMinutes Int
+  partsRequired        Boolean
+  quotedPrice          Float
+  quotedPriceMin       Float
+  quotedPriceMax       Float
+  confidence           String
+  status               String
+  userId               String?
+  contractorId         String?
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+  address              String?
+  postcode             String?
+  contractor           Contractor? @relation(fields: [contractorId], references: [id])
+  user                 User?       @relation(fields: [userId], references: [id])
+  reviews              Review?
+}
+
+model PricingEvent {
+  id               String   @id @default(uuid())
+  jobId            String?
+  userId           String?
+  inputDescription String
+  location         String
+  urgency          String
+  predictedPrice   Float
+  predictedMin     Float
+  predictedMax     Float
+  confidence       String
+  modelVersion     String
+  featuresJson     Json
+  createdAt        DateTime @default(now())
+}
+
+model Review {
+  id           String     @id @default(uuid())
+  jobId        String     @unique
+  rating       Int
+  comment      String?
+  createdAt    DateTime   @default(now())
+  contractorId String
+  customerId   String
+  updatedAt    DateTime   @updatedAt
+  contractor   Contractor @relation(fields: [contractorId], references: [id])
+  customer     User       @relation(fields: [customerId], references: [id])
+  job          Job        @relation(fields: [jobId], references: [id])
+}
+
+model ContractorLead {
+  id          String   @id @default(uuid())
+  name        String
+  phone       String
+  tradeType   String
+  suburbOrZip String
+  source      String
+  status      String
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model AdminAction {
+  id             String   @id @default(uuid())
+  adminUserId    String?
+  jobId          String
+  actionType     String
+  previousStatus String?
+  newStatus      String?
+  note           String?
+  createdAt      DateTime @default(now())
+}
+
+// ─── Verification codes ───────────────────────────────────────────────────────
+model VerificationCode {
+  id        String   @id @default(uuid())
+  target    String // email or phone
+  code      String
+  type      String // "email" or "phone"
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([target, code])
+}

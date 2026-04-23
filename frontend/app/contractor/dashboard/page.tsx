@@ -56,6 +56,12 @@ export default function EnterpriseContractorDashboard() {
   const [editZips, setEditZips] = useState("");
   const [updatingProfile, setUpdatingProfile] = useState(false);
 
+  // Verification State
+  const [verifying, setVerifying] = useState<{ type: "email" | "phone"; value: string } | null>(null);
+  const [verificationCode, setVerificationCode] = useState("");
+  const [isVerifyingLoading, setIsVerifyingLoading] = useState(false);
+
+
   useEffect(() => {
     const session = getSession();
     if (!session || session.role !== "contractor") {
@@ -160,6 +166,31 @@ export default function EnterpriseContractorDashboard() {
     } catch (e: any) { alert(e.message); }
     finally { setUpdatingProfile(false); }
   }
+
+  async function handleRequestVerification(type: "email" | "phone", value: string) {
+    try {
+      await api.requestVerification({ type, value });
+      setVerifying({ type, value });
+      setVerificationCode("");
+    } catch (e: any) { alert(e.message); }
+  }
+
+  async function handleSubmitVerification() {
+    if (!verifying) return;
+    setIsVerifyingLoading(true);
+    try {
+      await api.submitVerification({ 
+        type: verifying.type, 
+        value: verifying.value, 
+        code: verificationCode 
+      });
+      setVerifying(null);
+      await loadData();
+      alert("Verification successful!");
+    } catch (e: any) { alert(e.message); }
+    finally { setIsVerifyingLoading(false); }
+  }
+
 
   if (loading) {
     return (
@@ -438,21 +469,75 @@ export default function EnterpriseContractorDashboard() {
                        </div>
 
                        <div className="space-y-8">
-                           <div className="space-y-3">
-                              <label className="text-xs font-black uppercase tracking-widest text-slate-400">Contact Protocol</label>
-                              <div className="p-5 bg-slate-50 border border-slate-100 rounded-[22px] flex items-center gap-4">
-                                 <Phone className="text-emerald-500" size={18} />
-                                 <span className="font-bold text-slate-950">{contractor?.telephone}</span>
-                              </div>
-                           </div>
-                           <div className="space-y-3">
-                              <label className="text-xs font-black uppercase tracking-widest text-slate-400">Digital Identity</label>
-                              <div className="p-5 bg-slate-50 border border-slate-100 rounded-[22px] flex items-center gap-4">
-                                 <Mail className="text-emerald-500" size={18} />
-                                 <span className="font-bold text-slate-950">{contractor?.email}</span>
+                           <div className="space-y-4">
+                              <label className="text-xs font-black uppercase tracking-widest text-slate-400">Contact PROTOCOLS (Verified: {contractor?.isContactVerified ? 'YES' : 'NO'})</label>
+                              
+                              <div className="space-y-4">
+                                 {/* Emails Section */}
+                                 <div className="space-y-2">
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Registered Email Nodes</p>
+                                    {contractor?.emails.map((e) => (
+                                       <div key={e.id} className="p-4 bg-slate-50 border border-slate-100 rounded-[22px] flex items-center justify-between group transition-all hover:border-emerald-200">
+                                          <div className="flex items-center gap-4">
+                                             <div className={`h-8 w-8 rounded-xl flex items-center justify-center ${e.isVerified ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-200 text-slate-400'}`}>
+                                                <Mail size={16} />
+                                             </div>
+                                             <div>
+                                                <p className="font-bold text-slate-950 text-sm">{e.email}</p>
+                                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{e.type}</p>
+                                             </div>
+                                          </div>
+                                          {e.isVerified ? (
+                                             <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full">
+                                                <CheckCircle2 size={12} />
+                                                <span className="text-[10px] font-black uppercase">Verified</span>
+                                             </div>
+                                          ) : (
+                                             <button 
+                                                onClick={() => handleRequestVerification("email", e.email)}
+                                                className="px-4 py-1.5 bg-slate-950 text-white text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-emerald-600 transition-all opacity-0 group-hover:opacity-100"
+                                             >
+                                                Verify Node
+                                             </button>
+                                          )}
+                                       </div>
+                                    ))}
+                                 </div>
+
+                                 {/* Phones Section */}
+                                 <div className="space-y-2">
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Voice & Text Channels</p>
+                                    {contractor?.phones.map((p) => (
+                                       <div key={p.id} className="p-4 bg-slate-50 border border-slate-100 rounded-[22px] flex items-center justify-between group transition-all hover:border-emerald-200">
+                                          <div className="flex items-center gap-4">
+                                             <div className={`h-8 w-8 rounded-xl flex items-center justify-center ${p.isVerified ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-200 text-slate-400'}`}>
+                                                <Phone size={16} />
+                                             </div>
+                                             <div>
+                                                <p className="font-bold text-slate-950 text-sm">{p.number}</p>
+                                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{p.type}</p>
+                                             </div>
+                                          </div>
+                                          {p.isVerified ? (
+                                             <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full">
+                                                <CheckCircle2 size={12} />
+                                                <span className="text-[10px] font-black uppercase">Verified</span>
+                                             </div>
+                                          ) : (
+                                             <button 
+                                                onClick={() => handleRequestVerification("phone", p.number)}
+                                                className="px-4 py-1.5 bg-slate-950 text-white text-[10px] font-black uppercase tracking-widest rounded-full hover:bg-emerald-600 transition-all opacity-0 group-hover:opacity-100"
+                                             >
+                                                Verify Channel
+                                             </button>
+                                          )}
+                                       </div>
+                                    ))}
+                                 </div>
                               </div>
                            </div>
                        </div>
+
                     </div>
 
                     <div className="pt-8 border-t border-slate-100 flex justify-end">
@@ -554,6 +639,55 @@ export default function EnterpriseContractorDashboard() {
           </div>
         )}
       </AnimatePresence>
+
+      {/* Verification Modal */}
+      <AnimatePresence>
+        {verifying && (
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-6">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setVerifying(null)} className="absolute inset-0 bg-slate-950/60 backdrop-blur-xl" />
+            <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }} className="relative w-full max-w-md bg-white border border-slate-200 rounded-[40px] shadow-[0_32px_120px_rgba(0,0,0,0.3)] overflow-hidden">
+                <div className="p-10 text-center">
+                   <div className="h-20 w-20 bg-emerald-50 text-emerald-600 rounded-3xl flex items-center justify-center mx-auto mb-8">
+                      <ShieldCheck size={40} />
+                   </div>
+                   <h2 className="text-2xl font-black text-slate-950 tracking-tight mb-2">Security Verification</h2>
+                   <p className="text-slate-500 text-sm font-medium mb-8 leading-relaxed">
+                      We've dispatched a unique 6-digit protocol to <br/>
+                      <span className="text-slate-950 font-bold">{verifying.value}</span>. <br/>
+                      Please enter it below to verify this channel.
+                   </p>
+
+                   <div className="space-y-6">
+                      <input 
+                         type="text"
+                         maxLength={6}
+                         value={verificationCode}
+                         onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, ""))}
+                         className="w-full h-16 bg-slate-50 border-2 border-slate-100 rounded-[22px] text-center text-3xl font-black tracking-[0.5em] text-slate-950 outline-none focus:border-emerald-500 focus:bg-white transition-all placeholder:text-slate-200"
+                         placeholder="000000"
+                      />
+                      
+                      <button 
+                         onClick={handleSubmitVerification}
+                         disabled={verificationCode.length !== 6 || isVerifyingLoading}
+                         className="w-full py-5 bg-slate-950 text-white rounded-[22px] font-black uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-xl shadow-slate-900/10 active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3"
+                      >
+                         {isVerifyingLoading ? <div className="h-5 w-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : "Verify Identity"}
+                      </button>
+
+                      <button 
+                         onClick={() => setVerifying(null)}
+                         className="text-xs font-black text-slate-400 uppercase tracking-widest hover:text-slate-950 transition-colors"
+                      >
+                         Abort Verification
+                      </button>
+                   </div>
+                </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
 
     </div>
   );
