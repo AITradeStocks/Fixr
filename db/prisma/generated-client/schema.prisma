@@ -94,9 +94,38 @@ model Job {
   updatedAt            DateTime    @updatedAt
   address              String?
   postcode             String?
+  customerLocation     Json?       @map("customer_location")
   contractor           Contractor? @relation(fields: [contractorId], references: [id])
   user                 User?       @relation(fields: [userId], references: [id])
+  serviceCharge        Float?
+  parts                Part[]
   reviews              Review?
+  paymentStatus        String      @default("unpaid") // unpaid, pending, paid
+  stripeSessionId      String?
+}
+
+model Part {
+  id        String   @id @default(uuid())
+  name      String
+  price     Float
+  status    String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  jobId     String
+  job       Job      @relation(fields: [jobId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model LocationLog {
+  id           String   @id @default(cuid())
+  jobId        String   @map("job_id")
+  contractorId String   @map("contractor_id")
+  lat          Float
+  lng          Float
+  accuracy     Float?
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([jobId, createdAt])
+  @@map("location_logs")
 }
 
 model PricingEvent {

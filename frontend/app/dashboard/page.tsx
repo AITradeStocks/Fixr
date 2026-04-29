@@ -25,10 +25,20 @@ import {
   Calendar,
   Sparkles,
   MessageCircle,
-  Mail
+  Mail,
+  CreditCard
+
 } from "lucide-react";
 import { SupportOverlay } from "@/components/SupportOverlay";
 import { ReviewModal } from "@/components/ReviewModal";
+import dynamic from "next/dynamic";
+
+const LiveTrackingMap = dynamic(() => import("@/components/LiveTrackingMap").then(mod => mod.LiveTrackingMap), { 
+  ssr: false,
+  loading: () => <div className="h-[450px] bg-slate-50 rounded-[2.5rem] animate-pulse" />
+});
+
+
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -85,6 +95,30 @@ export default function DashboardPage() {
     } finally { setActionLoading(null); }
   }
 
+  async function handleApprovePart(jobId: string, partId: string) {
+    setActionLoading(jobId + "_" + partId + "_approve");
+    try {
+      await api.approveJobPart(jobId, partId);
+      await load();
+    } finally { setActionLoading(null); }
+  }
+
+  async function handleRejectPart(jobId: string, partId: string) {
+    setActionLoading(jobId + "_" + partId + "_reject");
+    try {
+      await api.rejectJobPart(jobId, partId);
+      await load();
+    } finally { setActionLoading(null); }
+  }
+  async function handlePayment(jobId: string) {
+    setActionLoading(jobId + "_payment");
+    try {
+      const { url } = await api.createCheckoutSession(jobId) as { url: string };
+      window.location.href = url;
+    } catch (e: any) { alert(e.message); }
+    finally { setActionLoading(null); }
+  }
+
   if (loading) return (
     <main className="min-h-screen bg-mesh flex items-center justify-center">
       <div className="flex flex-col items-center gap-6">
@@ -115,15 +149,21 @@ export default function DashboardPage() {
       <SupportOverlay isOpen={isSupportOpen} onClose={() => setIsSupportOpen(false)} />
       
       {/* Dynamic Review Modal */}
-      {showReview && (
-        <ReviewModal 
-          isOpen={!!showReview}
-          onClose={() => setShowReview(null)}
-          onSubmit={(r, c) => handleReview(showReview, r, c)}
-          jobTitle={jobs.find(j => j.id === showReview)?.description || "Service Job"}
-          contractorName={jobs.find(j => j.id === showReview)?.contractor?.name || "Professional"}
-        />
-      )}
+      {showReview && (() => {
+        const currentJob = jobs.find(j => j.id === showReview);
+        return (
+          <ReviewModal 
+            isOpen={!!showReview}
+            onClose={() => setShowReview(null)}
+            onSubmit={(r, c) => handleReview(showReview, r, c)}
+            jobTitle={currentJob?.description || "Service Job"}
+            contractorName={currentJob?.contractor?.name || "Professional"}
+            paymentStatus={currentJob?.paymentStatus}
+            quotedPrice={currentJob?.quotedPrice}
+            onPay={() => handlePayment(showReview)}
+          />
+        );
+      })()}
 
       <div className="mx-auto max-w-6xl px-6">
         {/* Header */}
@@ -229,6 +269,9 @@ export default function DashboardPage() {
                         actionLoading={actionLoading} 
                         showReview={showReview}
                         onConfirm={handleConfirm} 
+                        onApprovePart={handleApprovePart}
+                        onRejectPart={handleRejectPart}
+                        onPay={handlePayment}
                       />
                     </motion.div>
                   ))}
@@ -244,7 +287,16 @@ export default function DashboardPage() {
                 </h2>
                 <div className="space-y-4">
                   {doneJobs.map(job => (
-                    <JobCard key={job.id} job={job} actionLoading={actionLoading} showReview={showReview} onConfirm={handleConfirm} />
+                    <JobCard 
+                      key={job.id} 
+                      job={job} 
+                      actionLoading={actionLoading} 
+                      showReview={showReview} 
+                      onConfirm={handleConfirm} 
+                      onApprovePart={handleApprovePart}
+                      onRejectPart={handleRejectPart}
+                      onPay={handlePayment}
+                    />
                   ))}
                 </div>
               </motion.div>
@@ -293,9 +345,12 @@ export default function DashboardPage() {
   );
 }
 
-function JobCard({ job, actionLoading, showReview, onConfirm }: {
+function JobCard({ job, actionLoading, showReview, onConfirm, onApprovePart, onRejectPart, onPay }: {
   job: Job; actionLoading: string | null; showReview: string | null;
   onConfirm: (id: string) => void;
+  onApprovePart: (jobId: string, partId: string) => void;
+  onRejectPart: (jobId: string, partId: string) => void;
+  onPay: (jobId: string) => void;
 }) {
   const isDone = job.status === "reviewed" || job.status === "cancelled";
   
@@ -324,12 +379,82 @@ function JobCard({ job, actionLoading, showReview, onConfirm }: {
           <div className="flex flex-col md:items-end gap-1">
             <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Total Investment</p>
             <p className="text-3xl font-black text-slate-950">${job.quotedPrice}</p>
+            <div className="flex flex-col items-end gap-2">
+              {job.parts && job.parts.length > 0 && (
+                <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest mt-1">
+                  Incl. ${job.parts.filter(p => p.status === 'APPROVED').reduce((s, p) => s + p.price, 0)} Parts
+                </p>
+              )}
+              {job.paymentStatus === "paid" ? (
+                <span className="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full text-[9px] font-black uppercase tracking-widest border border-emerald-100 flex items-center gap-1">
+                  <ShieldCheck size={10} /> Fully Paid
+                </span>
+              ) : (
+                <button 
+                  onClick={() => onPay(job.id)}
+                  disabled={!!actionLoading}
+                  className="mt-2 px-6 py-2.5 bg-slate-950 text-white rounded-xl text-[10px] font-black uppercase tracking-[0.15em] hover:bg-emerald-600 transition-all shadow-xl shadow-slate-200 flex items-center gap-2 active:scale-95 disabled:opacity-50"
+                >
+                  <CreditCard size={14} /> 
+                  {actionLoading === job.id + "_payment" ? "Redirecting..." : "Settle Balance"}
+                </button>
+              )}
+            </div>
           </div>
         </div>
 
         <div className="mt-8 mb-6 bg-white/30 rounded-2xl p-6 border border-white/40 shadow-inner">
           <StatusTimeline status={job.status} />
         </div>
+
+        {/* Parts Approval Section */}
+        {job.parts && job.parts.length > 0 && (
+          <div className="mt-8 p-6 rounded-[2rem] bg-slate-50 border border-slate-200">
+             <div className="flex items-center justify-between mb-6">
+                <h4 className="text-xs font-black uppercase tracking-[0.2em] text-slate-400">Mission Logistics: Parts</h4>
+                <div className="h-6 w-6 rounded-full bg-white border border-slate-200 flex items-center justify-center text-[10px] font-black text-slate-900">{job.parts.length}</div>
+             </div>
+             
+             <div className="space-y-4">
+                {job.parts.map(part => (
+                   <div key={part.id} className="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between group transition-all hover:border-emerald-200">
+                      <div>
+                         <p className="font-bold text-slate-950 text-sm">{part.name}</p>
+                         <p className="text-[10px] font-black text-emerald-600 italic mt-0.5">${part.price}</p>
+                      </div>
+                      
+                      <div className="flex items-center gap-3">
+                         {part.status === 'PENDING' ? (
+                            <>
+                               <button 
+                                  onClick={() => onRejectPart(job.id, part.id)}
+                                  disabled={!!actionLoading}
+                                  className="px-4 py-2 rounded-xl bg-rose-50 text-rose-600 text-[10px] font-black uppercase tracking-widest hover:bg-rose-500 hover:text-white transition-all disabled:opacity-50"
+                               >
+                                  {actionLoading === job.id + "_" + part.id + "_reject" ? "..." : "Reject"}
+                               </button>
+                               <button 
+                                  onClick={() => onApprovePart(job.id, part.id)}
+                                  disabled={!!actionLoading}
+                                  className="px-4 py-2 rounded-xl bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-200 disabled:opacity-50"
+                               >
+                                  {actionLoading === job.id + "_" + part.id + "_approve" ? "..." : "Approve"}
+                                </button>
+                            </>
+                         ) : (
+                            <div className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 ${
+                               part.status === 'APPROVED' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-rose-50 text-rose-600 border border-rose-100'
+                            }`}>
+                               {part.status === 'APPROVED' ? <CheckCircle2 size={10} /> : <AlertCircle size={10} />}
+                               {part.status}
+                            </div>
+                         )}
+                      </div>
+                   </div>
+                ))}
+             </div>
+          </div>
+        )}
 
         {job.contractor && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="mt-6 pt-6 border-t border-slate-100">
@@ -357,6 +482,18 @@ function JobCard({ job, actionLoading, showReview, onConfirm }: {
             </div>
           </motion.div>
         )}
+
+        {["assigned", "awaiting_customer_confirmation"].includes(job.status) && job.customerLocation && (
+          <div className="mt-8">
+            <LiveTrackingMap 
+              jobId={job.id} 
+              destination={job.customerLocation}
+              contractorName={job.contractor?.name || "Pro"}
+              contractorPhone={job.contractor?.phones?.[0]?.number}
+            />
+          </div>
+        )}
+
 
         {job.status === "completed" && (
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-6 p-6 rounded-2xl bg-emerald-50 border border-emerald-100">
@@ -393,19 +530,31 @@ function JobCard({ job, actionLoading, showReview, onConfirm }: {
 
 function StatusTimeline({ status }: { status: string }) {
   const steps = [
-    { key: "priced", label: "Requested" }, 
-    { key: "awaiting_customer_confirmation", label: "Matching" }, 
-    { key: "completed", label: "In Progress" }, 
-    { key: "reviewed", label: "Finalized" }
+    { key: "requested", label: "Requested" }, 
+    { key: "matching", label: "Matching" }, 
+    { key: "in_progress", label: "In Progress" }, 
+    { key: "finalized", label: "Finalized" }
   ];
   
-  const idx = status === "manual_dispatch_required" ? 0 : Math.max(0, steps.findIndex(s => s.key === status));
+  // Map internal status to timeline index
+  const statusToIdx: Record<string, number> = {
+    "priced": 1,
+    "manual_dispatch_required": 1,
+    "assigned": 2,
+    "awaiting_customer_confirmation": 2.5,
+    "completed": 3,
+    "reviewed": 3,
+  };
+
+  const currentProgress = statusToIdx[status] ?? 0;
   
   return (
     <div className="flex items-center w-full px-2">
       {steps.map((s, i) => {
-        const isCompleted = i < idx;
-        const isActive = i === idx;
+        const isCompleted = i < Math.floor(currentProgress);
+        const isActive = i === Math.floor(currentProgress);
+        const isPast = i < currentProgress;
+        
         return (
           <div key={s.key} className="flex items-center flex-1 last:flex-none">
             <div className="flex flex-col items-center relative z-10">
@@ -414,22 +563,25 @@ function StatusTimeline({ status }: { status: string }) {
                 animate={isActive ? { scale: 1.2 } : { scale: 1 }}
                 className={`h-5 w-5 rounded-full flex items-center justify-center border-2 transition-colors duration-500 ${
                   isActive ? "bg-emerald-600 border-emerald-400 shadow-lg shadow-emerald-200" : 
-                  isCompleted ? "bg-emerald-500 border-emerald-500" : 
+                  isPast ? "bg-emerald-500 border-emerald-500" : 
                   "bg-white border-slate-200"
                 }`}
               >
-                {isCompleted && <CheckCircle2 size={12} className="text-white" />}
+                {isPast && !isActive && <CheckCircle2 size={12} className="text-white" />}
                 {isActive && <div className="h-1.5 w-1.5 bg-white rounded-full animate-ping" />}
               </motion.div>
               <span className={`absolute -bottom-8 text-[10px] font-bold uppercase tracking-tight whitespace-nowrap transition-colors duration-500 ${
-                isActive ? "text-emerald-600" : isCompleted ? "text-slate-500" : "text-slate-300"
+                isActive ? "text-emerald-600" : isPast ? "text-slate-500" : "text-slate-300"
               }`}>{s.label}</span>
             </div>
             {i < steps.length - 1 && (
               <div className="flex-1 h-1.5 mx-0 bg-slate-100 rounded-full overflow-hidden">
                 <motion.div 
                   initial={{ width: "0%" }}
-                  animate={{ width: i < idx ? "100%" : i === idx ? "50%" : "0%" }}
+                  animate={{ 
+                    width: currentProgress > i + 1 ? "100%" : 
+                           currentProgress > i ? `${(currentProgress - i) * 100}%` : "0%" 
+                  }}
                   transition={{ duration: 1, ease: "easeInOut" }}
                   className="h-full bg-emerald-500"
                 />

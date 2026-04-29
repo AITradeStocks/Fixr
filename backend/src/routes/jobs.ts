@@ -4,6 +4,8 @@ import { autoAssignJob } from "../services/assignment.service.js";
 import { createJob, updateJobStatus } from "../services/jobs.service.js";
 import { requireAuth, optionalAuth } from "../middleware/auth.middleware.js";
 import type { AuthRequest } from "../middleware/auth.middleware.js";
+import { LocationCache } from "../lib/redis.js";
+
 
 export const jobsRouter = Router();
 
@@ -36,7 +38,7 @@ jobsRouter.get("/jobs/mine", requireAuth, async (req: AuthRequest, res, next) =>
     const jobs = await prisma.job.findMany({
       where: { userId: req.userId },
       orderBy: { createdAt: "desc" },
-      include: { contractor: true, reviews: true },
+      include: { contractor: true, reviews: true, parts: true },
     });
     
     // Mask contractor details for customer
@@ -61,7 +63,7 @@ jobsRouter.get("/jobs", async (req, res) => {
   const jobs = await prisma.job.findMany({
     where,
     orderBy: { createdAt: "desc" },
-    include: { contractor: true, reviews: true },
+    include: { contractor: true, reviews: true, parts: true },
   });
   res.json(jobs);
 });
@@ -70,7 +72,7 @@ jobsRouter.get("/jobs", async (req, res) => {
 jobsRouter.get("/jobs/:id", async (req, res) => {
   const job = await prisma.job.findUnique({
     where: { id: req.params.id },
-    include: { contractor: true, reviews: true, user: { select: { id: true, name: true, email: true, phone: true } } },
+    include: { contractor: true, reviews: true, parts: true, user: { select: { id: true, name: true, email: true, phone: true } } },
   });
   if (!job) { res.status(404).json({ error: "job not found" }); return; }
   
@@ -229,3 +231,106 @@ jobsRouter.post("/jobs/:id/review", optionalAuth, async (req: AuthRequest, res, 
   } catch (error) { next(error); }
 });
 
+// GET /jobs/:id/location — fetch last known location from Redis
+
+jobsRouter.get("/jobs/:id/location", async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const location = await LocationCache.get(id);
+    
+    if (!location) {
+      res.json({ error: "no_active_location" });
+      return;
+    }
+
+    res.json(location);
+  } catch (error) { next(error); }
+});
+
+// POST /jobs/:id/location — manual update (contractor only)
+jobsRouter.post("/jobs/:id/location", requireAuth, async (req: AuthRequest, res, next) => {
+  try {
+    const { id } = req.params;
+    const { lat, lng, accuracy } = req.body;
+    
+    // Check if contractor is assigned to this job
+    const job = await prisma.job.findUnique({ where: { id } });
+    if (!job || job.contractorId !== req.userId) {
+       res.status(403).json({ error: "not_assigned_contractor" });
+       return;
+    }
+
+    const locationData = { lat, lng, accuracy, timestamp: new Date().toISOString(), contractorId: req.userId };
+    await LocationCache.set(id, locationData);
+    
+    // Log to DB
+    await prisma.locationLog.create({
+      data: {
+        jobId: id,
+        contractorId: req.userId as string,
+        lat,
+        lng,
+        accuracy
+      }
+    });
+
+    res.json({ success: true });
+  } catch (error) { next(error); }
+});
+
+
+// POST /jobs/:id/parts — contractor adds parts
+jobsRouter.post("/jobs/:id/parts", requireAuth, async (req: AuthRequest, res, next) => {
+  try {
+    const { name, price } = req.body;
+    const job = await prisma.job.findUnique({ where: { id: req.params.id } });
+    if (!job) return res.status(404).json({ error: "job not found" });
+    if (job.contractorId !== req.userId) return res.status(403).json({ error: "not your job" });
+
+    const part = await prisma.part.create({
+      data: { name, price: parseFloat(price), jobId: req.params.id, status: "PENDING" }
+    });
+    res.status(201).json(part);
+  } catch (error) { next(error); }
+});
+
+// PATCH /jobs/:id/parts/:partId/approve — customer approves part
+jobsRouter.patch("/jobs/:id/parts/:partId/approve", requireAuth, async (req: AuthRequest, res, next) => {
+  try {
+    const job = await prisma.job.findUnique({ where: { id: req.params.id } });
+    if (!job) return res.status(404).json({ error: "job not found" });
+    if (job.userId !== req.userId) return res.status(403).json({ error: "not your job" });
+
+    const part = await prisma.part.update({
+      where: { id: req.params.partId, jobId: req.params.id },
+      data: { status: "APPROVED" }
+    });
+
+    // Update quotedPrice to reflect the new total
+    const approvedParts = await prisma.part.findMany({
+      where: { jobId: req.params.id, status: "APPROVED" }
+    });
+    const totalPartsCost = approvedParts.reduce((sum, p) => sum + p.price, 0);
+    await prisma.job.update({
+      where: { id: req.params.id },
+      data: { quotedPrice: (job.serviceCharge || 0) + totalPartsCost }
+    });
+
+    res.json(part);
+  } catch (error) { next(error); }
+});
+
+// PATCH /jobs/:id/parts/:partId/reject — customer rejects part
+jobsRouter.patch("/jobs/:id/parts/:partId/reject", requireAuth, async (req: AuthRequest, res, next) => {
+  try {
+    const job = await prisma.job.findUnique({ where: { id: req.params.id } });
+    if (!job) return res.status(404).json({ error: "job not found" });
+    if (job.userId !== req.userId) return res.status(403).json({ error: "not your job" });
+
+    const part = await prisma.part.update({
+      where: { id: req.params.partId, jobId: req.params.id },
+      data: { status: "REJECTED" }
+    });
+    res.json(part);
+  } catch (error) { next(error); }
+});

@@ -65,7 +65,7 @@ export async function estimatePricing(input: PricingRequest): Promise<PricingRes
   const locationFactor = input.location.toLowerCase().includes("austin") ? 1.1 : 1.0;
   const base = basePrices[parsed.category] ?? 110;
 
-  let price = base + parsed.estimatedTimeMinutes * 1.2 + severityScore * 20 + (parsed.partsRequired ? 30 : 0);
+  let price = base + parsed.estimatedTimeMinutes * 1.2 + severityScore * 20;
   price = Math.round(price * urgencyMultiplier * locationFactor);
 
   return {

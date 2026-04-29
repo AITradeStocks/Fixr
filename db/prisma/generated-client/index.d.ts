@@ -39,6 +39,16 @@ export type ContractorPhone = $Result.DefaultSelection<Prisma.$ContractorPhonePa
  */
 export type Job = $Result.DefaultSelection<Prisma.$JobPayload>
 /**
+ * Model Part
+ * 
+ */
+export type Part = $Result.DefaultSelection<Prisma.$PartPayload>
+/**
+ * Model LocationLog
+ * 
+ */
+export type LocationLog = $Result.DefaultSelection<Prisma.$LocationLogPayload>
+/**
  * Model PricingEvent
  * 
  */
@@ -236,6 +246,26 @@ export class PrismaClient<
     * ```
     */
   get job(): Prisma.JobDelegate<ExtArgs>;
+
+  /**
+   * `prisma.part`: Exposes CRUD operations for the **Part** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Parts
+    * const parts = await prisma.part.findMany()
+    * ```
+    */
+  get part(): Prisma.PartDelegate<ExtArgs>;
+
+  /**
+   * `prisma.locationLog`: Exposes CRUD operations for the **LocationLog** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LocationLogs
+    * const locationLogs = await prisma.locationLog.findMany()
+    * ```
+    */
+  get locationLog(): Prisma.LocationLogDelegate<ExtArgs>;
 
   /**
    * `prisma.pricingEvent`: Exposes CRUD operations for the **PricingEvent** model.
@@ -732,6 +762,8 @@ export namespace Prisma {
     ContractorEmail: 'ContractorEmail',
     ContractorPhone: 'ContractorPhone',
     Job: 'Job',
+    Part: 'Part',
+    LocationLog: 'LocationLog',
     PricingEvent: 'PricingEvent',
     Review: 'Review',
     ContractorLead: 'ContractorLead',
@@ -752,7 +784,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "user" | "contractor" | "contractorEmail" | "contractorPhone" | "job" | "pricingEvent" | "review" | "contractorLead" | "adminAction" | "verificationCode"
+      modelProps: "user" | "contractor" | "contractorEmail" | "contractorPhone" | "job" | "part" | "locationLog" | "pricingEvent" | "review" | "contractorLead" | "adminAction" | "verificationCode"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1103,6 +1135,146 @@ export namespace Prisma {
           count: {
             args: Prisma.JobCountArgs<ExtArgs>
             result: $Utils.Optional<JobCountAggregateOutputType> | number
+          }
+        }
+      }
+      Part: {
+        payload: Prisma.$PartPayload<ExtArgs>
+        fields: Prisma.PartFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PartFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PartFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartPayload>
+          }
+          findFirst: {
+            args: Prisma.PartFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PartFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartPayload>
+          }
+          findMany: {
+            args: Prisma.PartFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartPayload>[]
+          }
+          create: {
+            args: Prisma.PartCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartPayload>
+          }
+          createMany: {
+            args: Prisma.PartCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PartCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartPayload>[]
+          }
+          delete: {
+            args: Prisma.PartDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartPayload>
+          }
+          update: {
+            args: Prisma.PartUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartPayload>
+          }
+          deleteMany: {
+            args: Prisma.PartDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PartUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.PartUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartPayload>
+          }
+          aggregate: {
+            args: Prisma.PartAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePart>
+          }
+          groupBy: {
+            args: Prisma.PartGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PartGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PartCountArgs<ExtArgs>
+            result: $Utils.Optional<PartCountAggregateOutputType> | number
+          }
+        }
+      }
+      LocationLog: {
+        payload: Prisma.$LocationLogPayload<ExtArgs>
+        fields: Prisma.LocationLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LocationLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LocationLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationLogPayload>
+          }
+          findFirst: {
+            args: Prisma.LocationLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LocationLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationLogPayload>
+          }
+          findMany: {
+            args: Prisma.LocationLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationLogPayload>[]
+          }
+          create: {
+            args: Prisma.LocationLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationLogPayload>
+          }
+          createMany: {
+            args: Prisma.LocationLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LocationLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationLogPayload>[]
+          }
+          delete: {
+            args: Prisma.LocationLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationLogPayload>
+          }
+          update: {
+            args: Prisma.LocationLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.LocationLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LocationLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.LocationLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationLogPayload>
+          }
+          aggregate: {
+            args: Prisma.LocationLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLocationLog>
+          }
+          groupBy: {
+            args: Prisma.LocationLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LocationLogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LocationLogCountArgs<ExtArgs>
+            result: $Utils.Optional<LocationLogCountAggregateOutputType> | number
           }
         }
       }
@@ -1707,6 +1879,37 @@ export namespace Prisma {
    */
   export type ContractorCountOutputTypeCountReviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ReviewWhereInput
+  }
+
+
+  /**
+   * Count Type JobCountOutputType
+   */
+
+  export type JobCountOutputType = {
+    parts: number
+  }
+
+  export type JobCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    parts?: boolean | JobCountOutputTypeCountPartsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * JobCountOutputType without action
+   */
+  export type JobCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the JobCountOutputType
+     */
+    select?: JobCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * JobCountOutputType without action
+   */
+  export type JobCountOutputTypeCountPartsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PartWhereInput
   }
 
 
@@ -5915,6 +6118,7 @@ export namespace Prisma {
     quotedPrice: number | null
     quotedPriceMin: number | null
     quotedPriceMax: number | null
+    serviceCharge: number | null
   }
 
   export type JobSumAggregateOutputType = {
@@ -5922,6 +6126,7 @@ export namespace Prisma {
     quotedPrice: number | null
     quotedPriceMin: number | null
     quotedPriceMax: number | null
+    serviceCharge: number | null
   }
 
   export type JobMinAggregateOutputType = {
@@ -5945,6 +6150,9 @@ export namespace Prisma {
     updatedAt: Date | null
     address: string | null
     postcode: string | null
+    serviceCharge: number | null
+    paymentStatus: string | null
+    stripeSessionId: string | null
   }
 
   export type JobMaxAggregateOutputType = {
@@ -5968,6 +6176,9 @@ export namespace Prisma {
     updatedAt: Date | null
     address: string | null
     postcode: string | null
+    serviceCharge: number | null
+    paymentStatus: string | null
+    stripeSessionId: string | null
   }
 
   export type JobCountAggregateOutputType = {
@@ -5991,6 +6202,10 @@ export namespace Prisma {
     updatedAt: number
     address: number
     postcode: number
+    customerLocation: number
+    serviceCharge: number
+    paymentStatus: number
+    stripeSessionId: number
     _all: number
   }
 
@@ -6000,6 +6215,7 @@ export namespace Prisma {
     quotedPrice?: true
     quotedPriceMin?: true
     quotedPriceMax?: true
+    serviceCharge?: true
   }
 
   export type JobSumAggregateInputType = {
@@ -6007,6 +6223,7 @@ export namespace Prisma {
     quotedPrice?: true
     quotedPriceMin?: true
     quotedPriceMax?: true
+    serviceCharge?: true
   }
 
   export type JobMinAggregateInputType = {
@@ -6030,6 +6247,9 @@ export namespace Prisma {
     updatedAt?: true
     address?: true
     postcode?: true
+    serviceCharge?: true
+    paymentStatus?: true
+    stripeSessionId?: true
   }
 
   export type JobMaxAggregateInputType = {
@@ -6053,6 +6273,9 @@ export namespace Prisma {
     updatedAt?: true
     address?: true
     postcode?: true
+    serviceCharge?: true
+    paymentStatus?: true
+    stripeSessionId?: true
   }
 
   export type JobCountAggregateInputType = {
@@ -6076,6 +6299,10 @@ export namespace Prisma {
     updatedAt?: true
     address?: true
     postcode?: true
+    customerLocation?: true
+    serviceCharge?: true
+    paymentStatus?: true
+    stripeSessionId?: true
     _all?: true
   }
 
@@ -6186,6 +6413,10 @@ export namespace Prisma {
     updatedAt: Date
     address: string | null
     postcode: string | null
+    customerLocation: JsonValue | null
+    serviceCharge: number | null
+    paymentStatus: string
+    stripeSessionId: string | null
     _count: JobCountAggregateOutputType | null
     _avg: JobAvgAggregateOutputType | null
     _sum: JobSumAggregateOutputType | null
@@ -6228,9 +6459,15 @@ export namespace Prisma {
     updatedAt?: boolean
     address?: boolean
     postcode?: boolean
+    customerLocation?: boolean
+    serviceCharge?: boolean
+    paymentStatus?: boolean
+    stripeSessionId?: boolean
     contractor?: boolean | Job$contractorArgs<ExtArgs>
     user?: boolean | Job$userArgs<ExtArgs>
+    parts?: boolean | Job$partsArgs<ExtArgs>
     reviews?: boolean | Job$reviewsArgs<ExtArgs>
+    _count?: boolean | JobCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["job"]>
 
   export type JobSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -6254,6 +6491,10 @@ export namespace Prisma {
     updatedAt?: boolean
     address?: boolean
     postcode?: boolean
+    customerLocation?: boolean
+    serviceCharge?: boolean
+    paymentStatus?: boolean
+    stripeSessionId?: boolean
     contractor?: boolean | Job$contractorArgs<ExtArgs>
     user?: boolean | Job$userArgs<ExtArgs>
   }, ExtArgs["result"]["job"]>
@@ -6279,12 +6520,18 @@ export namespace Prisma {
     updatedAt?: boolean
     address?: boolean
     postcode?: boolean
+    customerLocation?: boolean
+    serviceCharge?: boolean
+    paymentStatus?: boolean
+    stripeSessionId?: boolean
   }
 
   export type JobInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     contractor?: boolean | Job$contractorArgs<ExtArgs>
     user?: boolean | Job$userArgs<ExtArgs>
+    parts?: boolean | Job$partsArgs<ExtArgs>
     reviews?: boolean | Job$reviewsArgs<ExtArgs>
+    _count?: boolean | JobCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type JobIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     contractor?: boolean | Job$contractorArgs<ExtArgs>
@@ -6296,6 +6543,7 @@ export namespace Prisma {
     objects: {
       contractor: Prisma.$ContractorPayload<ExtArgs> | null
       user: Prisma.$UserPayload<ExtArgs> | null
+      parts: Prisma.$PartPayload<ExtArgs>[]
       reviews: Prisma.$ReviewPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -6319,6 +6567,10 @@ export namespace Prisma {
       updatedAt: Date
       address: string | null
       postcode: string | null
+      customerLocation: Prisma.JsonValue | null
+      serviceCharge: number | null
+      paymentStatus: string
+      stripeSessionId: string | null
     }, ExtArgs["result"]["job"]>
     composites: {}
   }
@@ -6685,6 +6937,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     contractor<T extends Job$contractorArgs<ExtArgs> = {}>(args?: Subset<T, Job$contractorArgs<ExtArgs>>): Prisma__ContractorClient<$Result.GetResult<Prisma.$ContractorPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     user<T extends Job$userArgs<ExtArgs> = {}>(args?: Subset<T, Job$userArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
+    parts<T extends Job$partsArgs<ExtArgs> = {}>(args?: Subset<T, Job$partsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PartPayload<ExtArgs>, T, "findMany"> | Null>
     reviews<T extends Job$reviewsArgs<ExtArgs> = {}>(args?: Subset<T, Job$reviewsArgs<ExtArgs>>): Prisma__ReviewClient<$Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findUniqueOrThrow"> | null, null, ExtArgs>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -6735,6 +6988,10 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"Job", 'DateTime'>
     readonly address: FieldRef<"Job", 'String'>
     readonly postcode: FieldRef<"Job", 'String'>
+    readonly customerLocation: FieldRef<"Job", 'Json'>
+    readonly serviceCharge: FieldRef<"Job", 'Float'>
+    readonly paymentStatus: FieldRef<"Job", 'String'>
+    readonly stripeSessionId: FieldRef<"Job", 'String'>
   }
     
 
@@ -7083,6 +7340,26 @@ export namespace Prisma {
   }
 
   /**
+   * Job.parts
+   */
+  export type Job$partsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Part
+     */
+    select?: PartSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartInclude<ExtArgs> | null
+    where?: PartWhereInput
+    orderBy?: PartOrderByWithRelationInput | PartOrderByWithRelationInput[]
+    cursor?: PartWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PartScalarFieldEnum | PartScalarFieldEnum[]
+  }
+
+  /**
    * Job.reviews
    */
   export type Job$reviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7109,6 +7386,1941 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: JobInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Part
+   */
+
+  export type AggregatePart = {
+    _count: PartCountAggregateOutputType | null
+    _avg: PartAvgAggregateOutputType | null
+    _sum: PartSumAggregateOutputType | null
+    _min: PartMinAggregateOutputType | null
+    _max: PartMaxAggregateOutputType | null
+  }
+
+  export type PartAvgAggregateOutputType = {
+    price: number | null
+  }
+
+  export type PartSumAggregateOutputType = {
+    price: number | null
+  }
+
+  export type PartMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    price: number | null
+    status: string | null
+    jobId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PartMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    price: number | null
+    status: string | null
+    jobId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PartCountAggregateOutputType = {
+    id: number
+    name: number
+    price: number
+    status: number
+    jobId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PartAvgAggregateInputType = {
+    price?: true
+  }
+
+  export type PartSumAggregateInputType = {
+    price?: true
+  }
+
+  export type PartMinAggregateInputType = {
+    id?: true
+    name?: true
+    price?: true
+    status?: true
+    jobId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PartMaxAggregateInputType = {
+    id?: true
+    name?: true
+    price?: true
+    status?: true
+    jobId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PartCountAggregateInputType = {
+    id?: true
+    name?: true
+    price?: true
+    status?: true
+    jobId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PartAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Part to aggregate.
+     */
+    where?: PartWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Parts to fetch.
+     */
+    orderBy?: PartOrderByWithRelationInput | PartOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PartWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Parts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Parts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Parts
+    **/
+    _count?: true | PartCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PartAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PartSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PartMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PartMaxAggregateInputType
+  }
+
+  export type GetPartAggregateType<T extends PartAggregateArgs> = {
+        [P in keyof T & keyof AggregatePart]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePart[P]>
+      : GetScalarType<T[P], AggregatePart[P]>
+  }
+
+
+
+
+  export type PartGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PartWhereInput
+    orderBy?: PartOrderByWithAggregationInput | PartOrderByWithAggregationInput[]
+    by: PartScalarFieldEnum[] | PartScalarFieldEnum
+    having?: PartScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PartCountAggregateInputType | true
+    _avg?: PartAvgAggregateInputType
+    _sum?: PartSumAggregateInputType
+    _min?: PartMinAggregateInputType
+    _max?: PartMaxAggregateInputType
+  }
+
+  export type PartGroupByOutputType = {
+    id: string
+    name: string
+    price: number
+    status: string
+    jobId: string
+    createdAt: Date
+    updatedAt: Date
+    _count: PartCountAggregateOutputType | null
+    _avg: PartAvgAggregateOutputType | null
+    _sum: PartSumAggregateOutputType | null
+    _min: PartMinAggregateOutputType | null
+    _max: PartMaxAggregateOutputType | null
+  }
+
+  type GetPartGroupByPayload<T extends PartGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PartGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PartGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PartGroupByOutputType[P]>
+            : GetScalarType<T[P], PartGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PartSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    price?: boolean
+    status?: boolean
+    jobId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    job?: boolean | JobDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["part"]>
+
+  export type PartSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    price?: boolean
+    status?: boolean
+    jobId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    job?: boolean | JobDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["part"]>
+
+  export type PartSelectScalar = {
+    id?: boolean
+    name?: boolean
+    price?: boolean
+    status?: boolean
+    jobId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PartInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    job?: boolean | JobDefaultArgs<ExtArgs>
+  }
+  export type PartIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    job?: boolean | JobDefaultArgs<ExtArgs>
+  }
+
+  export type $PartPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Part"
+    objects: {
+      job: Prisma.$JobPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      price: number
+      status: string
+      jobId: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["part"]>
+    composites: {}
+  }
+
+  type PartGetPayload<S extends boolean | null | undefined | PartDefaultArgs> = $Result.GetResult<Prisma.$PartPayload, S>
+
+  type PartCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<PartFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: PartCountAggregateInputType | true
+    }
+
+  export interface PartDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Part'], meta: { name: 'Part' } }
+    /**
+     * Find zero or one Part that matches the filter.
+     * @param {PartFindUniqueArgs} args - Arguments to find a Part
+     * @example
+     * // Get one Part
+     * const part = await prisma.part.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PartFindUniqueArgs>(args: SelectSubset<T, PartFindUniqueArgs<ExtArgs>>): Prisma__PartClient<$Result.GetResult<Prisma.$PartPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one Part that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {PartFindUniqueOrThrowArgs} args - Arguments to find a Part
+     * @example
+     * // Get one Part
+     * const part = await prisma.part.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PartFindUniqueOrThrowArgs>(args: SelectSubset<T, PartFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PartClient<$Result.GetResult<Prisma.$PartPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first Part that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartFindFirstArgs} args - Arguments to find a Part
+     * @example
+     * // Get one Part
+     * const part = await prisma.part.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PartFindFirstArgs>(args?: SelectSubset<T, PartFindFirstArgs<ExtArgs>>): Prisma__PartClient<$Result.GetResult<Prisma.$PartPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first Part that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartFindFirstOrThrowArgs} args - Arguments to find a Part
+     * @example
+     * // Get one Part
+     * const part = await prisma.part.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PartFindFirstOrThrowArgs>(args?: SelectSubset<T, PartFindFirstOrThrowArgs<ExtArgs>>): Prisma__PartClient<$Result.GetResult<Prisma.$PartPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more Parts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Parts
+     * const parts = await prisma.part.findMany()
+     * 
+     * // Get first 10 Parts
+     * const parts = await prisma.part.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const partWithIdOnly = await prisma.part.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PartFindManyArgs>(args?: SelectSubset<T, PartFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PartPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a Part.
+     * @param {PartCreateArgs} args - Arguments to create a Part.
+     * @example
+     * // Create one Part
+     * const Part = await prisma.part.create({
+     *   data: {
+     *     // ... data to create a Part
+     *   }
+     * })
+     * 
+     */
+    create<T extends PartCreateArgs>(args: SelectSubset<T, PartCreateArgs<ExtArgs>>): Prisma__PartClient<$Result.GetResult<Prisma.$PartPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many Parts.
+     * @param {PartCreateManyArgs} args - Arguments to create many Parts.
+     * @example
+     * // Create many Parts
+     * const part = await prisma.part.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PartCreateManyArgs>(args?: SelectSubset<T, PartCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Parts and returns the data saved in the database.
+     * @param {PartCreateManyAndReturnArgs} args - Arguments to create many Parts.
+     * @example
+     * // Create many Parts
+     * const part = await prisma.part.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Parts and only return the `id`
+     * const partWithIdOnly = await prisma.part.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PartCreateManyAndReturnArgs>(args?: SelectSubset<T, PartCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PartPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a Part.
+     * @param {PartDeleteArgs} args - Arguments to delete one Part.
+     * @example
+     * // Delete one Part
+     * const Part = await prisma.part.delete({
+     *   where: {
+     *     // ... filter to delete one Part
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PartDeleteArgs>(args: SelectSubset<T, PartDeleteArgs<ExtArgs>>): Prisma__PartClient<$Result.GetResult<Prisma.$PartPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one Part.
+     * @param {PartUpdateArgs} args - Arguments to update one Part.
+     * @example
+     * // Update one Part
+     * const part = await prisma.part.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PartUpdateArgs>(args: SelectSubset<T, PartUpdateArgs<ExtArgs>>): Prisma__PartClient<$Result.GetResult<Prisma.$PartPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more Parts.
+     * @param {PartDeleteManyArgs} args - Arguments to filter Parts to delete.
+     * @example
+     * // Delete a few Parts
+     * const { count } = await prisma.part.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PartDeleteManyArgs>(args?: SelectSubset<T, PartDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Parts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Parts
+     * const part = await prisma.part.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PartUpdateManyArgs>(args: SelectSubset<T, PartUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Part.
+     * @param {PartUpsertArgs} args - Arguments to update or create a Part.
+     * @example
+     * // Update or create a Part
+     * const part = await prisma.part.upsert({
+     *   create: {
+     *     // ... data to create a Part
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Part we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PartUpsertArgs>(args: SelectSubset<T, PartUpsertArgs<ExtArgs>>): Prisma__PartClient<$Result.GetResult<Prisma.$PartPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of Parts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartCountArgs} args - Arguments to filter Parts to count.
+     * @example
+     * // Count the number of Parts
+     * const count = await prisma.part.count({
+     *   where: {
+     *     // ... the filter for the Parts we want to count
+     *   }
+     * })
+    **/
+    count<T extends PartCountArgs>(
+      args?: Subset<T, PartCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PartCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Part.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PartAggregateArgs>(args: Subset<T, PartAggregateArgs>): Prisma.PrismaPromise<GetPartAggregateType<T>>
+
+    /**
+     * Group by Part.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PartGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PartGroupByArgs['orderBy'] }
+        : { orderBy?: PartGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PartGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPartGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Part model
+   */
+  readonly fields: PartFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Part.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PartClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    job<T extends JobDefaultArgs<ExtArgs> = {}>(args?: Subset<T, JobDefaultArgs<ExtArgs>>): Prisma__JobClient<$Result.GetResult<Prisma.$JobPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Part model
+   */ 
+  interface PartFieldRefs {
+    readonly id: FieldRef<"Part", 'String'>
+    readonly name: FieldRef<"Part", 'String'>
+    readonly price: FieldRef<"Part", 'Float'>
+    readonly status: FieldRef<"Part", 'String'>
+    readonly jobId: FieldRef<"Part", 'String'>
+    readonly createdAt: FieldRef<"Part", 'DateTime'>
+    readonly updatedAt: FieldRef<"Part", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Part findUnique
+   */
+  export type PartFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Part
+     */
+    select?: PartSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartInclude<ExtArgs> | null
+    /**
+     * Filter, which Part to fetch.
+     */
+    where: PartWhereUniqueInput
+  }
+
+  /**
+   * Part findUniqueOrThrow
+   */
+  export type PartFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Part
+     */
+    select?: PartSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartInclude<ExtArgs> | null
+    /**
+     * Filter, which Part to fetch.
+     */
+    where: PartWhereUniqueInput
+  }
+
+  /**
+   * Part findFirst
+   */
+  export type PartFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Part
+     */
+    select?: PartSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartInclude<ExtArgs> | null
+    /**
+     * Filter, which Part to fetch.
+     */
+    where?: PartWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Parts to fetch.
+     */
+    orderBy?: PartOrderByWithRelationInput | PartOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Parts.
+     */
+    cursor?: PartWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Parts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Parts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Parts.
+     */
+    distinct?: PartScalarFieldEnum | PartScalarFieldEnum[]
+  }
+
+  /**
+   * Part findFirstOrThrow
+   */
+  export type PartFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Part
+     */
+    select?: PartSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartInclude<ExtArgs> | null
+    /**
+     * Filter, which Part to fetch.
+     */
+    where?: PartWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Parts to fetch.
+     */
+    orderBy?: PartOrderByWithRelationInput | PartOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Parts.
+     */
+    cursor?: PartWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Parts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Parts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Parts.
+     */
+    distinct?: PartScalarFieldEnum | PartScalarFieldEnum[]
+  }
+
+  /**
+   * Part findMany
+   */
+  export type PartFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Part
+     */
+    select?: PartSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartInclude<ExtArgs> | null
+    /**
+     * Filter, which Parts to fetch.
+     */
+    where?: PartWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Parts to fetch.
+     */
+    orderBy?: PartOrderByWithRelationInput | PartOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Parts.
+     */
+    cursor?: PartWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Parts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Parts.
+     */
+    skip?: number
+    distinct?: PartScalarFieldEnum | PartScalarFieldEnum[]
+  }
+
+  /**
+   * Part create
+   */
+  export type PartCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Part
+     */
+    select?: PartSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Part.
+     */
+    data: XOR<PartCreateInput, PartUncheckedCreateInput>
+  }
+
+  /**
+   * Part createMany
+   */
+  export type PartCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Parts.
+     */
+    data: PartCreateManyInput | PartCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Part createManyAndReturn
+   */
+  export type PartCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Part
+     */
+    select?: PartSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many Parts.
+     */
+    data: PartCreateManyInput | PartCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Part update
+   */
+  export type PartUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Part
+     */
+    select?: PartSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Part.
+     */
+    data: XOR<PartUpdateInput, PartUncheckedUpdateInput>
+    /**
+     * Choose, which Part to update.
+     */
+    where: PartWhereUniqueInput
+  }
+
+  /**
+   * Part updateMany
+   */
+  export type PartUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Parts.
+     */
+    data: XOR<PartUpdateManyMutationInput, PartUncheckedUpdateManyInput>
+    /**
+     * Filter which Parts to update
+     */
+    where?: PartWhereInput
+  }
+
+  /**
+   * Part upsert
+   */
+  export type PartUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Part
+     */
+    select?: PartSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Part to update in case it exists.
+     */
+    where: PartWhereUniqueInput
+    /**
+     * In case the Part found by the `where` argument doesn't exist, create a new Part with this data.
+     */
+    create: XOR<PartCreateInput, PartUncheckedCreateInput>
+    /**
+     * In case the Part was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PartUpdateInput, PartUncheckedUpdateInput>
+  }
+
+  /**
+   * Part delete
+   */
+  export type PartDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Part
+     */
+    select?: PartSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartInclude<ExtArgs> | null
+    /**
+     * Filter which Part to delete.
+     */
+    where: PartWhereUniqueInput
+  }
+
+  /**
+   * Part deleteMany
+   */
+  export type PartDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Parts to delete
+     */
+    where?: PartWhereInput
+  }
+
+  /**
+   * Part without action
+   */
+  export type PartDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Part
+     */
+    select?: PartSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model LocationLog
+   */
+
+  export type AggregateLocationLog = {
+    _count: LocationLogCountAggregateOutputType | null
+    _avg: LocationLogAvgAggregateOutputType | null
+    _sum: LocationLogSumAggregateOutputType | null
+    _min: LocationLogMinAggregateOutputType | null
+    _max: LocationLogMaxAggregateOutputType | null
+  }
+
+  export type LocationLogAvgAggregateOutputType = {
+    lat: number | null
+    lng: number | null
+    accuracy: number | null
+  }
+
+  export type LocationLogSumAggregateOutputType = {
+    lat: number | null
+    lng: number | null
+    accuracy: number | null
+  }
+
+  export type LocationLogMinAggregateOutputType = {
+    id: string | null
+    jobId: string | null
+    contractorId: string | null
+    lat: number | null
+    lng: number | null
+    accuracy: number | null
+    createdAt: Date | null
+  }
+
+  export type LocationLogMaxAggregateOutputType = {
+    id: string | null
+    jobId: string | null
+    contractorId: string | null
+    lat: number | null
+    lng: number | null
+    accuracy: number | null
+    createdAt: Date | null
+  }
+
+  export type LocationLogCountAggregateOutputType = {
+    id: number
+    jobId: number
+    contractorId: number
+    lat: number
+    lng: number
+    accuracy: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type LocationLogAvgAggregateInputType = {
+    lat?: true
+    lng?: true
+    accuracy?: true
+  }
+
+  export type LocationLogSumAggregateInputType = {
+    lat?: true
+    lng?: true
+    accuracy?: true
+  }
+
+  export type LocationLogMinAggregateInputType = {
+    id?: true
+    jobId?: true
+    contractorId?: true
+    lat?: true
+    lng?: true
+    accuracy?: true
+    createdAt?: true
+  }
+
+  export type LocationLogMaxAggregateInputType = {
+    id?: true
+    jobId?: true
+    contractorId?: true
+    lat?: true
+    lng?: true
+    accuracy?: true
+    createdAt?: true
+  }
+
+  export type LocationLogCountAggregateInputType = {
+    id?: true
+    jobId?: true
+    contractorId?: true
+    lat?: true
+    lng?: true
+    accuracy?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type LocationLogAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LocationLog to aggregate.
+     */
+    where?: LocationLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LocationLogs to fetch.
+     */
+    orderBy?: LocationLogOrderByWithRelationInput | LocationLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LocationLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LocationLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LocationLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LocationLogs
+    **/
+    _count?: true | LocationLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LocationLogAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LocationLogSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LocationLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LocationLogMaxAggregateInputType
+  }
+
+  export type GetLocationLogAggregateType<T extends LocationLogAggregateArgs> = {
+        [P in keyof T & keyof AggregateLocationLog]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLocationLog[P]>
+      : GetScalarType<T[P], AggregateLocationLog[P]>
+  }
+
+
+
+
+  export type LocationLogGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LocationLogWhereInput
+    orderBy?: LocationLogOrderByWithAggregationInput | LocationLogOrderByWithAggregationInput[]
+    by: LocationLogScalarFieldEnum[] | LocationLogScalarFieldEnum
+    having?: LocationLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LocationLogCountAggregateInputType | true
+    _avg?: LocationLogAvgAggregateInputType
+    _sum?: LocationLogSumAggregateInputType
+    _min?: LocationLogMinAggregateInputType
+    _max?: LocationLogMaxAggregateInputType
+  }
+
+  export type LocationLogGroupByOutputType = {
+    id: string
+    jobId: string
+    contractorId: string
+    lat: number
+    lng: number
+    accuracy: number | null
+    createdAt: Date
+    _count: LocationLogCountAggregateOutputType | null
+    _avg: LocationLogAvgAggregateOutputType | null
+    _sum: LocationLogSumAggregateOutputType | null
+    _min: LocationLogMinAggregateOutputType | null
+    _max: LocationLogMaxAggregateOutputType | null
+  }
+
+  type GetLocationLogGroupByPayload<T extends LocationLogGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LocationLogGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LocationLogGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LocationLogGroupByOutputType[P]>
+            : GetScalarType<T[P], LocationLogGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LocationLogSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    jobId?: boolean
+    contractorId?: boolean
+    lat?: boolean
+    lng?: boolean
+    accuracy?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["locationLog"]>
+
+  export type LocationLogSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    jobId?: boolean
+    contractorId?: boolean
+    lat?: boolean
+    lng?: boolean
+    accuracy?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["locationLog"]>
+
+  export type LocationLogSelectScalar = {
+    id?: boolean
+    jobId?: boolean
+    contractorId?: boolean
+    lat?: boolean
+    lng?: boolean
+    accuracy?: boolean
+    createdAt?: boolean
+  }
+
+
+  export type $LocationLogPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LocationLog"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      jobId: string
+      contractorId: string
+      lat: number
+      lng: number
+      accuracy: number | null
+      createdAt: Date
+    }, ExtArgs["result"]["locationLog"]>
+    composites: {}
+  }
+
+  type LocationLogGetPayload<S extends boolean | null | undefined | LocationLogDefaultArgs> = $Result.GetResult<Prisma.$LocationLogPayload, S>
+
+  type LocationLogCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<LocationLogFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: LocationLogCountAggregateInputType | true
+    }
+
+  export interface LocationLogDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LocationLog'], meta: { name: 'LocationLog' } }
+    /**
+     * Find zero or one LocationLog that matches the filter.
+     * @param {LocationLogFindUniqueArgs} args - Arguments to find a LocationLog
+     * @example
+     * // Get one LocationLog
+     * const locationLog = await prisma.locationLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LocationLogFindUniqueArgs>(args: SelectSubset<T, LocationLogFindUniqueArgs<ExtArgs>>): Prisma__LocationLogClient<$Result.GetResult<Prisma.$LocationLogPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one LocationLog that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {LocationLogFindUniqueOrThrowArgs} args - Arguments to find a LocationLog
+     * @example
+     * // Get one LocationLog
+     * const locationLog = await prisma.locationLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LocationLogFindUniqueOrThrowArgs>(args: SelectSubset<T, LocationLogFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LocationLogClient<$Result.GetResult<Prisma.$LocationLogPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first LocationLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LocationLogFindFirstArgs} args - Arguments to find a LocationLog
+     * @example
+     * // Get one LocationLog
+     * const locationLog = await prisma.locationLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LocationLogFindFirstArgs>(args?: SelectSubset<T, LocationLogFindFirstArgs<ExtArgs>>): Prisma__LocationLogClient<$Result.GetResult<Prisma.$LocationLogPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first LocationLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LocationLogFindFirstOrThrowArgs} args - Arguments to find a LocationLog
+     * @example
+     * // Get one LocationLog
+     * const locationLog = await prisma.locationLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LocationLogFindFirstOrThrowArgs>(args?: SelectSubset<T, LocationLogFindFirstOrThrowArgs<ExtArgs>>): Prisma__LocationLogClient<$Result.GetResult<Prisma.$LocationLogPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more LocationLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LocationLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LocationLogs
+     * const locationLogs = await prisma.locationLog.findMany()
+     * 
+     * // Get first 10 LocationLogs
+     * const locationLogs = await prisma.locationLog.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const locationLogWithIdOnly = await prisma.locationLog.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LocationLogFindManyArgs>(args?: SelectSubset<T, LocationLogFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LocationLogPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a LocationLog.
+     * @param {LocationLogCreateArgs} args - Arguments to create a LocationLog.
+     * @example
+     * // Create one LocationLog
+     * const LocationLog = await prisma.locationLog.create({
+     *   data: {
+     *     // ... data to create a LocationLog
+     *   }
+     * })
+     * 
+     */
+    create<T extends LocationLogCreateArgs>(args: SelectSubset<T, LocationLogCreateArgs<ExtArgs>>): Prisma__LocationLogClient<$Result.GetResult<Prisma.$LocationLogPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many LocationLogs.
+     * @param {LocationLogCreateManyArgs} args - Arguments to create many LocationLogs.
+     * @example
+     * // Create many LocationLogs
+     * const locationLog = await prisma.locationLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LocationLogCreateManyArgs>(args?: SelectSubset<T, LocationLogCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many LocationLogs and returns the data saved in the database.
+     * @param {LocationLogCreateManyAndReturnArgs} args - Arguments to create many LocationLogs.
+     * @example
+     * // Create many LocationLogs
+     * const locationLog = await prisma.locationLog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many LocationLogs and only return the `id`
+     * const locationLogWithIdOnly = await prisma.locationLog.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LocationLogCreateManyAndReturnArgs>(args?: SelectSubset<T, LocationLogCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LocationLogPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a LocationLog.
+     * @param {LocationLogDeleteArgs} args - Arguments to delete one LocationLog.
+     * @example
+     * // Delete one LocationLog
+     * const LocationLog = await prisma.locationLog.delete({
+     *   where: {
+     *     // ... filter to delete one LocationLog
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LocationLogDeleteArgs>(args: SelectSubset<T, LocationLogDeleteArgs<ExtArgs>>): Prisma__LocationLogClient<$Result.GetResult<Prisma.$LocationLogPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one LocationLog.
+     * @param {LocationLogUpdateArgs} args - Arguments to update one LocationLog.
+     * @example
+     * // Update one LocationLog
+     * const locationLog = await prisma.locationLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LocationLogUpdateArgs>(args: SelectSubset<T, LocationLogUpdateArgs<ExtArgs>>): Prisma__LocationLogClient<$Result.GetResult<Prisma.$LocationLogPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more LocationLogs.
+     * @param {LocationLogDeleteManyArgs} args - Arguments to filter LocationLogs to delete.
+     * @example
+     * // Delete a few LocationLogs
+     * const { count } = await prisma.locationLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LocationLogDeleteManyArgs>(args?: SelectSubset<T, LocationLogDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LocationLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LocationLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LocationLogs
+     * const locationLog = await prisma.locationLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LocationLogUpdateManyArgs>(args: SelectSubset<T, LocationLogUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one LocationLog.
+     * @param {LocationLogUpsertArgs} args - Arguments to update or create a LocationLog.
+     * @example
+     * // Update or create a LocationLog
+     * const locationLog = await prisma.locationLog.upsert({
+     *   create: {
+     *     // ... data to create a LocationLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LocationLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LocationLogUpsertArgs>(args: SelectSubset<T, LocationLogUpsertArgs<ExtArgs>>): Prisma__LocationLogClient<$Result.GetResult<Prisma.$LocationLogPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of LocationLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LocationLogCountArgs} args - Arguments to filter LocationLogs to count.
+     * @example
+     * // Count the number of LocationLogs
+     * const count = await prisma.locationLog.count({
+     *   where: {
+     *     // ... the filter for the LocationLogs we want to count
+     *   }
+     * })
+    **/
+    count<T extends LocationLogCountArgs>(
+      args?: Subset<T, LocationLogCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LocationLogCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LocationLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LocationLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LocationLogAggregateArgs>(args: Subset<T, LocationLogAggregateArgs>): Prisma.PrismaPromise<GetLocationLogAggregateType<T>>
+
+    /**
+     * Group by LocationLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LocationLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LocationLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LocationLogGroupByArgs['orderBy'] }
+        : { orderBy?: LocationLogGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LocationLogGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLocationLogGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LocationLog model
+   */
+  readonly fields: LocationLogFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LocationLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LocationLogClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LocationLog model
+   */ 
+  interface LocationLogFieldRefs {
+    readonly id: FieldRef<"LocationLog", 'String'>
+    readonly jobId: FieldRef<"LocationLog", 'String'>
+    readonly contractorId: FieldRef<"LocationLog", 'String'>
+    readonly lat: FieldRef<"LocationLog", 'Float'>
+    readonly lng: FieldRef<"LocationLog", 'Float'>
+    readonly accuracy: FieldRef<"LocationLog", 'Float'>
+    readonly createdAt: FieldRef<"LocationLog", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LocationLog findUnique
+   */
+  export type LocationLogFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LocationLog
+     */
+    select?: LocationLogSelect<ExtArgs> | null
+    /**
+     * Filter, which LocationLog to fetch.
+     */
+    where: LocationLogWhereUniqueInput
+  }
+
+  /**
+   * LocationLog findUniqueOrThrow
+   */
+  export type LocationLogFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LocationLog
+     */
+    select?: LocationLogSelect<ExtArgs> | null
+    /**
+     * Filter, which LocationLog to fetch.
+     */
+    where: LocationLogWhereUniqueInput
+  }
+
+  /**
+   * LocationLog findFirst
+   */
+  export type LocationLogFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LocationLog
+     */
+    select?: LocationLogSelect<ExtArgs> | null
+    /**
+     * Filter, which LocationLog to fetch.
+     */
+    where?: LocationLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LocationLogs to fetch.
+     */
+    orderBy?: LocationLogOrderByWithRelationInput | LocationLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LocationLogs.
+     */
+    cursor?: LocationLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LocationLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LocationLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LocationLogs.
+     */
+    distinct?: LocationLogScalarFieldEnum | LocationLogScalarFieldEnum[]
+  }
+
+  /**
+   * LocationLog findFirstOrThrow
+   */
+  export type LocationLogFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LocationLog
+     */
+    select?: LocationLogSelect<ExtArgs> | null
+    /**
+     * Filter, which LocationLog to fetch.
+     */
+    where?: LocationLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LocationLogs to fetch.
+     */
+    orderBy?: LocationLogOrderByWithRelationInput | LocationLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LocationLogs.
+     */
+    cursor?: LocationLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LocationLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LocationLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LocationLogs.
+     */
+    distinct?: LocationLogScalarFieldEnum | LocationLogScalarFieldEnum[]
+  }
+
+  /**
+   * LocationLog findMany
+   */
+  export type LocationLogFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LocationLog
+     */
+    select?: LocationLogSelect<ExtArgs> | null
+    /**
+     * Filter, which LocationLogs to fetch.
+     */
+    where?: LocationLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LocationLogs to fetch.
+     */
+    orderBy?: LocationLogOrderByWithRelationInput | LocationLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LocationLogs.
+     */
+    cursor?: LocationLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LocationLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LocationLogs.
+     */
+    skip?: number
+    distinct?: LocationLogScalarFieldEnum | LocationLogScalarFieldEnum[]
+  }
+
+  /**
+   * LocationLog create
+   */
+  export type LocationLogCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LocationLog
+     */
+    select?: LocationLogSelect<ExtArgs> | null
+    /**
+     * The data needed to create a LocationLog.
+     */
+    data: XOR<LocationLogCreateInput, LocationLogUncheckedCreateInput>
+  }
+
+  /**
+   * LocationLog createMany
+   */
+  export type LocationLogCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LocationLogs.
+     */
+    data: LocationLogCreateManyInput | LocationLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LocationLog createManyAndReturn
+   */
+  export type LocationLogCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LocationLog
+     */
+    select?: LocationLogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many LocationLogs.
+     */
+    data: LocationLogCreateManyInput | LocationLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LocationLog update
+   */
+  export type LocationLogUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LocationLog
+     */
+    select?: LocationLogSelect<ExtArgs> | null
+    /**
+     * The data needed to update a LocationLog.
+     */
+    data: XOR<LocationLogUpdateInput, LocationLogUncheckedUpdateInput>
+    /**
+     * Choose, which LocationLog to update.
+     */
+    where: LocationLogWhereUniqueInput
+  }
+
+  /**
+   * LocationLog updateMany
+   */
+  export type LocationLogUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LocationLogs.
+     */
+    data: XOR<LocationLogUpdateManyMutationInput, LocationLogUncheckedUpdateManyInput>
+    /**
+     * Filter which LocationLogs to update
+     */
+    where?: LocationLogWhereInput
+  }
+
+  /**
+   * LocationLog upsert
+   */
+  export type LocationLogUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LocationLog
+     */
+    select?: LocationLogSelect<ExtArgs> | null
+    /**
+     * The filter to search for the LocationLog to update in case it exists.
+     */
+    where: LocationLogWhereUniqueInput
+    /**
+     * In case the LocationLog found by the `where` argument doesn't exist, create a new LocationLog with this data.
+     */
+    create: XOR<LocationLogCreateInput, LocationLogUncheckedCreateInput>
+    /**
+     * In case the LocationLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LocationLogUpdateInput, LocationLogUncheckedUpdateInput>
+  }
+
+  /**
+   * LocationLog delete
+   */
+  export type LocationLogDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LocationLog
+     */
+    select?: LocationLogSelect<ExtArgs> | null
+    /**
+     * Filter which LocationLog to delete.
+     */
+    where: LocationLogWhereUniqueInput
+  }
+
+  /**
+   * LocationLog deleteMany
+   */
+  export type LocationLogDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LocationLogs to delete
+     */
+    where?: LocationLogWhereInput
+  }
+
+  /**
+   * LocationLog without action
+   */
+  export type LocationLogDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LocationLog
+     */
+    select?: LocationLogSelect<ExtArgs> | null
   }
 
 
@@ -11984,10 +14196,40 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     address: 'address',
-    postcode: 'postcode'
+    postcode: 'postcode',
+    customerLocation: 'customerLocation',
+    serviceCharge: 'serviceCharge',
+    paymentStatus: 'paymentStatus',
+    stripeSessionId: 'stripeSessionId'
   };
 
   export type JobScalarFieldEnum = (typeof JobScalarFieldEnum)[keyof typeof JobScalarFieldEnum]
+
+
+  export const PartScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    price: 'price',
+    status: 'status',
+    jobId: 'jobId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PartScalarFieldEnum = (typeof PartScalarFieldEnum)[keyof typeof PartScalarFieldEnum]
+
+
+  export const LocationLogScalarFieldEnum: {
+    id: 'id',
+    jobId: 'jobId',
+    contractorId: 'contractorId',
+    lat: 'lat',
+    lng: 'lng',
+    accuracy: 'accuracy',
+    createdAt: 'createdAt'
+  };
+
+  export type LocationLogScalarFieldEnum = (typeof LocationLogScalarFieldEnum)[keyof typeof LocationLogScalarFieldEnum]
 
 
   export const PricingEventScalarFieldEnum: {
@@ -12071,6 +14313,14 @@ export namespace Prisma {
   };
 
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
   export const JsonNullValueInput: {
@@ -12566,8 +14816,13 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Job"> | Date | string
     address?: StringNullableFilter<"Job"> | string | null
     postcode?: StringNullableFilter<"Job"> | string | null
+    customerLocation?: JsonNullableFilter<"Job">
+    serviceCharge?: FloatNullableFilter<"Job"> | number | null
+    paymentStatus?: StringFilter<"Job"> | string
+    stripeSessionId?: StringNullableFilter<"Job"> | string | null
     contractor?: XOR<ContractorNullableRelationFilter, ContractorWhereInput> | null
     user?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    parts?: PartListRelationFilter
     reviews?: XOR<ReviewNullableRelationFilter, ReviewWhereInput> | null
   }
 
@@ -12592,8 +14847,13 @@ export namespace Prisma {
     updatedAt?: SortOrder
     address?: SortOrderInput | SortOrder
     postcode?: SortOrderInput | SortOrder
+    customerLocation?: SortOrderInput | SortOrder
+    serviceCharge?: SortOrderInput | SortOrder
+    paymentStatus?: SortOrder
+    stripeSessionId?: SortOrderInput | SortOrder
     contractor?: ContractorOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
+    parts?: PartOrderByRelationAggregateInput
     reviews?: ReviewOrderByWithRelationInput
   }
 
@@ -12621,8 +14881,13 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Job"> | Date | string
     address?: StringNullableFilter<"Job"> | string | null
     postcode?: StringNullableFilter<"Job"> | string | null
+    customerLocation?: JsonNullableFilter<"Job">
+    serviceCharge?: FloatNullableFilter<"Job"> | number | null
+    paymentStatus?: StringFilter<"Job"> | string
+    stripeSessionId?: StringNullableFilter<"Job"> | string | null
     contractor?: XOR<ContractorNullableRelationFilter, ContractorWhereInput> | null
     user?: XOR<UserNullableRelationFilter, UserWhereInput> | null
+    parts?: PartListRelationFilter
     reviews?: XOR<ReviewNullableRelationFilter, ReviewWhereInput> | null
   }, "id">
 
@@ -12647,6 +14912,10 @@ export namespace Prisma {
     updatedAt?: SortOrder
     address?: SortOrderInput | SortOrder
     postcode?: SortOrderInput | SortOrder
+    customerLocation?: SortOrderInput | SortOrder
+    serviceCharge?: SortOrderInput | SortOrder
+    paymentStatus?: SortOrder
+    stripeSessionId?: SortOrderInput | SortOrder
     _count?: JobCountOrderByAggregateInput
     _avg?: JobAvgOrderByAggregateInput
     _max?: JobMaxOrderByAggregateInput
@@ -12678,6 +14947,141 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Job"> | Date | string
     address?: StringNullableWithAggregatesFilter<"Job"> | string | null
     postcode?: StringNullableWithAggregatesFilter<"Job"> | string | null
+    customerLocation?: JsonNullableWithAggregatesFilter<"Job">
+    serviceCharge?: FloatNullableWithAggregatesFilter<"Job"> | number | null
+    paymentStatus?: StringWithAggregatesFilter<"Job"> | string
+    stripeSessionId?: StringNullableWithAggregatesFilter<"Job"> | string | null
+  }
+
+  export type PartWhereInput = {
+    AND?: PartWhereInput | PartWhereInput[]
+    OR?: PartWhereInput[]
+    NOT?: PartWhereInput | PartWhereInput[]
+    id?: StringFilter<"Part"> | string
+    name?: StringFilter<"Part"> | string
+    price?: FloatFilter<"Part"> | number
+    status?: StringFilter<"Part"> | string
+    jobId?: StringFilter<"Part"> | string
+    createdAt?: DateTimeFilter<"Part"> | Date | string
+    updatedAt?: DateTimeFilter<"Part"> | Date | string
+    job?: XOR<JobRelationFilter, JobWhereInput>
+  }
+
+  export type PartOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    price?: SortOrder
+    status?: SortOrder
+    jobId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    job?: JobOrderByWithRelationInput
+  }
+
+  export type PartWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PartWhereInput | PartWhereInput[]
+    OR?: PartWhereInput[]
+    NOT?: PartWhereInput | PartWhereInput[]
+    name?: StringFilter<"Part"> | string
+    price?: FloatFilter<"Part"> | number
+    status?: StringFilter<"Part"> | string
+    jobId?: StringFilter<"Part"> | string
+    createdAt?: DateTimeFilter<"Part"> | Date | string
+    updatedAt?: DateTimeFilter<"Part"> | Date | string
+    job?: XOR<JobRelationFilter, JobWhereInput>
+  }, "id">
+
+  export type PartOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    price?: SortOrder
+    status?: SortOrder
+    jobId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: PartCountOrderByAggregateInput
+    _avg?: PartAvgOrderByAggregateInput
+    _max?: PartMaxOrderByAggregateInput
+    _min?: PartMinOrderByAggregateInput
+    _sum?: PartSumOrderByAggregateInput
+  }
+
+  export type PartScalarWhereWithAggregatesInput = {
+    AND?: PartScalarWhereWithAggregatesInput | PartScalarWhereWithAggregatesInput[]
+    OR?: PartScalarWhereWithAggregatesInput[]
+    NOT?: PartScalarWhereWithAggregatesInput | PartScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Part"> | string
+    name?: StringWithAggregatesFilter<"Part"> | string
+    price?: FloatWithAggregatesFilter<"Part"> | number
+    status?: StringWithAggregatesFilter<"Part"> | string
+    jobId?: StringWithAggregatesFilter<"Part"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Part"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Part"> | Date | string
+  }
+
+  export type LocationLogWhereInput = {
+    AND?: LocationLogWhereInput | LocationLogWhereInput[]
+    OR?: LocationLogWhereInput[]
+    NOT?: LocationLogWhereInput | LocationLogWhereInput[]
+    id?: StringFilter<"LocationLog"> | string
+    jobId?: StringFilter<"LocationLog"> | string
+    contractorId?: StringFilter<"LocationLog"> | string
+    lat?: FloatFilter<"LocationLog"> | number
+    lng?: FloatFilter<"LocationLog"> | number
+    accuracy?: FloatNullableFilter<"LocationLog"> | number | null
+    createdAt?: DateTimeFilter<"LocationLog"> | Date | string
+  }
+
+  export type LocationLogOrderByWithRelationInput = {
+    id?: SortOrder
+    jobId?: SortOrder
+    contractorId?: SortOrder
+    lat?: SortOrder
+    lng?: SortOrder
+    accuracy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type LocationLogWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: LocationLogWhereInput | LocationLogWhereInput[]
+    OR?: LocationLogWhereInput[]
+    NOT?: LocationLogWhereInput | LocationLogWhereInput[]
+    jobId?: StringFilter<"LocationLog"> | string
+    contractorId?: StringFilter<"LocationLog"> | string
+    lat?: FloatFilter<"LocationLog"> | number
+    lng?: FloatFilter<"LocationLog"> | number
+    accuracy?: FloatNullableFilter<"LocationLog"> | number | null
+    createdAt?: DateTimeFilter<"LocationLog"> | Date | string
+  }, "id">
+
+  export type LocationLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    jobId?: SortOrder
+    contractorId?: SortOrder
+    lat?: SortOrder
+    lng?: SortOrder
+    accuracy?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: LocationLogCountOrderByAggregateInput
+    _avg?: LocationLogAvgOrderByAggregateInput
+    _max?: LocationLogMaxOrderByAggregateInput
+    _min?: LocationLogMinOrderByAggregateInput
+    _sum?: LocationLogSumOrderByAggregateInput
+  }
+
+  export type LocationLogScalarWhereWithAggregatesInput = {
+    AND?: LocationLogScalarWhereWithAggregatesInput | LocationLogScalarWhereWithAggregatesInput[]
+    OR?: LocationLogScalarWhereWithAggregatesInput[]
+    NOT?: LocationLogScalarWhereWithAggregatesInput | LocationLogScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"LocationLog"> | string
+    jobId?: StringWithAggregatesFilter<"LocationLog"> | string
+    contractorId?: StringWithAggregatesFilter<"LocationLog"> | string
+    lat?: FloatWithAggregatesFilter<"LocationLog"> | number
+    lng?: FloatWithAggregatesFilter<"LocationLog"> | number
+    accuracy?: FloatNullableWithAggregatesFilter<"LocationLog"> | number | null
+    createdAt?: DateTimeWithAggregatesFilter<"LocationLog"> | Date | string
   }
 
   export type PricingEventWhereInput = {
@@ -13493,8 +15897,13 @@ export namespace Prisma {
     updatedAt?: Date | string
     address?: string | null
     postcode?: string | null
+    customerLocation?: NullableJsonNullValueInput | InputJsonValue
+    serviceCharge?: number | null
+    paymentStatus?: string
+    stripeSessionId?: string | null
     contractor?: ContractorCreateNestedOneWithoutJobsInput
     user?: UserCreateNestedOneWithoutJobsInput
+    parts?: PartCreateNestedManyWithoutJobInput
     reviews?: ReviewCreateNestedOneWithoutJobInput
   }
 
@@ -13519,6 +15928,11 @@ export namespace Prisma {
     updatedAt?: Date | string
     address?: string | null
     postcode?: string | null
+    customerLocation?: NullableJsonNullValueInput | InputJsonValue
+    serviceCharge?: number | null
+    paymentStatus?: string
+    stripeSessionId?: string | null
+    parts?: PartUncheckedCreateNestedManyWithoutJobInput
     reviews?: ReviewUncheckedCreateNestedOneWithoutJobInput
   }
 
@@ -13541,8 +15955,13 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
     postcode?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLocation?: NullableJsonNullValueInput | InputJsonValue
+    serviceCharge?: NullableFloatFieldUpdateOperationsInput | number | null
+    paymentStatus?: StringFieldUpdateOperationsInput | string
+    stripeSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     contractor?: ContractorUpdateOneWithoutJobsNestedInput
     user?: UserUpdateOneWithoutJobsNestedInput
+    parts?: PartUpdateManyWithoutJobNestedInput
     reviews?: ReviewUpdateOneWithoutJobNestedInput
   }
 
@@ -13567,6 +15986,11 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
     postcode?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLocation?: NullableJsonNullValueInput | InputJsonValue
+    serviceCharge?: NullableFloatFieldUpdateOperationsInput | number | null
+    paymentStatus?: StringFieldUpdateOperationsInput | string
+    stripeSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    parts?: PartUncheckedUpdateManyWithoutJobNestedInput
     reviews?: ReviewUncheckedUpdateOneWithoutJobNestedInput
   }
 
@@ -13591,6 +16015,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     address?: string | null
     postcode?: string | null
+    customerLocation?: NullableJsonNullValueInput | InputJsonValue
+    serviceCharge?: number | null
+    paymentStatus?: string
+    stripeSessionId?: string | null
   }
 
   export type JobUpdateManyMutationInput = {
@@ -13612,6 +16040,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
     postcode?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLocation?: NullableJsonNullValueInput | InputJsonValue
+    serviceCharge?: NullableFloatFieldUpdateOperationsInput | number | null
+    paymentStatus?: StringFieldUpdateOperationsInput | string
+    stripeSessionId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type JobUncheckedUpdateManyInput = {
@@ -13635,6 +16067,149 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
     postcode?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLocation?: NullableJsonNullValueInput | InputJsonValue
+    serviceCharge?: NullableFloatFieldUpdateOperationsInput | number | null
+    paymentStatus?: StringFieldUpdateOperationsInput | string
+    stripeSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type PartCreateInput = {
+    id?: string
+    name: string
+    price: number
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    job: JobCreateNestedOneWithoutPartsInput
+  }
+
+  export type PartUncheckedCreateInput = {
+    id?: string
+    name: string
+    price: number
+    status?: string
+    jobId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PartUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    job?: JobUpdateOneRequiredWithoutPartsNestedInput
+  }
+
+  export type PartUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    jobId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PartCreateManyInput = {
+    id?: string
+    name: string
+    price: number
+    status?: string
+    jobId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PartUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PartUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    jobId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LocationLogCreateInput = {
+    id?: string
+    jobId: string
+    contractorId: string
+    lat: number
+    lng: number
+    accuracy?: number | null
+    createdAt?: Date | string
+  }
+
+  export type LocationLogUncheckedCreateInput = {
+    id?: string
+    jobId: string
+    contractorId: string
+    lat: number
+    lng: number
+    accuracy?: number | null
+    createdAt?: Date | string
+  }
+
+  export type LocationLogUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    jobId?: StringFieldUpdateOperationsInput | string
+    contractorId?: StringFieldUpdateOperationsInput | string
+    lat?: FloatFieldUpdateOperationsInput | number
+    lng?: FloatFieldUpdateOperationsInput | number
+    accuracy?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LocationLogUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    jobId?: StringFieldUpdateOperationsInput | string
+    contractorId?: StringFieldUpdateOperationsInput | string
+    lat?: FloatFieldUpdateOperationsInput | number
+    lng?: FloatFieldUpdateOperationsInput | number
+    accuracy?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LocationLogCreateManyInput = {
+    id?: string
+    jobId: string
+    contractorId: string
+    lat: number
+    lng: number
+    accuracy?: number | null
+    createdAt?: Date | string
+  }
+
+  export type LocationLogUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    jobId?: StringFieldUpdateOperationsInput | string
+    contractorId?: StringFieldUpdateOperationsInput | string
+    lat?: FloatFieldUpdateOperationsInput | number
+    lng?: FloatFieldUpdateOperationsInput | number
+    accuracy?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LocationLogUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    jobId?: StringFieldUpdateOperationsInput | string
+    contractorId?: StringFieldUpdateOperationsInput | string
+    lat?: FloatFieldUpdateOperationsInput | number
+    lng?: FloatFieldUpdateOperationsInput | number
+    accuracy?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PricingEventCreateInput = {
@@ -14439,6 +17014,28 @@ export namespace Prisma {
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatFilter<$PrismaModel> | number
   }
+  export type JsonNullableFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type ContractorNullableRelationFilter = {
     is?: ContractorWhereInput | null
@@ -14450,9 +17047,19 @@ export namespace Prisma {
     isNot?: UserWhereInput | null
   }
 
+  export type PartListRelationFilter = {
+    every?: PartWhereInput
+    some?: PartWhereInput
+    none?: PartWhereInput
+  }
+
   export type ReviewNullableRelationFilter = {
     is?: ReviewWhereInput | null
     isNot?: ReviewWhereInput | null
+  }
+
+  export type PartOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type JobCountOrderByAggregateInput = {
@@ -14476,6 +17083,10 @@ export namespace Prisma {
     updatedAt?: SortOrder
     address?: SortOrder
     postcode?: SortOrder
+    customerLocation?: SortOrder
+    serviceCharge?: SortOrder
+    paymentStatus?: SortOrder
+    stripeSessionId?: SortOrder
   }
 
   export type JobAvgOrderByAggregateInput = {
@@ -14483,6 +17094,7 @@ export namespace Prisma {
     quotedPrice?: SortOrder
     quotedPriceMin?: SortOrder
     quotedPriceMax?: SortOrder
+    serviceCharge?: SortOrder
   }
 
   export type JobMaxOrderByAggregateInput = {
@@ -14506,6 +17118,9 @@ export namespace Prisma {
     updatedAt?: SortOrder
     address?: SortOrder
     postcode?: SortOrder
+    serviceCharge?: SortOrder
+    paymentStatus?: SortOrder
+    stripeSessionId?: SortOrder
   }
 
   export type JobMinOrderByAggregateInput = {
@@ -14529,6 +17144,9 @@ export namespace Prisma {
     updatedAt?: SortOrder
     address?: SortOrder
     postcode?: SortOrder
+    serviceCharge?: SortOrder
+    paymentStatus?: SortOrder
+    stripeSessionId?: SortOrder
   }
 
   export type JobSumOrderByAggregateInput = {
@@ -14536,6 +17154,7 @@ export namespace Prisma {
     quotedPrice?: SortOrder
     quotedPriceMin?: SortOrder
     quotedPriceMax?: SortOrder
+    serviceCharge?: SortOrder
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -14568,6 +17187,116 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
+  }
+
+  export type JobRelationFilter = {
+    is?: JobWhereInput
+    isNot?: JobWhereInput
+  }
+
+  export type PartCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    price?: SortOrder
+    status?: SortOrder
+    jobId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PartAvgOrderByAggregateInput = {
+    price?: SortOrder
+  }
+
+  export type PartMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    price?: SortOrder
+    status?: SortOrder
+    jobId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PartMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    price?: SortOrder
+    status?: SortOrder
+    jobId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PartSumOrderByAggregateInput = {
+    price?: SortOrder
+  }
+
+  export type LocationLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    jobId?: SortOrder
+    contractorId?: SortOrder
+    lat?: SortOrder
+    lng?: SortOrder
+    accuracy?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type LocationLogAvgOrderByAggregateInput = {
+    lat?: SortOrder
+    lng?: SortOrder
+    accuracy?: SortOrder
+  }
+
+  export type LocationLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    jobId?: SortOrder
+    contractorId?: SortOrder
+    lat?: SortOrder
+    lng?: SortOrder
+    accuracy?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type LocationLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    jobId?: SortOrder
+    contractorId?: SortOrder
+    lat?: SortOrder
+    lng?: SortOrder
+    accuracy?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type LocationLogSumOrderByAggregateInput = {
+    lat?: SortOrder
+    lng?: SortOrder
+    accuracy?: SortOrder
   }
   export type JsonFilter<$PrismaModel = never> = 
     | PatchUndefined<
@@ -14678,11 +17407,6 @@ export namespace Prisma {
   export type UserRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
-  }
-
-  export type JobRelationFilter = {
-    is?: JobWhereInput
-    isNot?: JobWhereInput
   }
 
   export type ReviewCountOrderByAggregateInput = {
@@ -15159,10 +17883,24 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type PartCreateNestedManyWithoutJobInput = {
+    create?: XOR<PartCreateWithoutJobInput, PartUncheckedCreateWithoutJobInput> | PartCreateWithoutJobInput[] | PartUncheckedCreateWithoutJobInput[]
+    connectOrCreate?: PartCreateOrConnectWithoutJobInput | PartCreateOrConnectWithoutJobInput[]
+    createMany?: PartCreateManyJobInputEnvelope
+    connect?: PartWhereUniqueInput | PartWhereUniqueInput[]
+  }
+
   export type ReviewCreateNestedOneWithoutJobInput = {
     create?: XOR<ReviewCreateWithoutJobInput, ReviewUncheckedCreateWithoutJobInput>
     connectOrCreate?: ReviewCreateOrConnectWithoutJobInput
     connect?: ReviewWhereUniqueInput
+  }
+
+  export type PartUncheckedCreateNestedManyWithoutJobInput = {
+    create?: XOR<PartCreateWithoutJobInput, PartUncheckedCreateWithoutJobInput> | PartCreateWithoutJobInput[] | PartUncheckedCreateWithoutJobInput[]
+    connectOrCreate?: PartCreateOrConnectWithoutJobInput | PartCreateOrConnectWithoutJobInput[]
+    createMany?: PartCreateManyJobInputEnvelope
+    connect?: PartWhereUniqueInput | PartWhereUniqueInput[]
   }
 
   export type ReviewUncheckedCreateNestedOneWithoutJobInput = {
@@ -15207,6 +17945,20 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutJobsInput, UserUpdateWithoutJobsInput>, UserUncheckedUpdateWithoutJobsInput>
   }
 
+  export type PartUpdateManyWithoutJobNestedInput = {
+    create?: XOR<PartCreateWithoutJobInput, PartUncheckedCreateWithoutJobInput> | PartCreateWithoutJobInput[] | PartUncheckedCreateWithoutJobInput[]
+    connectOrCreate?: PartCreateOrConnectWithoutJobInput | PartCreateOrConnectWithoutJobInput[]
+    upsert?: PartUpsertWithWhereUniqueWithoutJobInput | PartUpsertWithWhereUniqueWithoutJobInput[]
+    createMany?: PartCreateManyJobInputEnvelope
+    set?: PartWhereUniqueInput | PartWhereUniqueInput[]
+    disconnect?: PartWhereUniqueInput | PartWhereUniqueInput[]
+    delete?: PartWhereUniqueInput | PartWhereUniqueInput[]
+    connect?: PartWhereUniqueInput | PartWhereUniqueInput[]
+    update?: PartUpdateWithWhereUniqueWithoutJobInput | PartUpdateWithWhereUniqueWithoutJobInput[]
+    updateMany?: PartUpdateManyWithWhereWithoutJobInput | PartUpdateManyWithWhereWithoutJobInput[]
+    deleteMany?: PartScalarWhereInput | PartScalarWhereInput[]
+  }
+
   export type ReviewUpdateOneWithoutJobNestedInput = {
     create?: XOR<ReviewCreateWithoutJobInput, ReviewUncheckedCreateWithoutJobInput>
     connectOrCreate?: ReviewCreateOrConnectWithoutJobInput
@@ -15217,6 +17969,20 @@ export namespace Prisma {
     update?: XOR<XOR<ReviewUpdateToOneWithWhereWithoutJobInput, ReviewUpdateWithoutJobInput>, ReviewUncheckedUpdateWithoutJobInput>
   }
 
+  export type PartUncheckedUpdateManyWithoutJobNestedInput = {
+    create?: XOR<PartCreateWithoutJobInput, PartUncheckedCreateWithoutJobInput> | PartCreateWithoutJobInput[] | PartUncheckedCreateWithoutJobInput[]
+    connectOrCreate?: PartCreateOrConnectWithoutJobInput | PartCreateOrConnectWithoutJobInput[]
+    upsert?: PartUpsertWithWhereUniqueWithoutJobInput | PartUpsertWithWhereUniqueWithoutJobInput[]
+    createMany?: PartCreateManyJobInputEnvelope
+    set?: PartWhereUniqueInput | PartWhereUniqueInput[]
+    disconnect?: PartWhereUniqueInput | PartWhereUniqueInput[]
+    delete?: PartWhereUniqueInput | PartWhereUniqueInput[]
+    connect?: PartWhereUniqueInput | PartWhereUniqueInput[]
+    update?: PartUpdateWithWhereUniqueWithoutJobInput | PartUpdateWithWhereUniqueWithoutJobInput[]
+    updateMany?: PartUpdateManyWithWhereWithoutJobInput | PartUpdateManyWithWhereWithoutJobInput[]
+    deleteMany?: PartScalarWhereInput | PartScalarWhereInput[]
+  }
+
   export type ReviewUncheckedUpdateOneWithoutJobNestedInput = {
     create?: XOR<ReviewCreateWithoutJobInput, ReviewUncheckedCreateWithoutJobInput>
     connectOrCreate?: ReviewCreateOrConnectWithoutJobInput
@@ -15225,6 +17991,20 @@ export namespace Prisma {
     delete?: ReviewWhereInput | boolean
     connect?: ReviewWhereUniqueInput
     update?: XOR<XOR<ReviewUpdateToOneWithWhereWithoutJobInput, ReviewUpdateWithoutJobInput>, ReviewUncheckedUpdateWithoutJobInput>
+  }
+
+  export type JobCreateNestedOneWithoutPartsInput = {
+    create?: XOR<JobCreateWithoutPartsInput, JobUncheckedCreateWithoutPartsInput>
+    connectOrCreate?: JobCreateOrConnectWithoutPartsInput
+    connect?: JobWhereUniqueInput
+  }
+
+  export type JobUpdateOneRequiredWithoutPartsNestedInput = {
+    create?: XOR<JobCreateWithoutPartsInput, JobUncheckedCreateWithoutPartsInput>
+    connectOrCreate?: JobCreateOrConnectWithoutPartsInput
+    upsert?: JobUpsertWithoutPartsInput
+    connect?: JobWhereUniqueInput
+    update?: XOR<XOR<JobUpdateToOneWithWhereWithoutPartsInput, JobUpdateWithoutPartsInput>, JobUncheckedUpdateWithoutPartsInput>
   }
 
   export type ContractorCreateNestedOneWithoutReviewsInput = {
@@ -15460,6 +18240,28 @@ export namespace Prisma {
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
   }
+  export type NestedJsonNullableFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
   export type NestedJsonFilter<$PrismaModel = never> = 
     | PatchUndefined<
         Either<Required<NestedJsonFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonFilterBase<$PrismaModel>>, 'path'>>,
@@ -15502,7 +18304,12 @@ export namespace Prisma {
     updatedAt?: Date | string
     address?: string | null
     postcode?: string | null
+    customerLocation?: NullableJsonNullValueInput | InputJsonValue
+    serviceCharge?: number | null
+    paymentStatus?: string
+    stripeSessionId?: string | null
     contractor?: ContractorCreateNestedOneWithoutJobsInput
+    parts?: PartCreateNestedManyWithoutJobInput
     reviews?: ReviewCreateNestedOneWithoutJobInput
   }
 
@@ -15526,6 +18333,11 @@ export namespace Prisma {
     updatedAt?: Date | string
     address?: string | null
     postcode?: string | null
+    customerLocation?: NullableJsonNullValueInput | InputJsonValue
+    serviceCharge?: number | null
+    paymentStatus?: string
+    stripeSessionId?: string | null
+    parts?: PartUncheckedCreateNestedManyWithoutJobInput
     reviews?: ReviewUncheckedCreateNestedOneWithoutJobInput
   }
 
@@ -15609,6 +18421,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Job"> | Date | string
     address?: StringNullableFilter<"Job"> | string | null
     postcode?: StringNullableFilter<"Job"> | string | null
+    customerLocation?: JsonNullableFilter<"Job">
+    serviceCharge?: FloatNullableFilter<"Job"> | number | null
+    paymentStatus?: StringFilter<"Job"> | string
+    stripeSessionId?: StringNullableFilter<"Job"> | string | null
   }
 
   export type ReviewUpsertWithWhereUniqueWithoutCustomerInput = {
@@ -15716,7 +18532,12 @@ export namespace Prisma {
     updatedAt?: Date | string
     address?: string | null
     postcode?: string | null
+    customerLocation?: NullableJsonNullValueInput | InputJsonValue
+    serviceCharge?: number | null
+    paymentStatus?: string
+    stripeSessionId?: string | null
     user?: UserCreateNestedOneWithoutJobsInput
+    parts?: PartCreateNestedManyWithoutJobInput
     reviews?: ReviewCreateNestedOneWithoutJobInput
   }
 
@@ -15740,6 +18561,11 @@ export namespace Prisma {
     updatedAt?: Date | string
     address?: string | null
     postcode?: string | null
+    customerLocation?: NullableJsonNullValueInput | InputJsonValue
+    serviceCharge?: number | null
+    paymentStatus?: string
+    stripeSessionId?: string | null
+    parts?: PartUncheckedCreateNestedManyWithoutJobInput
     reviews?: ReviewUncheckedCreateNestedOneWithoutJobInput
   }
 
@@ -16237,6 +19063,34 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutJobsInput, UserUncheckedCreateWithoutJobsInput>
   }
 
+  export type PartCreateWithoutJobInput = {
+    id?: string
+    name: string
+    price: number
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PartUncheckedCreateWithoutJobInput = {
+    id?: string
+    name: string
+    price: number
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PartCreateOrConnectWithoutJobInput = {
+    where: PartWhereUniqueInput
+    create: XOR<PartCreateWithoutJobInput, PartUncheckedCreateWithoutJobInput>
+  }
+
+  export type PartCreateManyJobInputEnvelope = {
+    data: PartCreateManyJobInput | PartCreateManyJobInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ReviewCreateWithoutJobInput = {
     id?: string
     rating: number
@@ -16366,6 +19220,35 @@ export namespace Prisma {
     reviews?: ReviewUncheckedUpdateManyWithoutCustomerNestedInput
   }
 
+  export type PartUpsertWithWhereUniqueWithoutJobInput = {
+    where: PartWhereUniqueInput
+    update: XOR<PartUpdateWithoutJobInput, PartUncheckedUpdateWithoutJobInput>
+    create: XOR<PartCreateWithoutJobInput, PartUncheckedCreateWithoutJobInput>
+  }
+
+  export type PartUpdateWithWhereUniqueWithoutJobInput = {
+    where: PartWhereUniqueInput
+    data: XOR<PartUpdateWithoutJobInput, PartUncheckedUpdateWithoutJobInput>
+  }
+
+  export type PartUpdateManyWithWhereWithoutJobInput = {
+    where: PartScalarWhereInput
+    data: XOR<PartUpdateManyMutationInput, PartUncheckedUpdateManyWithoutJobInput>
+  }
+
+  export type PartScalarWhereInput = {
+    AND?: PartScalarWhereInput | PartScalarWhereInput[]
+    OR?: PartScalarWhereInput[]
+    NOT?: PartScalarWhereInput | PartScalarWhereInput[]
+    id?: StringFilter<"Part"> | string
+    name?: StringFilter<"Part"> | string
+    price?: FloatFilter<"Part"> | number
+    status?: StringFilter<"Part"> | string
+    jobId?: StringFilter<"Part"> | string
+    createdAt?: DateTimeFilter<"Part"> | Date | string
+    updatedAt?: DateTimeFilter<"Part"> | Date | string
+  }
+
   export type ReviewUpsertWithoutJobInput = {
     update: XOR<ReviewUpdateWithoutJobInput, ReviewUncheckedUpdateWithoutJobInput>
     create: XOR<ReviewCreateWithoutJobInput, ReviewUncheckedCreateWithoutJobInput>
@@ -16395,6 +19278,134 @@ export namespace Prisma {
     contractorId?: StringFieldUpdateOperationsInput | string
     customerId?: StringFieldUpdateOperationsInput | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type JobCreateWithoutPartsInput = {
+    id?: string
+    description: string
+    location: string
+    urgency: string
+    category: string
+    problemType: string
+    severity: string
+    estimatedTimeMinutes: number
+    partsRequired: boolean
+    quotedPrice: number
+    quotedPriceMin: number
+    quotedPriceMax: number
+    confidence: string
+    status: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    address?: string | null
+    postcode?: string | null
+    customerLocation?: NullableJsonNullValueInput | InputJsonValue
+    serviceCharge?: number | null
+    paymentStatus?: string
+    stripeSessionId?: string | null
+    contractor?: ContractorCreateNestedOneWithoutJobsInput
+    user?: UserCreateNestedOneWithoutJobsInput
+    reviews?: ReviewCreateNestedOneWithoutJobInput
+  }
+
+  export type JobUncheckedCreateWithoutPartsInput = {
+    id?: string
+    description: string
+    location: string
+    urgency: string
+    category: string
+    problemType: string
+    severity: string
+    estimatedTimeMinutes: number
+    partsRequired: boolean
+    quotedPrice: number
+    quotedPriceMin: number
+    quotedPriceMax: number
+    confidence: string
+    status: string
+    userId?: string | null
+    contractorId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    address?: string | null
+    postcode?: string | null
+    customerLocation?: NullableJsonNullValueInput | InputJsonValue
+    serviceCharge?: number | null
+    paymentStatus?: string
+    stripeSessionId?: string | null
+    reviews?: ReviewUncheckedCreateNestedOneWithoutJobInput
+  }
+
+  export type JobCreateOrConnectWithoutPartsInput = {
+    where: JobWhereUniqueInput
+    create: XOR<JobCreateWithoutPartsInput, JobUncheckedCreateWithoutPartsInput>
+  }
+
+  export type JobUpsertWithoutPartsInput = {
+    update: XOR<JobUpdateWithoutPartsInput, JobUncheckedUpdateWithoutPartsInput>
+    create: XOR<JobCreateWithoutPartsInput, JobUncheckedCreateWithoutPartsInput>
+    where?: JobWhereInput
+  }
+
+  export type JobUpdateToOneWithWhereWithoutPartsInput = {
+    where?: JobWhereInput
+    data: XOR<JobUpdateWithoutPartsInput, JobUncheckedUpdateWithoutPartsInput>
+  }
+
+  export type JobUpdateWithoutPartsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    urgency?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    problemType?: StringFieldUpdateOperationsInput | string
+    severity?: StringFieldUpdateOperationsInput | string
+    estimatedTimeMinutes?: IntFieldUpdateOperationsInput | number
+    partsRequired?: BoolFieldUpdateOperationsInput | boolean
+    quotedPrice?: FloatFieldUpdateOperationsInput | number
+    quotedPriceMin?: FloatFieldUpdateOperationsInput | number
+    quotedPriceMax?: FloatFieldUpdateOperationsInput | number
+    confidence?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    postcode?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLocation?: NullableJsonNullValueInput | InputJsonValue
+    serviceCharge?: NullableFloatFieldUpdateOperationsInput | number | null
+    paymentStatus?: StringFieldUpdateOperationsInput | string
+    stripeSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    contractor?: ContractorUpdateOneWithoutJobsNestedInput
+    user?: UserUpdateOneWithoutJobsNestedInput
+    reviews?: ReviewUpdateOneWithoutJobNestedInput
+  }
+
+  export type JobUncheckedUpdateWithoutPartsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    urgency?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    problemType?: StringFieldUpdateOperationsInput | string
+    severity?: StringFieldUpdateOperationsInput | string
+    estimatedTimeMinutes?: IntFieldUpdateOperationsInput | number
+    partsRequired?: BoolFieldUpdateOperationsInput | boolean
+    quotedPrice?: FloatFieldUpdateOperationsInput | number
+    quotedPriceMin?: FloatFieldUpdateOperationsInput | number
+    quotedPriceMax?: FloatFieldUpdateOperationsInput | number
+    confidence?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    userId?: NullableStringFieldUpdateOperationsInput | string | null
+    contractorId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    postcode?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLocation?: NullableJsonNullValueInput | InputJsonValue
+    serviceCharge?: NullableFloatFieldUpdateOperationsInput | number | null
+    paymentStatus?: StringFieldUpdateOperationsInput | string
+    stripeSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    reviews?: ReviewUncheckedUpdateOneWithoutJobNestedInput
   }
 
   export type ContractorCreateWithoutReviewsInput = {
@@ -16508,8 +19519,13 @@ export namespace Prisma {
     updatedAt?: Date | string
     address?: string | null
     postcode?: string | null
+    customerLocation?: NullableJsonNullValueInput | InputJsonValue
+    serviceCharge?: number | null
+    paymentStatus?: string
+    stripeSessionId?: string | null
     contractor?: ContractorCreateNestedOneWithoutJobsInput
     user?: UserCreateNestedOneWithoutJobsInput
+    parts?: PartCreateNestedManyWithoutJobInput
   }
 
   export type JobUncheckedCreateWithoutReviewsInput = {
@@ -16533,6 +19549,11 @@ export namespace Prisma {
     updatedAt?: Date | string
     address?: string | null
     postcode?: string | null
+    customerLocation?: NullableJsonNullValueInput | InputJsonValue
+    serviceCharge?: number | null
+    paymentStatus?: string
+    stripeSessionId?: string | null
+    parts?: PartUncheckedCreateNestedManyWithoutJobInput
   }
 
   export type JobCreateOrConnectWithoutReviewsInput = {
@@ -16674,8 +19695,13 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
     postcode?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLocation?: NullableJsonNullValueInput | InputJsonValue
+    serviceCharge?: NullableFloatFieldUpdateOperationsInput | number | null
+    paymentStatus?: StringFieldUpdateOperationsInput | string
+    stripeSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     contractor?: ContractorUpdateOneWithoutJobsNestedInput
     user?: UserUpdateOneWithoutJobsNestedInput
+    parts?: PartUpdateManyWithoutJobNestedInput
   }
 
   export type JobUncheckedUpdateWithoutReviewsInput = {
@@ -16699,6 +19725,11 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
     postcode?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLocation?: NullableJsonNullValueInput | InputJsonValue
+    serviceCharge?: NullableFloatFieldUpdateOperationsInput | number | null
+    paymentStatus?: StringFieldUpdateOperationsInput | string
+    stripeSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    parts?: PartUncheckedUpdateManyWithoutJobNestedInput
   }
 
   export type JobCreateManyUserInput = {
@@ -16721,6 +19752,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     address?: string | null
     postcode?: string | null
+    customerLocation?: NullableJsonNullValueInput | InputJsonValue
+    serviceCharge?: number | null
+    paymentStatus?: string
+    stripeSessionId?: string | null
   }
 
   export type ReviewCreateManyCustomerInput = {
@@ -16752,7 +19787,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
     postcode?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLocation?: NullableJsonNullValueInput | InputJsonValue
+    serviceCharge?: NullableFloatFieldUpdateOperationsInput | number | null
+    paymentStatus?: StringFieldUpdateOperationsInput | string
+    stripeSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     contractor?: ContractorUpdateOneWithoutJobsNestedInput
+    parts?: PartUpdateManyWithoutJobNestedInput
     reviews?: ReviewUpdateOneWithoutJobNestedInput
   }
 
@@ -16776,6 +19816,11 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
     postcode?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLocation?: NullableJsonNullValueInput | InputJsonValue
+    serviceCharge?: NullableFloatFieldUpdateOperationsInput | number | null
+    paymentStatus?: StringFieldUpdateOperationsInput | string
+    stripeSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    parts?: PartUncheckedUpdateManyWithoutJobNestedInput
     reviews?: ReviewUncheckedUpdateOneWithoutJobNestedInput
   }
 
@@ -16799,6 +19844,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
     postcode?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLocation?: NullableJsonNullValueInput | InputJsonValue
+    serviceCharge?: NullableFloatFieldUpdateOperationsInput | number | null
+    paymentStatus?: StringFieldUpdateOperationsInput | string
+    stripeSessionId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ReviewUpdateWithoutCustomerInput = {
@@ -16869,6 +19918,10 @@ export namespace Prisma {
     updatedAt?: Date | string
     address?: string | null
     postcode?: string | null
+    customerLocation?: NullableJsonNullValueInput | InputJsonValue
+    serviceCharge?: number | null
+    paymentStatus?: string
+    stripeSessionId?: string | null
   }
 
   export type ReviewCreateManyContractorInput = {
@@ -16954,7 +20007,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
     postcode?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLocation?: NullableJsonNullValueInput | InputJsonValue
+    serviceCharge?: NullableFloatFieldUpdateOperationsInput | number | null
+    paymentStatus?: StringFieldUpdateOperationsInput | string
+    stripeSessionId?: NullableStringFieldUpdateOperationsInput | string | null
     user?: UserUpdateOneWithoutJobsNestedInput
+    parts?: PartUpdateManyWithoutJobNestedInput
     reviews?: ReviewUpdateOneWithoutJobNestedInput
   }
 
@@ -16978,6 +20036,11 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
     postcode?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLocation?: NullableJsonNullValueInput | InputJsonValue
+    serviceCharge?: NullableFloatFieldUpdateOperationsInput | number | null
+    paymentStatus?: StringFieldUpdateOperationsInput | string
+    stripeSessionId?: NullableStringFieldUpdateOperationsInput | string | null
+    parts?: PartUncheckedUpdateManyWithoutJobNestedInput
     reviews?: ReviewUncheckedUpdateOneWithoutJobNestedInput
   }
 
@@ -17001,6 +20064,10 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     address?: NullableStringFieldUpdateOperationsInput | string | null
     postcode?: NullableStringFieldUpdateOperationsInput | string | null
+    customerLocation?: NullableJsonNullValueInput | InputJsonValue
+    serviceCharge?: NullableFloatFieldUpdateOperationsInput | number | null
+    paymentStatus?: StringFieldUpdateOperationsInput | string
+    stripeSessionId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ReviewUpdateWithoutContractorInput = {
@@ -17033,6 +20100,42 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PartCreateManyJobInput = {
+    id?: string
+    name: string
+    price: number
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PartUpdateWithoutJobInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PartUncheckedUpdateWithoutJobInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PartUncheckedUpdateManyWithoutJobInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    price?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
 
 
   /**
@@ -17046,6 +20149,10 @@ export namespace Prisma {
      * @deprecated Use ContractorCountOutputTypeDefaultArgs instead
      */
     export type ContractorCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = ContractorCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use JobCountOutputTypeDefaultArgs instead
+     */
+    export type JobCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = JobCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use UserDefaultArgs instead
      */
@@ -17066,6 +20173,14 @@ export namespace Prisma {
      * @deprecated Use JobDefaultArgs instead
      */
     export type JobArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = JobDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PartDefaultArgs instead
+     */
+    export type PartArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PartDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use LocationLogDefaultArgs instead
+     */
+    export type LocationLogArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = LocationLogDefaultArgs<ExtArgs>
     /**
      * @deprecated Use PricingEventDefaultArgs instead
      */

@@ -114,6 +114,7 @@ export default function AdminJobsPage() {
   });
 
   const revenue = jobs.filter(j => ["completed", "reviewed"].includes(j.status)).reduce((s, j) => s + j.quotedPrice, 0);
+  const collectedRevenue = jobs.filter(j => j.paymentStatus === "paid").reduce((s, j) => s + j.quotedPrice, 0);
   const stuck = counts["manual_dispatch_required"] || 0;
 
   if (loading) return (
@@ -173,9 +174,9 @@ export default function AdminJobsPage() {
         {[
           { label: "Total Assets", value: counts.all, icon: Layers, color: "text-white" },
           { label: "Blocked", value: stuck, icon: AlertCircle, color: stuck > 0 ? "text-orange-400" : "text-slate-500" },
-          { label: "Active Operations", value: counts["awaiting_customer_confirmation"] || 0, icon: RefreshCcw, color: "text-blue-400" },
-          { label: "Total Revenue", value: `$${revenue.toLocaleString()}`, icon: TrendingUp, color: "text-emerald-400" },
-          { label: "Efficiency", value: "98.2%", icon: CheckCircle2, color: "text-cyan-400" },
+          { label: "Revenue Projected", value: `$${revenue.toLocaleString()}`, icon: TrendingUp, color: "text-emerald-400" },
+          { label: "Revenue Collected", value: `$${collectedRevenue.toLocaleString()}`, icon: CheckCircle2, color: "text-cyan-400" },
+          { label: "Payment Ratio", value: revenue > 0 ? `${Math.round((collectedRevenue / revenue) * 100)}%` : "0%", icon: Activity, color: "text-amber-400" },
         ].map((k, i) => (
           <motion.div 
             key={k.label} 
@@ -309,8 +310,19 @@ export default function AdminJobsPage() {
 
                       <div className="text-right shrink-0">
                         <p className="text-2xl font-black text-white">${job.quotedPrice}</p>
-                        <p className="text-[10px] font-bold text-slate-600 uppercase tracking-widest mt-1">Budget Matrix</p>
-                        <p className="text-xs text-slate-500 mt-0.5">${job.quotedPriceMin}–${job.quotedPriceMax}</p>
+                        <div className="flex flex-col items-end gap-1.5 mt-2">
+                           <p className="text-[10px] font-bold text-slate-600 uppercase tracking-widest">Budget Matrix</p>
+                           <p className="text-xs text-slate-500">${job.quotedPriceMin}–${job.quotedPriceMax}</p>
+                           {job.paymentStatus === "paid" ? (
+                             <span className="mt-2 px-2 py-0.5 bg-emerald-500/10 text-emerald-500 text-[9px] font-black uppercase tracking-wider rounded border border-emerald-500/20">
+                               Fully Paid
+                             </span>
+                           ) : (
+                             <span className="mt-2 px-2 py-0.5 bg-rose-500/10 text-rose-500 text-[9px] font-black uppercase tracking-wider rounded border border-rose-500/20">
+                               Unpaid
+                             </span>
+                           )}
+                        </div>
                       </div>
                     </div>
 

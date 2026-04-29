@@ -38,6 +38,8 @@ import {
   ChevronDown
 } from "lucide-react";
 import Link from "next/link";
+import { ContractorTracking } from "@/components/ContractorTracking";
+
 
 type TabId = "marketplace" | "tasks" | "earnings" | "profile";
 
@@ -60,6 +62,11 @@ export default function EnterpriseContractorDashboard() {
   const [verifying, setVerifying] = useState<{ type: "email" | "phone"; value: string } | null>(null);
   const [verificationCode, setVerificationCode] = useState("");
   const [isVerifyingLoading, setIsVerifyingLoading] = useState(false);
+  
+  // Parts State
+  const [newPart, setNewPart] = useState({ name: "", price: "" });
+  const [addingPart, setAddingPart] = useState(false);
+
 
 
   useEffect(() => {
@@ -124,7 +131,9 @@ export default function EnterpriseContractorDashboard() {
   }, [jobs, contractor]);
 
   const earningsTotal = useMemo(() => {
-    return historyJobs.reduce((sum, j) => sum + (j.quotedPrice || 0), 0);
+    return historyJobs
+      .filter(j => j.paymentStatus === "paid")
+      .reduce((sum, j) => sum + (j.quotedPrice || 0), 0);
   }, [historyJobs]);
 
   // --- Handlers ---
@@ -169,11 +178,12 @@ export default function EnterpriseContractorDashboard() {
 
   async function handleRequestVerification(type: "email" | "phone", value: string) {
     try {
-      await api.requestVerification({ type, value });
+      await api.requestVerification({ type, target: value });
       setVerifying({ type, value });
       setVerificationCode("");
     } catch (e: any) { alert(e.message); }
   }
+
 
   async function handleSubmitVerification() {
     if (!verifying) return;
@@ -181,15 +191,31 @@ export default function EnterpriseContractorDashboard() {
     try {
       await api.submitVerification({ 
         type: verifying.type, 
-        value: verifying.value, 
+        target: verifying.value, 
         code: verificationCode 
       });
+
       setVerifying(null);
       await loadData();
       alert("Verification successful!");
     } catch (e: any) { alert(e.message); }
     finally { setIsVerifyingLoading(false); }
   }
+
+  async function handleAddPart(jobId: string) {
+    if (!newPart.name || !newPart.price) return;
+    setAddingPart(true);
+    try {
+      await api.addJobPart(jobId, { name: newPart.name, price: parseFloat(newPart.price) });
+      setNewPart({ name: "", price: "" });
+      // Refresh job data to show new part
+      const updatedJob = await api.getJob(jobId) as Job;
+      setSelectedJob(updatedJob);
+      await loadData();
+    } catch (e: any) { alert(e.message); }
+    finally { setAddingPart(false); }
+  }
+
 
 
   if (loading) {
@@ -563,8 +589,14 @@ export default function EnterpriseContractorDashboard() {
         {selectedJob && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedJob(null)} className="absolute inset-0 bg-slate-950/40 backdrop-blur-md" />
-            <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }} className="relative w-full max-w-2xl bg-white border border-slate-200 rounded-[50px] shadow-[0_32px_120px_rgba(0,0,0,0.2)] overflow-hidden">
-                <div className="p-12">
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0 }} 
+              animate={{ scale: 1, opacity: 1 }} 
+              exit={{ scale: 0.95, opacity: 0 }} 
+              className="relative w-full max-w-2xl bg-white border border-slate-200 rounded-[50px] shadow-[0_32px_120px_rgba(0,0,0,0.2)] overflow-hidden flex flex-col max-h-[90vh]"
+            >
+                <div className="p-12 overflow-y-auto custom-scrollbar">
+
                    <div className="flex justify-between items-start mb-10">
                       <div>
                          <div className="flex items-center gap-3 mb-4">
@@ -610,6 +642,77 @@ export default function EnterpriseContractorDashboard() {
                          </div>
                       </div>
                    </div>
+
+                   {contractor && ["assigned", "awaiting_customer_confirmation"].includes(selectedJob.status) && selectedJob.contractorId === contractor.id && selectedJob.customerLocation && (
+                     <div className="mb-12">
+                       <ContractorTracking 
+                         jobId={selectedJob.id} 
+                         contractorId={contractor.id} 
+                         destination={selectedJob.customerLocation} 
+                       />
+                     </div>
+                   )}
+
+                   {contractor && ["assigned", "awaiting_customer_confirmation"].includes(selectedJob.status) && selectedJob.contractorId === contractor.id && (
+                     <div className="mb-12 p-8 bg-slate-50 rounded-[35px] border border-slate-200">
+                        <div className="flex items-center justify-between mb-8">
+                           <h3 className="text-xs font-black uppercase tracking-[0.2em] text-slate-400 flex items-center gap-2">
+                              <Plus size={16} className="text-emerald-500" /> Required Mission Parts
+                           </h3>
+                           <span className="text-[10px] font-black text-slate-400 italic">User Approval Required</span>
+                        </div>
+
+                        {/* Parts List */}
+                        <div className="space-y-4 mb-8">
+                           {selectedJob.parts && selectedJob.parts.length > 0 ? (
+                             selectedJob.parts.map((part) => (
+                               <div key={part.id} className="flex items-center justify-between p-4 bg-white rounded-2xl border border-slate-100 shadow-sm">
+                                  <div>
+                                     <p className="font-bold text-slate-900 text-sm">{part.name}</p>
+                                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-0.5">{part.status}</p>
+                                  </div>
+                                  <div className="flex items-center gap-4">
+                                     <span className="text-sm font-black italic text-emerald-600">${part.price}</span>
+                                     <div className={`h-2 w-2 rounded-full ${part.status === 'APPROVED' ? 'bg-emerald-500' : part.status === 'REJECTED' ? 'bg-rose-500' : 'bg-amber-400 animate-pulse'}`} />
+                                  </div>
+                               </div>
+                             ))
+                           ) : (
+                             <p className="text-center py-4 text-xs text-slate-400 italic">No parts added yet.</p>
+                           )}
+                        </div>
+
+                        {/* Add Part Form */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                           <input 
+                              type="text" 
+                              placeholder="Part Name (e.g. Copper Pipe)"
+                              value={newPart.name}
+                              onChange={(e) => setNewPart({ ...newPart, name: e.target.value })}
+                              className="bg-white border border-slate-200 rounded-2xl px-4 py-3 text-sm font-medium outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                           />
+                           <div className="flex gap-2">
+                              <input 
+                                 type="number" 
+                                 placeholder="Price"
+                                 value={newPart.price}
+                                 onChange={(e) => setNewPart({ ...newPart, price: e.target.value })}
+                                 className="flex-1 bg-white border border-slate-200 rounded-2xl px-4 py-3 text-sm font-medium outline-none focus:ring-2 focus:ring-emerald-500/20 transition-all"
+                              />
+                              <button 
+                                 onClick={() => handleAddPart(selectedJob.id)}
+                                 disabled={addingPart || !newPart.name || !newPart.price}
+                                 className="p-3 bg-slate-950 text-white rounded-2xl hover:bg-emerald-600 transition-all disabled:opacity-50"
+                              >
+                                 {addingPart ? <RefreshCcw size={18} className="animate-spin" /> : <Plus size={18} />}
+                              </button>
+                           </div>
+                        </div>
+                     </div>
+                   )}
+
+
+
 
                    {/* Contextual Action Button */}
                    <div className="flex gap-4">

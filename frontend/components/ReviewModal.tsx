@@ -10,9 +10,12 @@ interface ReviewModalProps {
   onSubmit: (rating: number, comment: string) => Promise<void>;
   jobTitle: string;
   contractorName: string;
+  paymentStatus?: string;
+  quotedPrice?: number;
+  onPay?: () => void;
 }
 
-export function ReviewModal({ isOpen, onClose, onSubmit, jobTitle, contractorName }: ReviewModalProps) {
+export function ReviewModal({ isOpen, onClose, onSubmit, jobTitle, contractorName, paymentStatus, quotedPrice, onPay }: ReviewModalProps) {
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [comment, setComment] = useState("");
@@ -156,20 +159,37 @@ export function ReviewModal({ isOpen, onClose, onSubmit, jobTitle, contractorNam
                         </div>
                     </div>
 
-                    <button 
-                      onClick={handleReviewSubmit}
-                      disabled={rating === 0 || loading}
-                      className="w-full h-18 rounded-[2rem] bg-slate-950 text-white font-black text-lg flex items-center justify-center gap-3 hover:bg-slate-800 disabled:opacity-20 transition-all shadow-[0_20px_40px_-12px_rgba(0,0,0,0.2)] active:scale-[0.98] group"
-                    >
-                      {loading ? (
-                        <div className="h-6 w-6 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                      ) : (
-                        <>
-                          Finalize Review
-                          <Send size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                        </>
-                      )}
-                    </button>
+                    <div className="flex flex-col gap-4">
+                        <button 
+                          onClick={handleReviewSubmit}
+                          disabled={rating === 0 || loading}
+                          className="w-full h-18 rounded-[2rem] bg-slate-950 text-white font-black text-lg flex items-center justify-center gap-3 hover:bg-slate-800 disabled:opacity-20 transition-all shadow-[0_20px_40px_-12px_rgba(0,0,0,0.2)] active:scale-[0.98] group"
+                        >
+                          {loading ? (
+                            <div className="h-6 w-6 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                          ) : (
+                            <>
+                              Finalize Review
+                              <Send size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                            </>
+                          )}
+                        </button>
+
+                        {paymentStatus !== "paid" && onPay && (
+                            <div className="p-6 bg-emerald-50 rounded-[2rem] border border-emerald-100 flex items-center justify-between">
+                                <div>
+                                    <p className="text-[10px] font-black uppercase tracking-widest text-emerald-600 mb-0.5">Balance Due</p>
+                                    <p className="text-xl font-black text-slate-950">${quotedPrice}</p>
+                                </div>
+                                <button 
+                                    onClick={onPay}
+                                    className="px-6 py-3 rounded-2xl bg-emerald-600 text-white text-xs font-black uppercase tracking-widest shadow-lg shadow-emerald-200 hover:bg-emerald-700 transition-all active:scale-95"
+                                >
+                                    Settle & Finalize
+                                </button>
+                            </div>
+                        )}
+                    </div>
                   </div>
                 </motion.div>
               ) : (

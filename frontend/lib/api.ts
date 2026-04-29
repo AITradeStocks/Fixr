@@ -52,8 +52,9 @@ export const api = {
     request("/pricing/estimate", { method: "POST", body: JSON.stringify(body) }),
 
   // ── Jobs ──
-  createJob: (body: { description: string; location: string; address?: string; postcode?: string; urgency: string }) =>
+  createJob: (body: { description: string; location: string; address?: string; postcode?: string; urgency: string; customerLocation?: any }) =>
     authReq("/jobs", { method: "POST", body: JSON.stringify(body) }),
+
   getMyJobs: () => authReq("/jobs/mine"),           // authenticated — own jobs only
   getJobs: (params?: { postcode?: string }) => {
     const query = params?.postcode ? `?postcode=${encodeURIComponent(params.postcode)}` : "";
@@ -68,6 +69,15 @@ export const api = {
     authReq(`/jobs/${id}/confirm-completion`, { method: "POST", body: JSON.stringify({}) }),
   reviewJob: (id: string, rating: number, comment: string) =>
     authReq(`/jobs/${id}/review`, { method: "POST", body: JSON.stringify({ rating, comment }) }),
+
+  // ── Job Parts ──
+  addJobPart: (jobId: string, body: { name: string; price: number }) =>
+    authReq(`/jobs/${jobId}/parts`, { method: "POST", body: JSON.stringify(body) }),
+  approveJobPart: (jobId: string, partId: string) =>
+    authReq(`/jobs/${jobId}/parts/${partId}/approve`, { method: "PATCH" }),
+  rejectJobPart: (jobId: string, partId: string) =>
+    authReq(`/jobs/${jobId}/parts/${partId}/reject`, { method: "PATCH" }),
+
 
   // ── Contractors ──
   getContractors: () => request("/contractors"),
@@ -112,4 +122,11 @@ export const api = {
     authReq(`/contractors/${contractorId}/verify-email/${emailId}`, { method: "POST" }),
   adminVerifyPhone: (contractorId: string, phoneId: string) =>
     authReq(`/contractors/${contractorId}/verify-phone/${phoneId}`, { method: "POST" }),
+
+  // ── Payments ──
+  createCheckoutSession: (jobId: string) =>
+    authReq("/payments/create-checkout-session", { method: "POST", body: JSON.stringify({ jobId }) }),
+  verifyPayment: (sessionId: string) =>
+    authReq(`/payments/verify?sessionId=${sessionId}`),
 };
+

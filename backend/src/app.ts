@@ -9,6 +9,8 @@ import { healthRouter } from "./routes/health.js";
 import { jobsRouter } from "./routes/jobs.js";
 import { leadsRouter } from "./routes/leads.js";
 import { pricingRouter } from "./routes/pricing.js";
+import { paymentsRouter } from "./routes/payments.js";
+
 import { HttpError } from "./lib/errors.js";
 
 export function createApp() {
@@ -26,6 +28,8 @@ export function createApp() {
   app.use("/api", adminRouter);
   app.use("/api", analyticsRouter);
   app.use("/api", leadsRouter);
+  app.use("/api/payments", paymentsRouter);
+
 
   app.use((error: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
     if (error instanceof HttpError) {

@@ -80,9 +80,26 @@ export interface Job {
   contractorId?: string;
   contractor?: Contractor;
   reviews?: Review[];
+  customerLocation?: any;
   createdAt: string;
+
+  serviceCharge?: number;
+  parts?: Part[];
+  paymentStatus?: string;
+  stripeSessionId?: string;
   updatedAt: string;
 }
+
+
+export interface Part {
+  id: string;
+  name: string;
+  price: number;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  jobId: string;
+  createdAt: string;
+}
+
 
 export interface Review {
   id: string;

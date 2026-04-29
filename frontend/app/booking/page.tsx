@@ -19,6 +19,14 @@ import {
   Home
 } from "lucide-react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+
+const DestinationPicker = dynamic(() => import("@/components/DestinationPicker").then(mod => mod.DestinationPicker), { 
+  ssr: false,
+  loading: () => <div className="h-[400px] bg-slate-50 rounded-3xl animate-pulse" />
+});
+
+
 
 const URGENCY_OPTIONS = [
   { value: "urgent now", label: "Urgent", sub: "Within 2 hours" },
@@ -40,6 +48,8 @@ function BookingContent() {
   const [booked, setBooked] = useState<Job | null>(null);
   const [error, setError] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [customerLocation, setCustomerLocation] = useState<any>(null);
+
 
   useEffect(() => {
     const session = getSession();
@@ -56,7 +66,12 @@ function BookingContent() {
     setLoadingEstimate(true);
     setBooked(null);
     try {
-      const result = await api.estimatePricing({ description, location: location || "Australia", postcode, urgency });
+      const result = await api.estimatePricing({ 
+        description, 
+        location: location || address || "Global", 
+        postcode, 
+        urgency 
+      });
       setEstimate(result as PricingEstimate);
     } catch {
       setError("Could not get estimate — is the backend running?");
@@ -78,8 +93,16 @@ function BookingContent() {
     setLoadingBook(true);
     setError("");
     try {
-      const job = await api.createJob({ description, location: location || "Australia", address, postcode, urgency });
+      const job = await api.createJob({ 
+        description, 
+        location: location || address || "Global", 
+        address, 
+        postcode, 
+        urgency,
+        customerLocation 
+      });
       setBooked(job as Job);
+
     } catch (e: any) {
       setError(e.message || "Could not book job");
     } finally { setLoadingBook(false); }
@@ -190,45 +213,24 @@ function BookingContent() {
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-slate-950 uppercase tracking-widest flex items-center gap-2">
-                <MapPin size={14} className="text-slate-400" />
-                Service City/Region
-              </label>
-              <input
-                value={location}
-                onChange={e => setLocation(e.target.value)}
-                placeholder="Sydney, NSW"
-                className="w-full h-14 rounded-2xl border border-slate-200 px-5 text-slate-900 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-50 transition-all shadow-sm"
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-slate-950 uppercase tracking-widest flex items-center gap-2">
-                <ShieldCheck size={14} className="text-slate-400" />
-                Postcode
-              </label>
-              <input
-                value={postcode}
-                onChange={e => setPostcode(e.target.value)}
-                placeholder="2000"
-                className="w-full h-14 rounded-2xl border border-slate-200 px-5 text-slate-900 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-50 transition-all shadow-sm"
-              />
-            </div>
-          </div>
-
           <div className="space-y-2">
             <label className="text-sm font-bold text-slate-950 uppercase tracking-widest flex items-center gap-2">
-              <Home size={14} className="text-slate-400" />
-              Full Address
+              <MapPin size={14} className="text-slate-400" />
+              Service Destination
             </label>
-            <input
-              value={address}
-              onChange={e => setAddress(e.target.value)}
-              placeholder="e.g. 123 Enterprise St, Unit 4"
-              className="w-full h-14 rounded-2xl border border-slate-200 px-5 text-slate-900 outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-50 transition-all shadow-sm"
+            <DestinationPicker 
+              initialAddress={address}
+              onConfirm={(loc) => {
+                setCustomerLocation(loc);
+                setAddress(loc.address);
+                setPostcode(loc.postcode || "");
+                // Priority: City > State > Country
+                const cityState = [loc.city, loc.state].filter(Boolean).join(", ");
+                setLocation(cityState || loc.country || "Unknown Location");
+              }} 
             />
           </div>
+
 
           <div className="space-y-2">
             <label className="text-sm font-bold text-slate-950 uppercase tracking-widest flex items-center gap-2">
@@ -257,11 +259,11 @@ function BookingContent() {
             </motion.div>
           )}
 
-          <button
-            onClick={handleEstimate}
-            disabled={loadingEstimate || !description.trim()}
-            className="w-full py-4 rounded-2xl bg-emerald-600 text-white font-bold hover:bg-emerald-700 disabled:opacity-50 transition-all shadow-xl shadow-emerald-100 flex items-center justify-center gap-2 active:scale-[0.98]"
-          >
+            <button
+              onClick={handleEstimate}
+              disabled={loadingEstimate || !description.trim() || !address}
+              className="w-full py-4 rounded-2xl bg-emerald-600 text-white font-bold hover:bg-emerald-700 disabled:opacity-50 transition-all shadow-xl shadow-emerald-100 flex items-center justify-center gap-2 active:scale-[0.98]"
+            >
             {loadingEstimate ? (
               <div className="h-5 w-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             ) : (

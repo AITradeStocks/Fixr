@@ -199,7 +199,31 @@ exports.Prisma.JobScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   address: 'address',
-  postcode: 'postcode'
+  postcode: 'postcode',
+  customerLocation: 'customerLocation',
+  serviceCharge: 'serviceCharge',
+  paymentStatus: 'paymentStatus',
+  stripeSessionId: 'stripeSessionId'
+};
+
+exports.Prisma.PartScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  price: 'price',
+  status: 'status',
+  jobId: 'jobId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LocationLogScalarFieldEnum = {
+  id: 'id',
+  jobId: 'jobId',
+  contractorId: 'contractorId',
+  lat: 'lat',
+  lng: 'lng',
+  accuracy: 'accuracy',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.PricingEventScalarFieldEnum = {
@@ -267,6 +291,11 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
 exports.Prisma.JsonNullValueInput = {
   JsonNull: Prisma.JsonNull
 };
@@ -294,6 +323,8 @@ exports.Prisma.ModelName = {
   ContractorEmail: 'ContractorEmail',
   ContractorPhone: 'ContractorPhone',
   Job: 'Job',
+  Part: 'Part',
+  LocationLog: 'LocationLog',
   PricingEvent: 'PricingEvent',
   Review: 'Review',
   ContractorLead: 'ContractorLead',
