@@ -2927,10 +2927,16 @@ export namespace Prisma {
 
   export type ContractorAvgAggregateOutputType = {
     rating: number | null
+    reviewCount: number | null
+    hiredCount: number | null
+    recommendations: number | null
   }
 
   export type ContractorSumAggregateOutputType = {
     rating: number | null
+    reviewCount: number | null
+    hiredCount: number | null
+    recommendations: number | null
   }
 
   export type ContractorMinAggregateOutputType = {
@@ -2956,6 +2962,11 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     isContactVerified: boolean | null
+    suburb: string | null
+    reviewCount: number | null
+    hiredCount: number | null
+    recommendations: number | null
+    profileUrl: string | null
   }
 
   export type ContractorMaxAggregateOutputType = {
@@ -2981,6 +2992,11 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     isContactVerified: boolean | null
+    suburb: string | null
+    reviewCount: number | null
+    hiredCount: number | null
+    recommendations: number | null
+    profileUrl: string | null
   }
 
   export type ContractorCountAggregateOutputType = {
@@ -3008,16 +3024,27 @@ export namespace Prisma {
     createdAt: number
     updatedAt: number
     isContactVerified: number
+    suburb: number
+    reviewCount: number
+    hiredCount: number
+    recommendations: number
+    profileUrl: number
     _all: number
   }
 
 
   export type ContractorAvgAggregateInputType = {
     rating?: true
+    reviewCount?: true
+    hiredCount?: true
+    recommendations?: true
   }
 
   export type ContractorSumAggregateInputType = {
     rating?: true
+    reviewCount?: true
+    hiredCount?: true
+    recommendations?: true
   }
 
   export type ContractorMinAggregateInputType = {
@@ -3043,6 +3070,11 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     isContactVerified?: true
+    suburb?: true
+    reviewCount?: true
+    hiredCount?: true
+    recommendations?: true
+    profileUrl?: true
   }
 
   export type ContractorMaxAggregateInputType = {
@@ -3068,6 +3100,11 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     isContactVerified?: true
+    suburb?: true
+    reviewCount?: true
+    hiredCount?: true
+    recommendations?: true
+    profileUrl?: true
   }
 
   export type ContractorCountAggregateInputType = {
@@ -3095,6 +3132,11 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     isContactVerified?: true
+    suburb?: true
+    reviewCount?: true
+    hiredCount?: true
+    recommendations?: true
+    profileUrl?: true
     _all?: true
   }
 
@@ -3209,6 +3251,11 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     isContactVerified: boolean
+    suburb: string | null
+    reviewCount: number
+    hiredCount: number
+    recommendations: number
+    profileUrl: string | null
     _count: ContractorCountAggregateOutputType | null
     _avg: ContractorAvgAggregateOutputType | null
     _sum: ContractorSumAggregateOutputType | null
@@ -3255,6 +3302,11 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     isContactVerified?: boolean
+    suburb?: boolean
+    reviewCount?: boolean
+    hiredCount?: boolean
+    recommendations?: boolean
+    profileUrl?: boolean
     emails?: boolean | Contractor$emailsArgs<ExtArgs>
     phones?: boolean | Contractor$phonesArgs<ExtArgs>
     jobs?: boolean | Contractor$jobsArgs<ExtArgs>
@@ -3287,6 +3339,11 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     isContactVerified?: boolean
+    suburb?: boolean
+    reviewCount?: boolean
+    hiredCount?: boolean
+    recommendations?: boolean
+    profileUrl?: boolean
   }, ExtArgs["result"]["contractor"]>
 
   export type ContractorSelectScalar = {
@@ -3314,6 +3371,11 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     isContactVerified?: boolean
+    suburb?: boolean
+    reviewCount?: boolean
+    hiredCount?: boolean
+    recommendations?: boolean
+    profileUrl?: boolean
   }
 
   export type ContractorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3358,6 +3420,11 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
       isContactVerified: boolean
+      suburb: string | null
+      reviewCount: number
+      hiredCount: number
+      recommendations: number
+      profileUrl: string | null
     }, ExtArgs["result"]["contractor"]>
     composites: {}
   }
@@ -3779,6 +3846,11 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"Contractor", 'DateTime'>
     readonly updatedAt: FieldRef<"Contractor", 'DateTime'>
     readonly isContactVerified: FieldRef<"Contractor", 'Boolean'>
+    readonly suburb: FieldRef<"Contractor", 'String'>
+    readonly reviewCount: FieldRef<"Contractor", 'Int'>
+    readonly hiredCount: FieldRef<"Contractor", 'Int'>
+    readonly recommendations: FieldRef<"Contractor", 'Int'>
+    readonly profileUrl: FieldRef<"Contractor", 'String'>
   }
     
 
@@ -14144,7 +14216,12 @@ export namespace Prisma {
     address: 'address',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-    isContactVerified: 'isContactVerified'
+    isContactVerified: 'isContactVerified',
+    suburb: 'suburb',
+    reviewCount: 'reviewCount',
+    hiredCount: 'hiredCount',
+    recommendations: 'recommendations',
+    profileUrl: 'profileUrl'
   };
 
   export type ContractorScalarFieldEnum = (typeof ContractorScalarFieldEnum)[keyof typeof ContractorScalarFieldEnum]
@@ -14529,6 +14606,11 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Contractor"> | Date | string
     updatedAt?: DateTimeFilter<"Contractor"> | Date | string
     isContactVerified?: BoolFilter<"Contractor"> | boolean
+    suburb?: StringNullableFilter<"Contractor"> | string | null
+    reviewCount?: IntFilter<"Contractor"> | number
+    hiredCount?: IntFilter<"Contractor"> | number
+    recommendations?: IntFilter<"Contractor"> | number
+    profileUrl?: StringNullableFilter<"Contractor"> | string | null
     emails?: ContractorEmailListRelationFilter
     phones?: ContractorPhoneListRelationFilter
     jobs?: JobListRelationFilter
@@ -14560,6 +14642,11 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isContactVerified?: SortOrder
+    suburb?: SortOrderInput | SortOrder
+    reviewCount?: SortOrder
+    hiredCount?: SortOrder
+    recommendations?: SortOrder
+    profileUrl?: SortOrderInput | SortOrder
     emails?: ContractorEmailOrderByRelationAggregateInput
     phones?: ContractorPhoneOrderByRelationAggregateInput
     jobs?: JobOrderByRelationAggregateInput
@@ -14594,6 +14681,11 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Contractor"> | Date | string
     updatedAt?: DateTimeFilter<"Contractor"> | Date | string
     isContactVerified?: BoolFilter<"Contractor"> | boolean
+    suburb?: StringNullableFilter<"Contractor"> | string | null
+    reviewCount?: IntFilter<"Contractor"> | number
+    hiredCount?: IntFilter<"Contractor"> | number
+    recommendations?: IntFilter<"Contractor"> | number
+    profileUrl?: StringNullableFilter<"Contractor"> | string | null
     emails?: ContractorEmailListRelationFilter
     phones?: ContractorPhoneListRelationFilter
     jobs?: JobListRelationFilter
@@ -14625,6 +14717,11 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isContactVerified?: SortOrder
+    suburb?: SortOrderInput | SortOrder
+    reviewCount?: SortOrder
+    hiredCount?: SortOrder
+    recommendations?: SortOrder
+    profileUrl?: SortOrderInput | SortOrder
     _count?: ContractorCountOrderByAggregateInput
     _avg?: ContractorAvgOrderByAggregateInput
     _max?: ContractorMaxOrderByAggregateInput
@@ -14660,6 +14757,11 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Contractor"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Contractor"> | Date | string
     isContactVerified?: BoolWithAggregatesFilter<"Contractor"> | boolean
+    suburb?: StringNullableWithAggregatesFilter<"Contractor"> | string | null
+    reviewCount?: IntWithAggregatesFilter<"Contractor"> | number
+    hiredCount?: IntWithAggregatesFilter<"Contractor"> | number
+    recommendations?: IntWithAggregatesFilter<"Contractor"> | number
+    profileUrl?: StringNullableWithAggregatesFilter<"Contractor"> | string | null
   }
 
   export type ContractorEmailWhereInput = {
@@ -15560,6 +15662,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isContactVerified?: boolean
+    suburb?: string | null
+    reviewCount?: number
+    hiredCount?: number
+    recommendations?: number
+    profileUrl?: string | null
     emails?: ContractorEmailCreateNestedManyWithoutContractorInput
     phones?: ContractorPhoneCreateNestedManyWithoutContractorInput
     jobs?: JobCreateNestedManyWithoutContractorInput
@@ -15591,6 +15698,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isContactVerified?: boolean
+    suburb?: string | null
+    reviewCount?: number
+    hiredCount?: number
+    recommendations?: number
+    profileUrl?: string | null
     emails?: ContractorEmailUncheckedCreateNestedManyWithoutContractorInput
     phones?: ContractorPhoneUncheckedCreateNestedManyWithoutContractorInput
     jobs?: JobUncheckedCreateNestedManyWithoutContractorInput
@@ -15622,6 +15734,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isContactVerified?: BoolFieldUpdateOperationsInput | boolean
+    suburb?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewCount?: IntFieldUpdateOperationsInput | number
+    hiredCount?: IntFieldUpdateOperationsInput | number
+    recommendations?: IntFieldUpdateOperationsInput | number
+    profileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     emails?: ContractorEmailUpdateManyWithoutContractorNestedInput
     phones?: ContractorPhoneUpdateManyWithoutContractorNestedInput
     jobs?: JobUpdateManyWithoutContractorNestedInput
@@ -15653,6 +15770,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isContactVerified?: BoolFieldUpdateOperationsInput | boolean
+    suburb?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewCount?: IntFieldUpdateOperationsInput | number
+    hiredCount?: IntFieldUpdateOperationsInput | number
+    recommendations?: IntFieldUpdateOperationsInput | number
+    profileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     emails?: ContractorEmailUncheckedUpdateManyWithoutContractorNestedInput
     phones?: ContractorPhoneUncheckedUpdateManyWithoutContractorNestedInput
     jobs?: JobUncheckedUpdateManyWithoutContractorNestedInput
@@ -15684,6 +15806,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isContactVerified?: boolean
+    suburb?: string | null
+    reviewCount?: number
+    hiredCount?: number
+    recommendations?: number
+    profileUrl?: string | null
   }
 
   export type ContractorUpdateManyMutationInput = {
@@ -15711,6 +15838,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isContactVerified?: BoolFieldUpdateOperationsInput | boolean
+    suburb?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewCount?: IntFieldUpdateOperationsInput | number
+    hiredCount?: IntFieldUpdateOperationsInput | number
+    recommendations?: IntFieldUpdateOperationsInput | number
+    profileUrl?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ContractorUncheckedUpdateManyInput = {
@@ -15738,6 +15870,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isContactVerified?: BoolFieldUpdateOperationsInput | boolean
+    suburb?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewCount?: IntFieldUpdateOperationsInput | number
+    hiredCount?: IntFieldUpdateOperationsInput | number
+    recommendations?: IntFieldUpdateOperationsInput | number
+    profileUrl?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ContractorEmailCreateInput = {
@@ -16799,6 +16936,17 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type ContractorEmailListRelationFilter = {
     every?: ContractorEmailWhereInput
     some?: ContractorEmailWhereInput
@@ -16844,10 +16992,18 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isContactVerified?: SortOrder
+    suburb?: SortOrder
+    reviewCount?: SortOrder
+    hiredCount?: SortOrder
+    recommendations?: SortOrder
+    profileUrl?: SortOrder
   }
 
   export type ContractorAvgOrderByAggregateInput = {
     rating?: SortOrder
+    reviewCount?: SortOrder
+    hiredCount?: SortOrder
+    recommendations?: SortOrder
   }
 
   export type ContractorMaxOrderByAggregateInput = {
@@ -16873,6 +17029,11 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isContactVerified?: SortOrder
+    suburb?: SortOrder
+    reviewCount?: SortOrder
+    hiredCount?: SortOrder
+    recommendations?: SortOrder
+    profileUrl?: SortOrder
   }
 
   export type ContractorMinOrderByAggregateInput = {
@@ -16898,10 +17059,18 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isContactVerified?: SortOrder
+    suburb?: SortOrder
+    reviewCount?: SortOrder
+    hiredCount?: SortOrder
+    recommendations?: SortOrder
+    profileUrl?: SortOrder
   }
 
   export type ContractorSumOrderByAggregateInput = {
     rating?: SortOrder
+    reviewCount?: SortOrder
+    hiredCount?: SortOrder
+    recommendations?: SortOrder
   }
 
   export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -16926,6 +17095,22 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type ContractorRelationFilter = {
@@ -16991,17 +17176,6 @@ export namespace Prisma {
     contractorId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type FloatFilter<$PrismaModel = never> = {
@@ -17155,22 +17329,6 @@ export namespace Prisma {
     quotedPriceMin?: SortOrder
     quotedPriceMax?: SortOrder
     serviceCharge?: SortOrder
-  }
-
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type FloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -17731,6 +17889,14 @@ export namespace Prisma {
     push?: string | string[]
   }
 
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type ContractorEmailUpdateManyWithoutContractorNestedInput = {
     create?: XOR<ContractorEmailCreateWithoutContractorInput, ContractorEmailUncheckedCreateWithoutContractorInput> | ContractorEmailCreateWithoutContractorInput[] | ContractorEmailUncheckedCreateWithoutContractorInput[]
     connectOrCreate?: ContractorEmailCreateOrConnectWithoutContractorInput | ContractorEmailCreateOrConnectWithoutContractorInput[]
@@ -17907,14 +18073,6 @@ export namespace Prisma {
     create?: XOR<ReviewCreateWithoutJobInput, ReviewUncheckedCreateWithoutJobInput>
     connectOrCreate?: ReviewCreateOrConnectWithoutJobInput
     connect?: ReviewWhereUniqueInput
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type FloatFieldUpdateOperationsInput = {
@@ -18198,17 +18356,6 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type NestedFloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
-  }
-
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -18223,6 +18370,17 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -18724,6 +18882,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isContactVerified?: boolean
+    suburb?: string | null
+    reviewCount?: number
+    hiredCount?: number
+    recommendations?: number
+    profileUrl?: string | null
     phones?: ContractorPhoneCreateNestedManyWithoutContractorInput
     jobs?: JobCreateNestedManyWithoutContractorInput
     reviews?: ReviewCreateNestedManyWithoutContractorInput
@@ -18754,6 +18917,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isContactVerified?: boolean
+    suburb?: string | null
+    reviewCount?: number
+    hiredCount?: number
+    recommendations?: number
+    profileUrl?: string | null
     phones?: ContractorPhoneUncheckedCreateNestedManyWithoutContractorInput
     jobs?: JobUncheckedCreateNestedManyWithoutContractorInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutContractorInput
@@ -18800,6 +18968,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isContactVerified?: BoolFieldUpdateOperationsInput | boolean
+    suburb?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewCount?: IntFieldUpdateOperationsInput | number
+    hiredCount?: IntFieldUpdateOperationsInput | number
+    recommendations?: IntFieldUpdateOperationsInput | number
+    profileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phones?: ContractorPhoneUpdateManyWithoutContractorNestedInput
     jobs?: JobUpdateManyWithoutContractorNestedInput
     reviews?: ReviewUpdateManyWithoutContractorNestedInput
@@ -18830,6 +19003,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isContactVerified?: BoolFieldUpdateOperationsInput | boolean
+    suburb?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewCount?: IntFieldUpdateOperationsInput | number
+    hiredCount?: IntFieldUpdateOperationsInput | number
+    recommendations?: IntFieldUpdateOperationsInput | number
+    profileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     phones?: ContractorPhoneUncheckedUpdateManyWithoutContractorNestedInput
     jobs?: JobUncheckedUpdateManyWithoutContractorNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutContractorNestedInput
@@ -18860,6 +19038,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isContactVerified?: boolean
+    suburb?: string | null
+    reviewCount?: number
+    hiredCount?: number
+    recommendations?: number
+    profileUrl?: string | null
     emails?: ContractorEmailCreateNestedManyWithoutContractorInput
     jobs?: JobCreateNestedManyWithoutContractorInput
     reviews?: ReviewCreateNestedManyWithoutContractorInput
@@ -18890,6 +19073,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isContactVerified?: boolean
+    suburb?: string | null
+    reviewCount?: number
+    hiredCount?: number
+    recommendations?: number
+    profileUrl?: string | null
     emails?: ContractorEmailUncheckedCreateNestedManyWithoutContractorInput
     jobs?: JobUncheckedCreateNestedManyWithoutContractorInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutContractorInput
@@ -18936,6 +19124,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isContactVerified?: BoolFieldUpdateOperationsInput | boolean
+    suburb?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewCount?: IntFieldUpdateOperationsInput | number
+    hiredCount?: IntFieldUpdateOperationsInput | number
+    recommendations?: IntFieldUpdateOperationsInput | number
+    profileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     emails?: ContractorEmailUpdateManyWithoutContractorNestedInput
     jobs?: JobUpdateManyWithoutContractorNestedInput
     reviews?: ReviewUpdateManyWithoutContractorNestedInput
@@ -18966,6 +19159,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isContactVerified?: BoolFieldUpdateOperationsInput | boolean
+    suburb?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewCount?: IntFieldUpdateOperationsInput | number
+    hiredCount?: IntFieldUpdateOperationsInput | number
+    recommendations?: IntFieldUpdateOperationsInput | number
+    profileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     emails?: ContractorEmailUncheckedUpdateManyWithoutContractorNestedInput
     jobs?: JobUncheckedUpdateManyWithoutContractorNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutContractorNestedInput
@@ -18996,6 +19194,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isContactVerified?: boolean
+    suburb?: string | null
+    reviewCount?: number
+    hiredCount?: number
+    recommendations?: number
+    profileUrl?: string | null
     emails?: ContractorEmailCreateNestedManyWithoutContractorInput
     phones?: ContractorPhoneCreateNestedManyWithoutContractorInput
     reviews?: ReviewCreateNestedManyWithoutContractorInput
@@ -19026,6 +19229,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isContactVerified?: boolean
+    suburb?: string | null
+    reviewCount?: number
+    hiredCount?: number
+    recommendations?: number
+    profileUrl?: string | null
     emails?: ContractorEmailUncheckedCreateNestedManyWithoutContractorInput
     phones?: ContractorPhoneUncheckedCreateNestedManyWithoutContractorInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutContractorInput
@@ -19152,6 +19360,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isContactVerified?: BoolFieldUpdateOperationsInput | boolean
+    suburb?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewCount?: IntFieldUpdateOperationsInput | number
+    hiredCount?: IntFieldUpdateOperationsInput | number
+    recommendations?: IntFieldUpdateOperationsInput | number
+    profileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     emails?: ContractorEmailUpdateManyWithoutContractorNestedInput
     phones?: ContractorPhoneUpdateManyWithoutContractorNestedInput
     reviews?: ReviewUpdateManyWithoutContractorNestedInput
@@ -19182,6 +19395,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isContactVerified?: BoolFieldUpdateOperationsInput | boolean
+    suburb?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewCount?: IntFieldUpdateOperationsInput | number
+    hiredCount?: IntFieldUpdateOperationsInput | number
+    recommendations?: IntFieldUpdateOperationsInput | number
+    profileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     emails?: ContractorEmailUncheckedUpdateManyWithoutContractorNestedInput
     phones?: ContractorPhoneUncheckedUpdateManyWithoutContractorNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutContractorNestedInput
@@ -19433,6 +19651,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isContactVerified?: boolean
+    suburb?: string | null
+    reviewCount?: number
+    hiredCount?: number
+    recommendations?: number
+    profileUrl?: string | null
     emails?: ContractorEmailCreateNestedManyWithoutContractorInput
     phones?: ContractorPhoneCreateNestedManyWithoutContractorInput
     jobs?: JobCreateNestedManyWithoutContractorInput
@@ -19463,6 +19686,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isContactVerified?: boolean
+    suburb?: string | null
+    reviewCount?: number
+    hiredCount?: number
+    recommendations?: number
+    profileUrl?: string | null
     emails?: ContractorEmailUncheckedCreateNestedManyWithoutContractorInput
     phones?: ContractorPhoneUncheckedCreateNestedManyWithoutContractorInput
     jobs?: JobUncheckedCreateNestedManyWithoutContractorInput
@@ -19597,6 +19825,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isContactVerified?: BoolFieldUpdateOperationsInput | boolean
+    suburb?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewCount?: IntFieldUpdateOperationsInput | number
+    hiredCount?: IntFieldUpdateOperationsInput | number
+    recommendations?: IntFieldUpdateOperationsInput | number
+    profileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     emails?: ContractorEmailUpdateManyWithoutContractorNestedInput
     phones?: ContractorPhoneUpdateManyWithoutContractorNestedInput
     jobs?: JobUpdateManyWithoutContractorNestedInput
@@ -19627,6 +19860,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isContactVerified?: BoolFieldUpdateOperationsInput | boolean
+    suburb?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewCount?: IntFieldUpdateOperationsInput | number
+    hiredCount?: IntFieldUpdateOperationsInput | number
+    recommendations?: IntFieldUpdateOperationsInput | number
+    profileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     emails?: ContractorEmailUncheckedUpdateManyWithoutContractorNestedInput
     phones?: ContractorPhoneUncheckedUpdateManyWithoutContractorNestedInput
     jobs?: JobUncheckedUpdateManyWithoutContractorNestedInput

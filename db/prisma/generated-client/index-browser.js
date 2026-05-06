@@ -156,7 +156,12 @@ exports.Prisma.ContractorScalarFieldEnum = {
   address: 'address',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  isContactVerified: 'isContactVerified'
+  isContactVerified: 'isContactVerified',
+  suburb: 'suburb',
+  reviewCount: 'reviewCount',
+  hiredCount: 'hiredCount',
+  recommendations: 'recommendations',
+  profileUrl: 'profileUrl'
 };
 
 exports.Prisma.ContractorEmailScalarFieldEnum = {

@@ -45,6 +45,11 @@ model Contractor {
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
   isContactVerified Boolean           @default(false)
+  suburb            String?
+  reviewCount       Int               @default(0)
+  hiredCount        Int               @default(0)
+  recommendations   Int               @default(0)
+  profileUrl        String?
   emails            ContractorEmail[]
   phones            ContractorPhone[]
   jobs              Job[]

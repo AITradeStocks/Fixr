@@ -1,16 +1,15 @@
 import PDFDocument from 'pdfkit';
-import { Buffer } from 'buffer';
 
 export async function generateInvoicePDF(job: any, amountPaid: number): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     const doc = new PDFDocument({ margin: 50, size: 'A4' });
     const buffers: Buffer[] = [];
 
-    doc.on('data', buffers.push.bind(buffers));
-    doc.on('end', () => resolve(Buffer.concat(buffers)));
+    doc.on('data', (chunk) => buffers.push(chunk));
+    doc.on('end', () => resolve(Buffer.concat(buffers as any)));
     doc.on('error', reject);
 
-    // --- Header ---
+    // --- Header --- 
     doc.fillColor('#0f172a').rect(0, 0, 600, 150).fill();
     doc.fillColor('#ffffff').fontSize(24).font('Helvetica-Bold').text('FIXR ELITE', 50, 50);
     doc.fontSize(10).font('Helvetica').text('SECURE PROPERTY MAINTENANCE INTELLIGENCE', 50, 80, { characterSpacing: 1 });
