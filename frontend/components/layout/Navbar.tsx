@@ -73,7 +73,7 @@ export function Navbar() {
             F
           </div>
           <span className="text-xl font-bold tracking-tight text-slate-950">
-            Fixr {isAdmin && <span className="text-xs font-normal text-slate-400 ml-1">admin</span>}
+            FXR {isAdmin && <span className="text-xs font-normal text-slate-400 ml-1">admin</span>}
           </span>
         </Link>
 

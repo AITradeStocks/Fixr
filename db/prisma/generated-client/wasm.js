@@ -127,14 +127,21 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   passwordHash: 'passwordHash',
   name: 'name',
+  firstName: 'firstName',
+  middleName: 'middleName',
+  lastName: 'lastName',
   phone: 'phone',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  cookieConsent: 'cookieConsent'
 };
 
 exports.Prisma.ContractorScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  firstName: 'firstName',
+  middleName: 'middleName',
+  lastName: 'lastName',
   passwordHash: 'passwordHash',
   trade: 'trade',
   businessType: 'businessType',
@@ -161,7 +168,8 @@ exports.Prisma.ContractorScalarFieldEnum = {
   reviewCount: 'reviewCount',
   hiredCount: 'hiredCount',
   recommendations: 'recommendations',
-  profileUrl: 'profileUrl'
+  profileUrl: 'profileUrl',
+  cookieConsent: 'cookieConsent'
 };
 
 exports.Prisma.ContractorEmailScalarFieldEnum = {
@@ -310,15 +318,15 @@ exports.Prisma.QueryMode = {
   insensitive: 'insensitive'
 };
 
-exports.Prisma.NullsOrder = {
-  first: 'first',
-  last: 'last'
-};
-
 exports.Prisma.JsonNullValueFilter = {
   DbNull: Prisma.DbNull,
   JsonNull: Prisma.JsonNull,
   AnyNull: Prisma.AnyNull
+};
+
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
 };
 
 

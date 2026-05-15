@@ -9,20 +9,27 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(uuid())
-  email        String   @unique
-  passwordHash String
-  name         String
-  phone        String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  jobs         Job[]
-  reviews      Review[]
+  id            String   @id @default(uuid())
+  email         String   @unique
+  passwordHash  String
+  name          String
+  firstName     String   @default("")
+  middleName    String?
+  lastName      String   @default("")
+  phone         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  jobs          Job[]
+  reviews       Review[]
+  cookieConsent Json?
 }
 
 model Contractor {
   id                String            @id @default(uuid())
   name              String
+  firstName         String            @default("")
+  middleName        String?
+  lastName          String            @default("")
   passwordHash      String
   trade             String
   businessType      String
@@ -54,6 +61,7 @@ model Contractor {
   phones            ContractorPhone[]
   jobs              Job[]
   reviews           Review[]
+  cookieConsent     Json?
 }
 
 model ContractorEmail {

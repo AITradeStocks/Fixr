@@ -1932,6 +1932,9 @@ export namespace Prisma {
     email: string | null
     passwordHash: string | null
     name: string | null
+    firstName: string | null
+    middleName: string | null
+    lastName: string | null
     phone: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -1942,6 +1945,9 @@ export namespace Prisma {
     email: string | null
     passwordHash: string | null
     name: string | null
+    firstName: string | null
+    middleName: string | null
+    lastName: string | null
     phone: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -1952,9 +1958,13 @@ export namespace Prisma {
     email: number
     passwordHash: number
     name: number
+    firstName: number
+    middleName: number
+    lastName: number
     phone: number
     createdAt: number
     updatedAt: number
+    cookieConsent: number
     _all: number
   }
 
@@ -1964,6 +1974,9 @@ export namespace Prisma {
     email?: true
     passwordHash?: true
     name?: true
+    firstName?: true
+    middleName?: true
+    lastName?: true
     phone?: true
     createdAt?: true
     updatedAt?: true
@@ -1974,6 +1987,9 @@ export namespace Prisma {
     email?: true
     passwordHash?: true
     name?: true
+    firstName?: true
+    middleName?: true
+    lastName?: true
     phone?: true
     createdAt?: true
     updatedAt?: true
@@ -1984,9 +2000,13 @@ export namespace Prisma {
     email?: true
     passwordHash?: true
     name?: true
+    firstName?: true
+    middleName?: true
+    lastName?: true
     phone?: true
     createdAt?: true
     updatedAt?: true
+    cookieConsent?: true
     _all?: true
   }
 
@@ -2067,9 +2087,13 @@ export namespace Prisma {
     email: string
     passwordHash: string
     name: string
+    firstName: string
+    middleName: string | null
+    lastName: string
     phone: string | null
     createdAt: Date
     updatedAt: Date
+    cookieConsent: JsonValue | null
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -2094,9 +2118,13 @@ export namespace Prisma {
     email?: boolean
     passwordHash?: boolean
     name?: boolean
+    firstName?: boolean
+    middleName?: boolean
+    lastName?: boolean
     phone?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    cookieConsent?: boolean
     jobs?: boolean | User$jobsArgs<ExtArgs>
     reviews?: boolean | User$reviewsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -2107,9 +2135,13 @@ export namespace Prisma {
     email?: boolean
     passwordHash?: boolean
     name?: boolean
+    firstName?: boolean
+    middleName?: boolean
+    lastName?: boolean
     phone?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    cookieConsent?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -2117,9 +2149,13 @@ export namespace Prisma {
     email?: boolean
     passwordHash?: boolean
     name?: boolean
+    firstName?: boolean
+    middleName?: boolean
+    lastName?: boolean
     phone?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    cookieConsent?: boolean
   }
 
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2140,9 +2176,13 @@ export namespace Prisma {
       email: string
       passwordHash: string
       name: string
+      firstName: string
+      middleName: string | null
+      lastName: string
       phone: string | null
       createdAt: Date
       updatedAt: Date
+      cookieConsent: Prisma.JsonValue | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -2542,9 +2582,13 @@ export namespace Prisma {
     readonly email: FieldRef<"User", 'String'>
     readonly passwordHash: FieldRef<"User", 'String'>
     readonly name: FieldRef<"User", 'String'>
+    readonly firstName: FieldRef<"User", 'String'>
+    readonly middleName: FieldRef<"User", 'String'>
+    readonly lastName: FieldRef<"User", 'String'>
     readonly phone: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
+    readonly cookieConsent: FieldRef<"User", 'Json'>
   }
     
 
@@ -2942,6 +2986,9 @@ export namespace Prisma {
   export type ContractorMinAggregateOutputType = {
     id: string | null
     name: string | null
+    firstName: string | null
+    middleName: string | null
+    lastName: string | null
     passwordHash: string | null
     trade: string | null
     businessType: string | null
@@ -2972,6 +3019,9 @@ export namespace Prisma {
   export type ContractorMaxAggregateOutputType = {
     id: string | null
     name: string | null
+    firstName: string | null
+    middleName: string | null
+    lastName: string | null
     passwordHash: string | null
     trade: string | null
     businessType: string | null
@@ -3002,6 +3052,9 @@ export namespace Prisma {
   export type ContractorCountAggregateOutputType = {
     id: number
     name: number
+    firstName: number
+    middleName: number
+    lastName: number
     passwordHash: number
     trade: number
     businessType: number
@@ -3029,6 +3082,7 @@ export namespace Prisma {
     hiredCount: number
     recommendations: number
     profileUrl: number
+    cookieConsent: number
     _all: number
   }
 
@@ -3050,6 +3104,9 @@ export namespace Prisma {
   export type ContractorMinAggregateInputType = {
     id?: true
     name?: true
+    firstName?: true
+    middleName?: true
+    lastName?: true
     passwordHash?: true
     trade?: true
     businessType?: true
@@ -3080,6 +3137,9 @@ export namespace Prisma {
   export type ContractorMaxAggregateInputType = {
     id?: true
     name?: true
+    firstName?: true
+    middleName?: true
+    lastName?: true
     passwordHash?: true
     trade?: true
     businessType?: true
@@ -3110,6 +3170,9 @@ export namespace Prisma {
   export type ContractorCountAggregateInputType = {
     id?: true
     name?: true
+    firstName?: true
+    middleName?: true
+    lastName?: true
     passwordHash?: true
     trade?: true
     businessType?: true
@@ -3137,6 +3200,7 @@ export namespace Prisma {
     hiredCount?: true
     recommendations?: true
     profileUrl?: true
+    cookieConsent?: true
     _all?: true
   }
 
@@ -3229,6 +3293,9 @@ export namespace Prisma {
   export type ContractorGroupByOutputType = {
     id: string
     name: string
+    firstName: string
+    middleName: string | null
+    lastName: string
     passwordHash: string
     trade: string
     businessType: string
@@ -3256,6 +3323,7 @@ export namespace Prisma {
     hiredCount: number
     recommendations: number
     profileUrl: string | null
+    cookieConsent: JsonValue | null
     _count: ContractorCountAggregateOutputType | null
     _avg: ContractorAvgAggregateOutputType | null
     _sum: ContractorSumAggregateOutputType | null
@@ -3280,6 +3348,9 @@ export namespace Prisma {
   export type ContractorSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    firstName?: boolean
+    middleName?: boolean
+    lastName?: boolean
     passwordHash?: boolean
     trade?: boolean
     businessType?: boolean
@@ -3307,6 +3378,7 @@ export namespace Prisma {
     hiredCount?: boolean
     recommendations?: boolean
     profileUrl?: boolean
+    cookieConsent?: boolean
     emails?: boolean | Contractor$emailsArgs<ExtArgs>
     phones?: boolean | Contractor$phonesArgs<ExtArgs>
     jobs?: boolean | Contractor$jobsArgs<ExtArgs>
@@ -3317,6 +3389,9 @@ export namespace Prisma {
   export type ContractorSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    firstName?: boolean
+    middleName?: boolean
+    lastName?: boolean
     passwordHash?: boolean
     trade?: boolean
     businessType?: boolean
@@ -3344,11 +3419,15 @@ export namespace Prisma {
     hiredCount?: boolean
     recommendations?: boolean
     profileUrl?: boolean
+    cookieConsent?: boolean
   }, ExtArgs["result"]["contractor"]>
 
   export type ContractorSelectScalar = {
     id?: boolean
     name?: boolean
+    firstName?: boolean
+    middleName?: boolean
+    lastName?: boolean
     passwordHash?: boolean
     trade?: boolean
     businessType?: boolean
@@ -3376,6 +3455,7 @@ export namespace Prisma {
     hiredCount?: boolean
     recommendations?: boolean
     profileUrl?: boolean
+    cookieConsent?: boolean
   }
 
   export type ContractorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3398,6 +3478,9 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
+      firstName: string
+      middleName: string | null
+      lastName: string
       passwordHash: string
       trade: string
       businessType: string
@@ -3425,6 +3508,7 @@ export namespace Prisma {
       hiredCount: number
       recommendations: number
       profileUrl: string | null
+      cookieConsent: Prisma.JsonValue | null
     }, ExtArgs["result"]["contractor"]>
     composites: {}
   }
@@ -3824,6 +3908,9 @@ export namespace Prisma {
   interface ContractorFieldRefs {
     readonly id: FieldRef<"Contractor", 'String'>
     readonly name: FieldRef<"Contractor", 'String'>
+    readonly firstName: FieldRef<"Contractor", 'String'>
+    readonly middleName: FieldRef<"Contractor", 'String'>
+    readonly lastName: FieldRef<"Contractor", 'String'>
     readonly passwordHash: FieldRef<"Contractor", 'String'>
     readonly trade: FieldRef<"Contractor", 'String'>
     readonly businessType: FieldRef<"Contractor", 'String'>
@@ -3851,6 +3938,7 @@ export namespace Prisma {
     readonly hiredCount: FieldRef<"Contractor", 'Int'>
     readonly recommendations: FieldRef<"Contractor", 'Int'>
     readonly profileUrl: FieldRef<"Contractor", 'String'>
+    readonly cookieConsent: FieldRef<"Contractor", 'Json'>
   }
     
 
@@ -14184,9 +14272,13 @@ export namespace Prisma {
     email: 'email',
     passwordHash: 'passwordHash',
     name: 'name',
+    firstName: 'firstName',
+    middleName: 'middleName',
+    lastName: 'lastName',
     phone: 'phone',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    cookieConsent: 'cookieConsent'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -14195,6 +14287,9 @@ export namespace Prisma {
   export const ContractorScalarFieldEnum: {
     id: 'id',
     name: 'name',
+    firstName: 'firstName',
+    middleName: 'middleName',
+    lastName: 'lastName',
     passwordHash: 'passwordHash',
     trade: 'trade',
     businessType: 'businessType',
@@ -14221,7 +14316,8 @@ export namespace Prisma {
     reviewCount: 'reviewCount',
     hiredCount: 'hiredCount',
     recommendations: 'recommendations',
-    profileUrl: 'profileUrl'
+    profileUrl: 'profileUrl',
+    cookieConsent: 'cookieConsent'
   };
 
   export type ContractorScalarFieldEnum = (typeof ContractorScalarFieldEnum)[keyof typeof ContractorScalarFieldEnum]
@@ -14415,14 +14511,6 @@ export namespace Prisma {
   export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
-  export const NullsOrder: {
-    first: 'first',
-    last: 'last'
-  };
-
-  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
-
-
   export const JsonNullValueFilter: {
     DbNull: typeof DbNull,
     JsonNull: typeof JsonNull,
@@ -14430,6 +14518,14 @@ export namespace Prisma {
   };
 
   export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+
+
+  export const NullsOrder: {
+    first: 'first',
+    last: 'last'
+  };
+
+  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
   /**
@@ -14466,6 +14562,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -14498,13 +14601,6 @@ export namespace Prisma {
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
-
-
-  /**
-   * Reference to a field of type 'Json'
-   */
-  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-    
   /**
    * Deep Input Types
    */
@@ -14518,9 +14614,13 @@ export namespace Prisma {
     email?: StringFilter<"User"> | string
     passwordHash?: StringFilter<"User"> | string
     name?: StringFilter<"User"> | string
+    firstName?: StringFilter<"User"> | string
+    middleName?: StringNullableFilter<"User"> | string | null
+    lastName?: StringFilter<"User"> | string
     phone?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    cookieConsent?: JsonNullableFilter<"User">
     jobs?: JobListRelationFilter
     reviews?: ReviewListRelationFilter
   }
@@ -14530,9 +14630,13 @@ export namespace Prisma {
     email?: SortOrder
     passwordHash?: SortOrder
     name?: SortOrder
+    firstName?: SortOrder
+    middleName?: SortOrderInput | SortOrder
+    lastName?: SortOrder
     phone?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    cookieConsent?: SortOrderInput | SortOrder
     jobs?: JobOrderByRelationAggregateInput
     reviews?: ReviewOrderByRelationAggregateInput
   }
@@ -14545,9 +14649,13 @@ export namespace Prisma {
     NOT?: UserWhereInput | UserWhereInput[]
     passwordHash?: StringFilter<"User"> | string
     name?: StringFilter<"User"> | string
+    firstName?: StringFilter<"User"> | string
+    middleName?: StringNullableFilter<"User"> | string | null
+    lastName?: StringFilter<"User"> | string
     phone?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    cookieConsent?: JsonNullableFilter<"User">
     jobs?: JobListRelationFilter
     reviews?: ReviewListRelationFilter
   }, "id" | "email">
@@ -14557,9 +14665,13 @@ export namespace Prisma {
     email?: SortOrder
     passwordHash?: SortOrder
     name?: SortOrder
+    firstName?: SortOrder
+    middleName?: SortOrderInput | SortOrder
+    lastName?: SortOrder
     phone?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    cookieConsent?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -14573,9 +14685,13 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"User"> | string
     passwordHash?: StringWithAggregatesFilter<"User"> | string
     name?: StringWithAggregatesFilter<"User"> | string
+    firstName?: StringWithAggregatesFilter<"User"> | string
+    middleName?: StringNullableWithAggregatesFilter<"User"> | string | null
+    lastName?: StringWithAggregatesFilter<"User"> | string
     phone?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    cookieConsent?: JsonNullableWithAggregatesFilter<"User">
   }
 
   export type ContractorWhereInput = {
@@ -14584,6 +14700,9 @@ export namespace Prisma {
     NOT?: ContractorWhereInput | ContractorWhereInput[]
     id?: StringFilter<"Contractor"> | string
     name?: StringFilter<"Contractor"> | string
+    firstName?: StringFilter<"Contractor"> | string
+    middleName?: StringNullableFilter<"Contractor"> | string | null
+    lastName?: StringFilter<"Contractor"> | string
     passwordHash?: StringFilter<"Contractor"> | string
     trade?: StringFilter<"Contractor"> | string
     businessType?: StringFilter<"Contractor"> | string
@@ -14611,6 +14730,7 @@ export namespace Prisma {
     hiredCount?: IntFilter<"Contractor"> | number
     recommendations?: IntFilter<"Contractor"> | number
     profileUrl?: StringNullableFilter<"Contractor"> | string | null
+    cookieConsent?: JsonNullableFilter<"Contractor">
     emails?: ContractorEmailListRelationFilter
     phones?: ContractorPhoneListRelationFilter
     jobs?: JobListRelationFilter
@@ -14620,6 +14740,9 @@ export namespace Prisma {
   export type ContractorOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
+    firstName?: SortOrder
+    middleName?: SortOrderInput | SortOrder
+    lastName?: SortOrder
     passwordHash?: SortOrder
     trade?: SortOrder
     businessType?: SortOrder
@@ -14647,6 +14770,7 @@ export namespace Prisma {
     hiredCount?: SortOrder
     recommendations?: SortOrder
     profileUrl?: SortOrderInput | SortOrder
+    cookieConsent?: SortOrderInput | SortOrder
     emails?: ContractorEmailOrderByRelationAggregateInput
     phones?: ContractorPhoneOrderByRelationAggregateInput
     jobs?: JobOrderByRelationAggregateInput
@@ -14659,6 +14783,9 @@ export namespace Prisma {
     OR?: ContractorWhereInput[]
     NOT?: ContractorWhereInput | ContractorWhereInput[]
     name?: StringFilter<"Contractor"> | string
+    firstName?: StringFilter<"Contractor"> | string
+    middleName?: StringNullableFilter<"Contractor"> | string | null
+    lastName?: StringFilter<"Contractor"> | string
     passwordHash?: StringFilter<"Contractor"> | string
     trade?: StringFilter<"Contractor"> | string
     businessType?: StringFilter<"Contractor"> | string
@@ -14686,6 +14813,7 @@ export namespace Prisma {
     hiredCount?: IntFilter<"Contractor"> | number
     recommendations?: IntFilter<"Contractor"> | number
     profileUrl?: StringNullableFilter<"Contractor"> | string | null
+    cookieConsent?: JsonNullableFilter<"Contractor">
     emails?: ContractorEmailListRelationFilter
     phones?: ContractorPhoneListRelationFilter
     jobs?: JobListRelationFilter
@@ -14695,6 +14823,9 @@ export namespace Prisma {
   export type ContractorOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
+    firstName?: SortOrder
+    middleName?: SortOrderInput | SortOrder
+    lastName?: SortOrder
     passwordHash?: SortOrder
     trade?: SortOrder
     businessType?: SortOrder
@@ -14722,6 +14853,7 @@ export namespace Prisma {
     hiredCount?: SortOrder
     recommendations?: SortOrder
     profileUrl?: SortOrderInput | SortOrder
+    cookieConsent?: SortOrderInput | SortOrder
     _count?: ContractorCountOrderByAggregateInput
     _avg?: ContractorAvgOrderByAggregateInput
     _max?: ContractorMaxOrderByAggregateInput
@@ -14735,6 +14867,9 @@ export namespace Prisma {
     NOT?: ContractorScalarWhereWithAggregatesInput | ContractorScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Contractor"> | string
     name?: StringWithAggregatesFilter<"Contractor"> | string
+    firstName?: StringWithAggregatesFilter<"Contractor"> | string
+    middleName?: StringNullableWithAggregatesFilter<"Contractor"> | string | null
+    lastName?: StringWithAggregatesFilter<"Contractor"> | string
     passwordHash?: StringWithAggregatesFilter<"Contractor"> | string
     trade?: StringWithAggregatesFilter<"Contractor"> | string
     businessType?: StringWithAggregatesFilter<"Contractor"> | string
@@ -14762,6 +14897,7 @@ export namespace Prisma {
     hiredCount?: IntWithAggregatesFilter<"Contractor"> | number
     recommendations?: IntWithAggregatesFilter<"Contractor"> | number
     profileUrl?: StringNullableWithAggregatesFilter<"Contractor"> | string | null
+    cookieConsent?: JsonNullableWithAggregatesFilter<"Contractor">
   }
 
   export type ContractorEmailWhereInput = {
@@ -15564,9 +15700,13 @@ export namespace Prisma {
     email: string
     passwordHash: string
     name: string
+    firstName?: string
+    middleName?: string | null
+    lastName?: string
     phone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     jobs?: JobCreateNestedManyWithoutUserInput
     reviews?: ReviewCreateNestedManyWithoutCustomerInput
   }
@@ -15576,9 +15716,13 @@ export namespace Prisma {
     email: string
     passwordHash: string
     name: string
+    firstName?: string
+    middleName?: string | null
+    lastName?: string
     phone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     jobs?: JobUncheckedCreateNestedManyWithoutUserInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutCustomerInput
   }
@@ -15588,9 +15732,13 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     jobs?: JobUpdateManyWithoutUserNestedInput
     reviews?: ReviewUpdateManyWithoutCustomerNestedInput
   }
@@ -15600,9 +15748,13 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     jobs?: JobUncheckedUpdateManyWithoutUserNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutCustomerNestedInput
   }
@@ -15612,9 +15764,13 @@ export namespace Prisma {
     email: string
     passwordHash: string
     name: string
+    firstName?: string
+    middleName?: string | null
+    lastName?: string
     phone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type UserUpdateManyMutationInput = {
@@ -15622,9 +15778,13 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -15632,14 +15792,21 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type ContractorCreateInput = {
     id?: string
     name: string
+    firstName?: string
+    middleName?: string | null
+    lastName?: string
     passwordHash: string
     trade: string
     businessType: string
@@ -15667,6 +15834,7 @@ export namespace Prisma {
     hiredCount?: number
     recommendations?: number
     profileUrl?: string | null
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     emails?: ContractorEmailCreateNestedManyWithoutContractorInput
     phones?: ContractorPhoneCreateNestedManyWithoutContractorInput
     jobs?: JobCreateNestedManyWithoutContractorInput
@@ -15676,6 +15844,9 @@ export namespace Prisma {
   export type ContractorUncheckedCreateInput = {
     id?: string
     name: string
+    firstName?: string
+    middleName?: string | null
+    lastName?: string
     passwordHash: string
     trade: string
     businessType: string
@@ -15703,6 +15874,7 @@ export namespace Prisma {
     hiredCount?: number
     recommendations?: number
     profileUrl?: string | null
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     emails?: ContractorEmailUncheckedCreateNestedManyWithoutContractorInput
     phones?: ContractorPhoneUncheckedCreateNestedManyWithoutContractorInput
     jobs?: JobUncheckedCreateNestedManyWithoutContractorInput
@@ -15712,6 +15884,9 @@ export namespace Prisma {
   export type ContractorUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     trade?: StringFieldUpdateOperationsInput | string
     businessType?: StringFieldUpdateOperationsInput | string
@@ -15739,6 +15914,7 @@ export namespace Prisma {
     hiredCount?: IntFieldUpdateOperationsInput | number
     recommendations?: IntFieldUpdateOperationsInput | number
     profileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     emails?: ContractorEmailUpdateManyWithoutContractorNestedInput
     phones?: ContractorPhoneUpdateManyWithoutContractorNestedInput
     jobs?: JobUpdateManyWithoutContractorNestedInput
@@ -15748,6 +15924,9 @@ export namespace Prisma {
   export type ContractorUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     trade?: StringFieldUpdateOperationsInput | string
     businessType?: StringFieldUpdateOperationsInput | string
@@ -15775,6 +15954,7 @@ export namespace Prisma {
     hiredCount?: IntFieldUpdateOperationsInput | number
     recommendations?: IntFieldUpdateOperationsInput | number
     profileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     emails?: ContractorEmailUncheckedUpdateManyWithoutContractorNestedInput
     phones?: ContractorPhoneUncheckedUpdateManyWithoutContractorNestedInput
     jobs?: JobUncheckedUpdateManyWithoutContractorNestedInput
@@ -15784,6 +15964,9 @@ export namespace Prisma {
   export type ContractorCreateManyInput = {
     id?: string
     name: string
+    firstName?: string
+    middleName?: string | null
+    lastName?: string
     passwordHash: string
     trade: string
     businessType: string
@@ -15811,11 +15994,15 @@ export namespace Prisma {
     hiredCount?: number
     recommendations?: number
     profileUrl?: string | null
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type ContractorUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     trade?: StringFieldUpdateOperationsInput | string
     businessType?: StringFieldUpdateOperationsInput | string
@@ -15843,11 +16030,15 @@ export namespace Prisma {
     hiredCount?: IntFieldUpdateOperationsInput | number
     recommendations?: IntFieldUpdateOperationsInput | number
     profileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type ContractorUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     trade?: StringFieldUpdateOperationsInput | string
     businessType?: StringFieldUpdateOperationsInput | string
@@ -15875,6 +16066,7 @@ export namespace Prisma {
     hiredCount?: IntFieldUpdateOperationsInput | number
     recommendations?: IntFieldUpdateOperationsInput | number
     profileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type ContractorEmailCreateInput = {
@@ -16806,6 +16998,28 @@ export namespace Prisma {
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
+  export type JsonNullableFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type JobListRelationFilter = {
     every?: JobWhereInput
@@ -16837,9 +17051,13 @@ export namespace Prisma {
     email?: SortOrder
     passwordHash?: SortOrder
     name?: SortOrder
+    firstName?: SortOrder
+    middleName?: SortOrder
+    lastName?: SortOrder
     phone?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    cookieConsent?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -16847,6 +17065,9 @@ export namespace Prisma {
     email?: SortOrder
     passwordHash?: SortOrder
     name?: SortOrder
+    firstName?: SortOrder
+    middleName?: SortOrder
+    lastName?: SortOrder
     phone?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -16857,6 +17078,9 @@ export namespace Prisma {
     email?: SortOrder
     passwordHash?: SortOrder
     name?: SortOrder
+    firstName?: SortOrder
+    middleName?: SortOrder
+    lastName?: SortOrder
     phone?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -16910,6 +17134,31 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type StringNullableListFilter<$PrismaModel = never> = {
@@ -16970,6 +17219,9 @@ export namespace Prisma {
   export type ContractorCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    firstName?: SortOrder
+    middleName?: SortOrder
+    lastName?: SortOrder
     passwordHash?: SortOrder
     trade?: SortOrder
     businessType?: SortOrder
@@ -16997,6 +17249,7 @@ export namespace Prisma {
     hiredCount?: SortOrder
     recommendations?: SortOrder
     profileUrl?: SortOrder
+    cookieConsent?: SortOrder
   }
 
   export type ContractorAvgOrderByAggregateInput = {
@@ -17009,6 +17262,9 @@ export namespace Prisma {
   export type ContractorMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    firstName?: SortOrder
+    middleName?: SortOrder
+    lastName?: SortOrder
     passwordHash?: SortOrder
     trade?: SortOrder
     businessType?: SortOrder
@@ -17039,6 +17295,9 @@ export namespace Prisma {
   export type ContractorMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    firstName?: SortOrder
+    middleName?: SortOrder
+    lastName?: SortOrder
     passwordHash?: SortOrder
     trade?: SortOrder
     businessType?: SortOrder
@@ -17188,28 +17447,6 @@ export namespace Prisma {
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatFilter<$PrismaModel> | number
   }
-  export type JsonNullableFilter<$PrismaModel = never> = 
-    | PatchUndefined<
-        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
 
   export type ContractorNullableRelationFilter = {
     is?: ContractorWhereInput | null
@@ -17345,31 +17582,6 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
-  }
-  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> = 
-    | PatchUndefined<
-        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
-        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
-
-  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedJsonNullableFilter<$PrismaModel>
-    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type JobRelationFilter = {
@@ -18315,6 +18527,28 @@ export namespace Prisma {
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
+  export type NestedJsonNullableFilter<$PrismaModel = never> = 
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type NestedFloatNullableFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel> | null
@@ -18397,28 +18631,6 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
-  }
-  export type NestedJsonNullableFilter<$PrismaModel = never> = 
-    | PatchUndefined<
-        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
-        Required<NestedJsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
-
-  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
-    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    path?: string[]
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
   export type NestedJsonFilter<$PrismaModel = never> = 
     | PatchUndefined<
@@ -18860,6 +19072,9 @@ export namespace Prisma {
   export type ContractorCreateWithoutEmailsInput = {
     id?: string
     name: string
+    firstName?: string
+    middleName?: string | null
+    lastName?: string
     passwordHash: string
     trade: string
     businessType: string
@@ -18887,6 +19102,7 @@ export namespace Prisma {
     hiredCount?: number
     recommendations?: number
     profileUrl?: string | null
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     phones?: ContractorPhoneCreateNestedManyWithoutContractorInput
     jobs?: JobCreateNestedManyWithoutContractorInput
     reviews?: ReviewCreateNestedManyWithoutContractorInput
@@ -18895,6 +19111,9 @@ export namespace Prisma {
   export type ContractorUncheckedCreateWithoutEmailsInput = {
     id?: string
     name: string
+    firstName?: string
+    middleName?: string | null
+    lastName?: string
     passwordHash: string
     trade: string
     businessType: string
@@ -18922,6 +19141,7 @@ export namespace Prisma {
     hiredCount?: number
     recommendations?: number
     profileUrl?: string | null
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     phones?: ContractorPhoneUncheckedCreateNestedManyWithoutContractorInput
     jobs?: JobUncheckedCreateNestedManyWithoutContractorInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutContractorInput
@@ -18946,6 +19166,9 @@ export namespace Prisma {
   export type ContractorUpdateWithoutEmailsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     trade?: StringFieldUpdateOperationsInput | string
     businessType?: StringFieldUpdateOperationsInput | string
@@ -18973,6 +19196,7 @@ export namespace Prisma {
     hiredCount?: IntFieldUpdateOperationsInput | number
     recommendations?: IntFieldUpdateOperationsInput | number
     profileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     phones?: ContractorPhoneUpdateManyWithoutContractorNestedInput
     jobs?: JobUpdateManyWithoutContractorNestedInput
     reviews?: ReviewUpdateManyWithoutContractorNestedInput
@@ -18981,6 +19205,9 @@ export namespace Prisma {
   export type ContractorUncheckedUpdateWithoutEmailsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     trade?: StringFieldUpdateOperationsInput | string
     businessType?: StringFieldUpdateOperationsInput | string
@@ -19008,6 +19235,7 @@ export namespace Prisma {
     hiredCount?: IntFieldUpdateOperationsInput | number
     recommendations?: IntFieldUpdateOperationsInput | number
     profileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     phones?: ContractorPhoneUncheckedUpdateManyWithoutContractorNestedInput
     jobs?: JobUncheckedUpdateManyWithoutContractorNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutContractorNestedInput
@@ -19016,6 +19244,9 @@ export namespace Prisma {
   export type ContractorCreateWithoutPhonesInput = {
     id?: string
     name: string
+    firstName?: string
+    middleName?: string | null
+    lastName?: string
     passwordHash: string
     trade: string
     businessType: string
@@ -19043,6 +19274,7 @@ export namespace Prisma {
     hiredCount?: number
     recommendations?: number
     profileUrl?: string | null
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     emails?: ContractorEmailCreateNestedManyWithoutContractorInput
     jobs?: JobCreateNestedManyWithoutContractorInput
     reviews?: ReviewCreateNestedManyWithoutContractorInput
@@ -19051,6 +19283,9 @@ export namespace Prisma {
   export type ContractorUncheckedCreateWithoutPhonesInput = {
     id?: string
     name: string
+    firstName?: string
+    middleName?: string | null
+    lastName?: string
     passwordHash: string
     trade: string
     businessType: string
@@ -19078,6 +19313,7 @@ export namespace Prisma {
     hiredCount?: number
     recommendations?: number
     profileUrl?: string | null
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     emails?: ContractorEmailUncheckedCreateNestedManyWithoutContractorInput
     jobs?: JobUncheckedCreateNestedManyWithoutContractorInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutContractorInput
@@ -19102,6 +19338,9 @@ export namespace Prisma {
   export type ContractorUpdateWithoutPhonesInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     trade?: StringFieldUpdateOperationsInput | string
     businessType?: StringFieldUpdateOperationsInput | string
@@ -19129,6 +19368,7 @@ export namespace Prisma {
     hiredCount?: IntFieldUpdateOperationsInput | number
     recommendations?: IntFieldUpdateOperationsInput | number
     profileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     emails?: ContractorEmailUpdateManyWithoutContractorNestedInput
     jobs?: JobUpdateManyWithoutContractorNestedInput
     reviews?: ReviewUpdateManyWithoutContractorNestedInput
@@ -19137,6 +19377,9 @@ export namespace Prisma {
   export type ContractorUncheckedUpdateWithoutPhonesInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     trade?: StringFieldUpdateOperationsInput | string
     businessType?: StringFieldUpdateOperationsInput | string
@@ -19164,6 +19407,7 @@ export namespace Prisma {
     hiredCount?: IntFieldUpdateOperationsInput | number
     recommendations?: IntFieldUpdateOperationsInput | number
     profileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     emails?: ContractorEmailUncheckedUpdateManyWithoutContractorNestedInput
     jobs?: JobUncheckedUpdateManyWithoutContractorNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutContractorNestedInput
@@ -19172,6 +19416,9 @@ export namespace Prisma {
   export type ContractorCreateWithoutJobsInput = {
     id?: string
     name: string
+    firstName?: string
+    middleName?: string | null
+    lastName?: string
     passwordHash: string
     trade: string
     businessType: string
@@ -19199,6 +19446,7 @@ export namespace Prisma {
     hiredCount?: number
     recommendations?: number
     profileUrl?: string | null
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     emails?: ContractorEmailCreateNestedManyWithoutContractorInput
     phones?: ContractorPhoneCreateNestedManyWithoutContractorInput
     reviews?: ReviewCreateNestedManyWithoutContractorInput
@@ -19207,6 +19455,9 @@ export namespace Prisma {
   export type ContractorUncheckedCreateWithoutJobsInput = {
     id?: string
     name: string
+    firstName?: string
+    middleName?: string | null
+    lastName?: string
     passwordHash: string
     trade: string
     businessType: string
@@ -19234,6 +19485,7 @@ export namespace Prisma {
     hiredCount?: number
     recommendations?: number
     profileUrl?: string | null
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     emails?: ContractorEmailUncheckedCreateNestedManyWithoutContractorInput
     phones?: ContractorPhoneUncheckedCreateNestedManyWithoutContractorInput
     reviews?: ReviewUncheckedCreateNestedManyWithoutContractorInput
@@ -19249,9 +19501,13 @@ export namespace Prisma {
     email: string
     passwordHash: string
     name: string
+    firstName?: string
+    middleName?: string | null
+    lastName?: string
     phone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     reviews?: ReviewCreateNestedManyWithoutCustomerInput
   }
 
@@ -19260,9 +19516,13 @@ export namespace Prisma {
     email: string
     passwordHash: string
     name: string
+    firstName?: string
+    middleName?: string | null
+    lastName?: string
     phone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     reviews?: ReviewUncheckedCreateNestedManyWithoutCustomerInput
   }
 
@@ -19338,6 +19598,9 @@ export namespace Prisma {
   export type ContractorUpdateWithoutJobsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     trade?: StringFieldUpdateOperationsInput | string
     businessType?: StringFieldUpdateOperationsInput | string
@@ -19365,6 +19628,7 @@ export namespace Prisma {
     hiredCount?: IntFieldUpdateOperationsInput | number
     recommendations?: IntFieldUpdateOperationsInput | number
     profileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     emails?: ContractorEmailUpdateManyWithoutContractorNestedInput
     phones?: ContractorPhoneUpdateManyWithoutContractorNestedInput
     reviews?: ReviewUpdateManyWithoutContractorNestedInput
@@ -19373,6 +19637,9 @@ export namespace Prisma {
   export type ContractorUncheckedUpdateWithoutJobsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     trade?: StringFieldUpdateOperationsInput | string
     businessType?: StringFieldUpdateOperationsInput | string
@@ -19400,6 +19667,7 @@ export namespace Prisma {
     hiredCount?: IntFieldUpdateOperationsInput | number
     recommendations?: IntFieldUpdateOperationsInput | number
     profileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     emails?: ContractorEmailUncheckedUpdateManyWithoutContractorNestedInput
     phones?: ContractorPhoneUncheckedUpdateManyWithoutContractorNestedInput
     reviews?: ReviewUncheckedUpdateManyWithoutContractorNestedInput
@@ -19421,9 +19689,13 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     reviews?: ReviewUpdateManyWithoutCustomerNestedInput
   }
 
@@ -19432,9 +19704,13 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     reviews?: ReviewUncheckedUpdateManyWithoutCustomerNestedInput
   }
 
@@ -19629,6 +19905,9 @@ export namespace Prisma {
   export type ContractorCreateWithoutReviewsInput = {
     id?: string
     name: string
+    firstName?: string
+    middleName?: string | null
+    lastName?: string
     passwordHash: string
     trade: string
     businessType: string
@@ -19656,6 +19935,7 @@ export namespace Prisma {
     hiredCount?: number
     recommendations?: number
     profileUrl?: string | null
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     emails?: ContractorEmailCreateNestedManyWithoutContractorInput
     phones?: ContractorPhoneCreateNestedManyWithoutContractorInput
     jobs?: JobCreateNestedManyWithoutContractorInput
@@ -19664,6 +19944,9 @@ export namespace Prisma {
   export type ContractorUncheckedCreateWithoutReviewsInput = {
     id?: string
     name: string
+    firstName?: string
+    middleName?: string | null
+    lastName?: string
     passwordHash: string
     trade: string
     businessType: string
@@ -19691,6 +19974,7 @@ export namespace Prisma {
     hiredCount?: number
     recommendations?: number
     profileUrl?: string | null
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     emails?: ContractorEmailUncheckedCreateNestedManyWithoutContractorInput
     phones?: ContractorPhoneUncheckedCreateNestedManyWithoutContractorInput
     jobs?: JobUncheckedCreateNestedManyWithoutContractorInput
@@ -19706,9 +19990,13 @@ export namespace Prisma {
     email: string
     passwordHash: string
     name: string
+    firstName?: string
+    middleName?: string | null
+    lastName?: string
     phone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     jobs?: JobCreateNestedManyWithoutUserInput
   }
 
@@ -19717,9 +20005,13 @@ export namespace Prisma {
     email: string
     passwordHash: string
     name: string
+    firstName?: string
+    middleName?: string | null
+    lastName?: string
     phone?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     jobs?: JobUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -19803,6 +20095,9 @@ export namespace Prisma {
   export type ContractorUpdateWithoutReviewsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     trade?: StringFieldUpdateOperationsInput | string
     businessType?: StringFieldUpdateOperationsInput | string
@@ -19830,6 +20125,7 @@ export namespace Prisma {
     hiredCount?: IntFieldUpdateOperationsInput | number
     recommendations?: IntFieldUpdateOperationsInput | number
     profileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     emails?: ContractorEmailUpdateManyWithoutContractorNestedInput
     phones?: ContractorPhoneUpdateManyWithoutContractorNestedInput
     jobs?: JobUpdateManyWithoutContractorNestedInput
@@ -19838,6 +20134,9 @@ export namespace Prisma {
   export type ContractorUncheckedUpdateWithoutReviewsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     trade?: StringFieldUpdateOperationsInput | string
     businessType?: StringFieldUpdateOperationsInput | string
@@ -19865,6 +20164,7 @@ export namespace Prisma {
     hiredCount?: IntFieldUpdateOperationsInput | number
     recommendations?: IntFieldUpdateOperationsInput | number
     profileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     emails?: ContractorEmailUncheckedUpdateManyWithoutContractorNestedInput
     phones?: ContractorPhoneUncheckedUpdateManyWithoutContractorNestedInput
     jobs?: JobUncheckedUpdateManyWithoutContractorNestedInput
@@ -19886,9 +20186,13 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     jobs?: JobUpdateManyWithoutUserNestedInput
   }
 
@@ -19897,9 +20201,13 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: StringFieldUpdateOperationsInput | string
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cookieConsent?: NullableJsonNullValueInput | InputJsonValue
     jobs?: JobUncheckedUpdateManyWithoutUserNestedInput
   }
 

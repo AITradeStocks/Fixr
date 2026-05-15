@@ -145,7 +145,7 @@ export default function HomePage() {
             Ready to experience <br />the <span className="text-emerald-400 font-medium">modern standard?</span>
           </h2>
           <p className="text-slate-400 text-lg mb-12 max-w-xl mx-auto">
-            Join the forward-thinking enterprises and homeowners who manage their property with Fixr.
+            Join the forward-thinking enterprises and homeowners who manage their property with FXR.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link 
@@ -175,7 +175,7 @@ export default function HomePage() {
             <div className="col-span-2 lg:col-span-2">
               <div className="flex items-center gap-3 mb-6 group cursor-pointer">
                 <div className="h-10 w-10 bg-emerald-600 rounded-xl flex items-center justify-center text-white font-black text-lg group-hover:rotate-6 transition-transform shadow-lg shadow-emerald-900/40">F</div>
-                <span className="text-2xl font-black tracking-tight text-white uppercase">Fixr</span>
+                <span className="text-2xl font-black tracking-tight text-white uppercase">FXR</span>
               </div>
               <p className="text-slate-400 text-sm leading-relaxed max-w-sm mb-8">
                 The modern standard for property intelligence and rapid maintenance. Vetted professionals, transparent pricing, and enterprise-grade accountability.
@@ -246,7 +246,7 @@ export default function HomePage() {
                 <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
                 <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">System Operational</span>
               </div>
-              <p className="text-[10px] font-black text-slate-700 uppercase tracking-widest">© 2026 Fixr Inc.</p>
+              <p className="text-[10px] font-black text-slate-700 uppercase tracking-widest">© 2026 FXR Inc.</p>
             </div>
           </div>
         </div>

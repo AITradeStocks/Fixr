@@ -32,6 +32,8 @@ export const api = {
   login: (body: { email: string; password: string }) =>
     request("/auth/login", { method: "POST", body: JSON.stringify(body) }),
   me: () => authReq("/auth/me"),
+  updateCookieConsent: (consent: { essential: boolean; analytics: boolean; marketing: boolean }) =>
+    authReq("/auth/cookie-consent", { method: "POST", body: JSON.stringify({ consent }) }),
 
   // ── Contractor Auth ──
   registerContractor: (body: any) =>

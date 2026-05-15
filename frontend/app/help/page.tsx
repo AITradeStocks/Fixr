@@ -51,7 +51,7 @@ const CATEGORIES = [
   { 
     id: "mobile",
     title: "Mobile App", 
-    desc: "Using Fixr on the go via iOS and Android.", 
+    desc: "Using FXR on the go via iOS and Android.", 
     icon: <Smartphone className="text-indigo-500" />, 
     color: "bg-indigo-50" 
   },
@@ -67,7 +67,7 @@ const CATEGORIES = [
 const ARTICLES: Record<string, { q: string, a: string }[]> = {
   "getting-started": [
     { q: "How do I create a new maintenance request?", a: "Click the 'Post New Request' button on your dashboard. Our AI will guide you through describing the issue, setting urgency, and estimating costs." },
-    { q: "What happens after I post a request?", a: "Fixr immediately notifies the top-rated pros in your area. You'll receive a match notification usually within 15 minutes." }
+    { q: "What happens after I post a request?", a: "FXR immediately notifies the top-rated pros in your area. You'll receive a match notification usually within 15 minutes." }
   ],
   "payments": [
     { q: "When is my card charged?", a: "Payment is authorized when you confirm a match but only released to the pro once you confirm the job is successfully completed." },
@@ -75,7 +75,7 @@ const ARTICLES: Record<string, { q: string, a: string }[]> = {
   ],
   "safety": [
     { q: "How are pros verified?", a: "Every pro undergoes a 5-point check: Identity verification, License validation, Insurance coverage, Background check, and historical rating audit." },
-    { q: "What is the Fixr Guarantee?", a: "All jobs booked through the platform are covered by our $1M property protection guarantee." }
+    { q: "What is the FXR Guarantee?", a: "All jobs booked through the platform are covered by our $1M property protection guarantee." }
   ]
 };
 
@@ -262,7 +262,7 @@ export default function HelpPage() {
                 Live Chat
               </button>
               <a 
-                href="mailto:support@fixr.io"
+                href="mailto:support@fxr.io"
                 className="flex-1 h-14 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold border border-white/10 flex items-center justify-center transition-all active:scale-95"
               >
                 Email Support

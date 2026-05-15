@@ -39,7 +39,7 @@ authRouter.post("/register", async (req, res, next) => {
     const token = signToken(user.id, user.email);
     res.status(201).json({
       token,
-      user: { id: user.id, email: user.email, name: user.name, phone: user.phone },
+      user: { id: user.id, email: user.email, name: user.name, phone: user.phone, cookieConsent: user.cookieConsent },
     });
   } catch (error) { next(error); }
 });
@@ -68,7 +68,7 @@ authRouter.post("/login", async (req, res, next) => {
     const token = signToken(user.id, user.email);
     res.json({
       token,
-      user: { id: user.id, email: user.email, name: user.name, phone: user.phone },
+      user: { id: user.id, email: user.email, name: user.name, phone: user.phone, cookieConsent: user.cookieConsent },
     });
   } catch (error) { next(error); }
 });
@@ -78,9 +78,34 @@ authRouter.get("/me", requireAuth, async (req: AuthRequest, res, next) => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: req.userId },
-      select: { id: true, email: true, name: true, phone: true, createdAt: true },
+      select: { id: true, email: true, name: true, phone: true, createdAt: true, cookieConsent: true },
     });
     if (!user) { res.status(404).json({ error: "user not found" }); return; }
     res.json(user);
+  } catch (error) { next(error); }
+});
+
+// POST /auth/cookie-consent — save cookie consent preferences in database for authenticated User or Contractor
+authRouter.post("/cookie-consent", requireAuth, async (req: AuthRequest, res, next) => {
+  try {
+    const { consent } = req.body;
+    if (!consent) {
+      res.status(400).json({ error: "Consent details are required" });
+      return;
+    }
+
+    if (req.role === "contractor") {
+      const updated = await prisma.contractor.update({
+        where: { id: req.userId },
+        data: { cookieConsent: consent },
+      });
+      res.json({ success: true, role: "contractor", consent: updated.cookieConsent });
+    } else {
+      const updated = await prisma.user.update({
+        where: { id: req.userId },
+        data: { cookieConsent: consent },
+      });
+      res.json({ success: true, role: "customer", consent: updated.cookieConsent });
+    }
   } catch (error) { next(error); }
 });

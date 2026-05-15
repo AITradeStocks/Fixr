@@ -39,7 +39,7 @@ export function EnterpriseHero() {
             </h1>
             
             <p className="text-lg md:text-xl text-slate-500 mb-10 max-w-xl leading-relaxed">
-              Fixr combines AI precision with vetted expertise to deliver instant pricing and on-demand maintenance for modern enterprises and homes.
+              FXR combines AI precision with vetted expertise to deliver instant pricing and on-demand maintenance for modern enterprises and homes.
             </p>
             
             <div className="flex flex-col sm:flex-row items-center gap-4">
@@ -83,7 +83,7 @@ export function EnterpriseHero() {
             <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl border-8 border-white/50 ring-1 ring-slate-200">
               <img 
                 src="/hero.png" 
-                alt="Fixr Digital Interface" 
+                alt="FXR Digital Interface" 
                 className="w-full h-auto object-cover"
               />
             </div>
